@@ -128,6 +128,16 @@ def get_dataset_for_drug_eval(tsv_path, task, validation_size, test_size, quiet,
 
 
 def get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config=CONFIG_NAME):
+  """Build the model exactly as train_and_eval.py did (same config handling, CompGCN options,
+  DistMult baseline), so the saved state_dict always matches the architecture."""
+  from train_and_eval import get_model as _train_get_model
+  model, lr, regularization, grad_norm, _, _ = _train_get_model(
+    model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config_name=config)
+  return model, lr, regularization, grad_norm
+
+
+def _legacy_get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config=CONFIG_NAME):
+  """Previous local copy of get_model (kept for reference, not used)."""
   with open(models_params_path, 'r') as f:
     models_params = json.load(f)
 
@@ -239,6 +249,7 @@ def resolve_model_folder(folder_path):
   else:
     model_file = best_run_files[0]
   model_path = os.path.join(folder_path, model_file)
+  train_params['_selected_run'] = best_run_idx if best_run_files else 0
 
   return model_path, model_name, train_params
 
@@ -474,7 +485,7 @@ def evaluate_compound_legacy(
 
 def main(model_folder, dataset_tsv, task, compound_query, topk,
          validation_size, test_size, quiet, undersample_rate, batch_size,
-         target_type='ExtGene'):
+         target_type='ExtGene', candidate_pool='all'):
 
   set_seed(BASE_SEED)
 
@@ -483,6 +494,24 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   print(f'[i] Model file: {model_path}')
   print(f'[i] Model type: {model_name}')
   print(f'[i] Training params: {json.dumps(train_params, indent=2)}')
+
+  # Rebuild EXACTLY the data the selected model was trained on (values saved in *_params.json):
+  #  - split / undersampling seed: --split_seed if the run used a fixed split (protocol v2),
+  #    otherwise the seed of the selected run (legacy: BASE_SEED + run index);
+  #  - undersample rate, validation/test sizes and hyperparameter config of training.
+  # Explicit CLI values (not None) still override.
+  selected_run = int(train_params.get('_selected_run', 0))
+  split_seed = train_params.get('split_seed')
+  data_seed = int(split_seed) if split_seed is not None else BASE_SEED + selected_run
+  if undersample_rate is None:
+    undersample_rate = float(train_params.get('undersample_rate', 0.5))
+  if validation_size is None:
+    validation_size = float(train_params.get('validation_size', 0.1))
+  if test_size is None:
+    test_size = float(train_params.get('test_size', 0.2))
+  config_name = train_params.get('config', CONFIG_NAME)
+  print(f'[i] Rebuilding training data: data_seed={data_seed} (run {selected_run}), '
+        f'undersample_rate={undersample_rate}, val={validation_size}, test={test_size}, config={config_name}')
 
   # Load dataset
   print('[i] Loading dataset...', end='', flush=True)
@@ -493,7 +522,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
    train_triplets, train_index, flattened_features_per_type,
    val_triplets, test_triplets, edge_index, ent2id, relation2id,
    all_nodes_per_type) = get_dataset_for_drug_eval(
-    dataset_tsv, task, validation_size, test_size, quiet, BASE_SEED, undersample_rate
+    dataset_tsv, task, validation_size, test_size, quiet, data_seed, undersample_rate
   )
 
   print(f' ok ({time.time() - start_time:.2f}s)')
@@ -511,22 +540,37 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   # Align names with IDs (filter out any that weren't in ent2id)
   all_extgene_names = [name for name in all_extgene_names if name in ent2id]
 
+  # Candidate pool. 'all' = every node of target_type (PathogenKG case study). 'relation' = only the
+  # nodes that occur as tails of the target relation (train+val+test) — the same pool used by the
+  # training/HPO filtered evaluation and by the negative sampler. Nodes outside that pool are never
+  # negatives during training, so their scores are not calibrated against true targets.
+  relation_pool = set()
+  for trip in (train_triplets, val_triplets, test_triplets):
+    if trip.numel() > 0:
+      relation_pool.update(int(t) for t in trip[:, 2].tolist())
+  if candidate_pool == 'relation':
+    keep = [i for i, tid in enumerate(all_extgene_ids.tolist()) if tid in relation_pool]
+    all_extgene_ids = all_extgene_ids[torch.tensor(keep, dtype=torch.long, device=all_extgene_ids.device)]
+    all_extgene_names = [all_extgene_names[i] for i in keep]
+  print(f'[i] Candidate pool: {candidate_pool} ({len(relation_pool)} {target_type} nodes occur in the target relation)')
   print(f'[i] Total {target_type} targets to score against: {len(all_extgene_ids)}')
 
   # Collect all compound names
   all_compound_names = sorted(all_nodes_per_type.get('Compound', []))
   print(f'[i] Total Compounds in graph: {len(all_compound_names)}')
 
-  # Determine TARGET relation ID
-  relation_name = 'TARGET'
-  if relation_name not in relation2id:
-    # Try normalized version
+  # Determine the target relation ID: 'TARGET' (PathogenKG) or the task relation (PKT: DTI / TREATS)
+  wanted = ['TARGET'] + [t.strip() for t in task.split(',') if t.strip()]
+  relation_name = None
+  for w in wanted:
     for rn in relation2id:
-      if rn.lower().replace(' ', '_') == 'target':
+      if rn.lower().replace(' ', '_') == w.lower().replace(' ', '_'):
         relation_name = rn
         break
-  if relation_name not in relation2id:
-    raise KeyError(f"Relation 'TARGET' not found in relation2id. Available: {list(relation2id.keys())}")
+    if relation_name:
+      break
+  if relation_name is None:
+    raise KeyError(f"Target relation {wanted} not found in relation2id. Available: {list(relation2id.keys())}")
   rel_id = relation2id[relation_name]
   print(f'[i] TARGET relation ID: {rel_id}')
 
@@ -566,7 +610,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
 
   # Create model and load weights
   model, lr, regularization, grad_norm = get_model(
-    model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config= CONFIG_NAME
+    model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config=config_name
   )
   model.load_state_dict(torch.load(model_path, map_location=device))
   model = model.to(device)
@@ -634,6 +678,11 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
       )
 
     metrics['num_train_val_targets'] = len(train_val_tails)
+    # Share of the top-k predictions that are OUTSIDE the target-relation pool (nodes that never
+    # occur in a train/val/test target edge, hence never used as training negatives either).
+    top_ids = [p['tail_id'] for p in ranking[:topk]]
+    metrics[f'top{topk}_outside_relation_pool'] = (
+      sum(1 for t in top_ids if t not in relation_pool) / len(top_ids) if top_ids else None)
     all_rankings[compound_name] = ranking
     all_metrics.append(metrics)
 
@@ -664,7 +713,8 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
     print(f"AGGREGATE METRICS ({len(compounds_with_test)} compounds with test targets)")
     print(f"{'='*70}")
 
-    for key in ['mrr', 'hits@1', 'hits@3', 'hits@5', 'hits@10', 'hits@20', 'hits@50', 'hits@100', 'median_rank', 'mean_rank']:
+    for key in ['mrr', 'hits@1', 'hits@3', 'hits@5', 'hits@10', 'hits@20', 'hits@50', 'hits@100', 'median_rank', 'mean_rank',
+                f'top{topk}_outside_relation_pool']:
       values = [m[key] for m in compounds_with_test if m[key] is not None]
       if values:
         print(f"  {key:15s}: mean={np.mean(values):.4f}, std={np.std(values):.4f}")
@@ -776,12 +826,16 @@ Examples:
                            'For PKT subgraphs use Protein (Task A / DTI) or Disease (Task B / TREATS).')
   parser.add_argument('--topk', type=int, default=20,
                       help='Number of top predictions to display per compound (default: 20)')
-  parser.add_argument('--validation_size', type=float, default=0.1,
-                      help='Validation split size (default: 0.1)')
-  parser.add_argument('--test_size', type=float, default=0.2,
-                      help='Test split size (default: 0.2)')
-  parser.add_argument('--undersample_rate', type=float, default=0.5,
-                      help='Fraction of non-target triplets to keep (default: 0.5)')
+  parser.add_argument('--validation_size', type=float, default=None,
+                      help='Validation split size (default: value used in training, from *_params.json)')
+  parser.add_argument('--test_size', type=float, default=None,
+                      help='Test split size (default: value used in training, from *_params.json)')
+  parser.add_argument('--undersample_rate', type=float, default=None,
+                      help='Fraction of non-target triplets to keep (default: value used in training)')
+  parser.add_argument('--candidate_pool', type=str, default='all', choices=['all', 'relation'],
+                      help="'all' = rank every node of --target_type (default, PathogenKG case study); "
+                           "'relation' = only nodes occurring in the target relation, i.e. the pool of the "
+                           "training evaluation and of the negative sampler.")
   parser.add_argument('--batch_size', type=int, default=4096,
                       help='Batch size for scoring triplets (default: 4096)')
   parser.add_argument('--quiet', action='store_true',
@@ -809,4 +863,5 @@ Examples:
     undersample_rate=args.undersample_rate,
     batch_size=args.batch_size,
     target_type=args.target_type,
+    candidate_pool=args.candidate_pool,
   )

@@ -12,9 +12,11 @@ target relation (e.g. drug→target, drug→disease), it trains a link-predictio
 ranked shortlist of novel candidates, with a full protocol for tuning, ablation, and human review.
 
 The method originates from **PathogenKG** (developed and validated in the *bacterial* domain: STRING
-PPI + COG orthology + GO + DrugBank) and generalises the **same code and experimental protocol**,
-unchanged, to any human biomedical KG. Because the encoders are **featureless (topology-only)**, any
-KG whose nodes lack features can be plugged in as-is.
+PPI + COG orthology + GO + DrugBank) and generalises the **same code and evaluation protocol** to
+any human biomedical KG. The original training protocol is kept available (v1) next to a
+consolidated one (v2, see [Training & evaluation protocol](#training--evaluation-protocol)).
+Because the encoders are **featureless (topology-only)**, any KG whose nodes lack features can be
+plugged in as-is.
 
 ### Reference use case in this repo: PheKnowLator
 
@@ -86,20 +88,21 @@ To run the framework on a **different** biomedical KG, produce a TSV in the same
 
 ```
 RelationalBioKG/
-├── train_and_eval.py            # training & evaluation (added: --config)
-├── drug_eval.py                 # compound-centric repurposing eval (added: --target_type)
+├── train_and_eval.py            # training & evaluation (--config, protocol v1/v2 flags, distmult baseline)
+├── drug_eval.py                 # compound-centric repurposing eval (rebuilds split/graph/config from the run)
 ├── drug_eval_results.py         # summarise drug-eval outputs
-├── tuning_hyperparameter.py     # Bayesian W&B HPO (logs to project RelationalBioKG)
+├── tuning_hyperparameter.py     # Bayesian W&B HPO (PKT_HPO_PROTOCOL=v1|v2)
 ├── expert_review_script.py      # human 3-tier expert review driver (cohort → review sheet)
-├── src/                         # encoders (hetero_rgcn/compgcn/rgat), utils, metrics, params
+├── TODO_SERVER.md               # step-by-step run list for the next server session
+├── src/                         # encoders (hetero_rgcn/compgcn/rgat), kge_distmult baseline, utils, metrics, params
 │
 ├── dataset/
 │   ├── PKT/                     # reference KG: raw PheKnowLator (nodes.json + edges.json, zipped)
 │   └── PKT_subgraphs/           # built task subgraphs (+ ablation/, node_labels.tsv)
 │
 ├── analysis/                    # KG analysis & subgraph builders (01–08_*.py) + out/
-├── experiments/                 # server run scripts (E1–E4), config, interpret_predictions.py, README
-└── docs/                        # project report + expert-validation request docs
+├── experiments/                 # server run scripts (E0–E4), config, baselines, summaries, README
+└── docs/                        # project reports, consolidation plan v2, expert-validation requests
 ```
 
 ---
@@ -135,31 +138,55 @@ conda activate gnn
 # 1. Build the task subgraphs from the reference PKT KG (one-time)
 python analysis/06_build_subgraphs.py
 
-# 2. Train (Task A / DTI, CompGCN, BIOKG-128 config)
-python train_and_eval.py --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip \
-  --task DTI --model compgcn --config BIOKG-128 --runs 12 --epochs 400 \
-  --early_stopping --negative_sampling filtered --eval_filtered
+# 2. Train (Task A / DTI, R-GCN, tuned config, consolidated protocol v2)
+PYTHONHASHSEED=0 python train_and_eval.py --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip \
+  --task DTI --model rgcn --config PKT-DTI-best --runs 5 --epochs 400 \
+  --early_stopping --patience 50 --negative_sampling filtered --eval_filtered \
+  --oversample_rate 1 --undersample_rate 1.0 --split_seed 42 --select_metric mixed \
+  --train_negative_rate 5 --disjoint_supervision 0.3 --warm_eval
+#    same command with --model distmult --learning_rate 0.03 = embedding-only baseline (no GNN)
 
-# 3. Compound-centric repurposing on a trained model (Task A ranks proteins)
+# 3. Compound-centric repurposing on a trained model (Task A ranks proteins);
+#    split, graph and config are rebuilt automatically from the model's *_params.json
 python drug_eval.py --model_folder models/<your_model_folder> \
   --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --target_type Protein --compound all
 ```
 
 Full, scripted pipeline (both tasks, HPO, ablations, repurposing) lives in
-**[`experiments/`](experiments/)** — see [`experiments/README.md`](experiments/README.md).
+**[`experiments/`](experiments/)** — see [`experiments/README.md`](experiments/README.md). The
+run list for the next server session is in **[`TODO_SERVER.md`](TODO_SERVER.md)**.
 
 | Exp | What | Script |
 |---|---|---|
-| **E1** | main training & model comparison (compgcn/rgcn, 12 seeds) | `experiments/e1_main_training.sh` |
-| **E2** | Bayesian hyperparameter optimisation (W&B) | `experiments/e2_hpo_sweep.sh` |
+| **E0** | protocol comparison v1 vs v2 + popularity and DistMult baselines | `experiments/e0_protocol_compare.sh` |
+| **E1** | main training: R-GCN vs CompGCN vs **DistMult baseline** | `experiments/e1_main_training.sh` |
+| **E2** | Bayesian hyperparameter optimisation (W&B), baseline tuned too | `experiments/e2_hpo_tandem.sh` |
 | **E3** | ablations (component machinery + relational context) | `experiments/e3_ablation.sh` |
 | **E4** | compound-centric repurposing + interpretability + expert review | `experiments/e4_repurposing.sh` |
 
-Evaluation protocol (unchanged from PathogenKG): edge-level stratified split, multi-seed, focal loss
-(α=0.25, γ=3.0) + adversarial negative weighting (α_adv=2.0), oversample ×5 / undersample ×0.5,
-type-constrained **filtered** metrics — AUROC, AUPRC, MRR, Hits@1/3/10 and composite
-**M = 0.2·AUROC + 0.4·AUPRC + 0.4·MRR**. The composite is optimised in validation and reported
-in test with the identical ranking protocol.
+### Training & evaluation protocol
+
+Type-constrained **filtered** metrics — AUROC, AUPRC, MRR, Hits@1/3/10 and composite
+**M = 0.2·AUROC + 0.4·AUPRC + 0.4·MRR** (candidates for ranking = nodes occurring in the target
+relation; known positives masked). Focal loss (α=0.25, γ=3.0) + adversarial negative weighting
+(α_adv=2.0), edge-level split stratified by target node.
+
+Two sampling/selection protocols are available as flags of `train_and_eval.py` (defaults = v1,
+reproduced bit-for-bit); the full audit behind v2 is in
+[`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md):
+
+| | **v1** (PathogenKG, legacy) | **v2** (consolidated) |
+|---|---|---|
+| model selection / early stopping | validation loss | validation **M** (same criterion as the HPO) |
+| data split | changes at every run | fixed (`--split_seed 42`), only init varies |
+| positives / negatives | target oversampling ×5 (does not reweight the loss) | no oversampling, `--train_negative_rate k` |
+| background graph | 50% random undersampling (isolates 21% of DTI nodes) | full graph |
+| training target edges | inside the message-passing graph | disjoint supervision (`--disjoint_supervision 0.3`) |
+| baseline | none | popularity (node degree) + **DistMult without message passing** |
+| reproducibility | Python hash seed random per process | `PYTHONHASHSEED=0` |
+
+**Key question answered by E1 under v2:** do the relational GNN encoders (R-GCN, CompGCN) improve
+over an equally tuned embedding-only DistMult on the same data, split and protocol?
 
 ---
 
@@ -184,7 +211,10 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
 
 ## Documentation
 
+- [`TODO_SERVER.md`](TODO_SERVER.md) — what to run on the server, in order (Italian).
+- [`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md) — audit of the training/evaluation protocol, v2 changes and their verification.
 - [`docs/report_progetto_RelationalPKT.md`](docs/report_progetto_RelationalPKT.md) — full project report.
+- [`docs/report_HPO_risultati_finali.md`](docs/report_HPO_risultati_finali.md) — first HPO (protocol v1; superseded by the v2 HPO).
 - [`docs/richiesta_candidati_validazione_medico.md`](docs/richiesta_candidati_validazione_medico.md) — candidate request for a clinician/biologist.
 - [`docs/richiesta_candidati_validazione_oncologo.md`](docs/richiesta_candidati_validazione_oncologo.md) — oncology-tailored version (with TCGA / multi-omics cross-check).
 - [`experiments/README.md`](experiments/README.md) — experiment plan and run instructions.

@@ -23,7 +23,8 @@ DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY", "giovannimaria-defilippis-univer
 OUT_DIR = Path(__file__).resolve().parent / "hpo_report"
 PARAM_KEYS = ["conv_layer_num", "dropout", "layer_0", "layer_1", "layer_2", "mlp_out_layer",
               "learning_rate", "opn", "grad_norm", "num_bases", "regularization",
-              "weight_decay", "scheduler_gamma", "model_name"]
+              "weight_decay", "scheduler_gamma", "model_name", "train_negative_rate", "use_layer_norm",
+              "protocol", "oversample_rate", "undersample_rate", "disjoint_supervision"]
 
 
 def _scalar(v):
@@ -88,12 +89,14 @@ def main():
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--task", help="DTI or TREATS -> RelationalPKT-<task>-{compgcn,rgcn}")
     g.add_argument("--projects", nargs="+", help="explicit W&B project names")
-    ap.add_argument("--models", nargs="+", default=["compgcn", "rgcn"])
+    ap.add_argument("--models", nargs="+", default=["compgcn", "rgcn", "distmult"])
     ap.add_argument("--entity", default=DEFAULT_ENTITY)
-    ap.add_argument("--sort-metric", default="val_mixed_metric")
+    ap.add_argument("--sort-metric", default="val_mixed_metric",
+                    help="use best_val_mixed_metric for protocol-v2 sweeps")
+    ap.add_argument("--suffix", default="", help="project suffix, e.g. '-v2' -> RelationalPKT-<TASK>-v2-<model>")
     args = ap.parse_args()
 
-    projects = args.projects or [f"RelationalPKT-{args.task}-{m}" for m in args.models]
+    projects = args.projects or [f"RelationalPKT-{args.task}{args.suffix}-{m}" for m in args.models]
     import wandb
     api = wandb.Api()
     print(f"[i] entity={args.entity} | projects={projects} | sort by {args.sort_metric}")

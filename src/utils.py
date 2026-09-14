@@ -670,6 +670,62 @@ def negative_sampling_filtered_orignal(
 	return samples, labels
 
 
+_NEG_POOLS_CACHE = {}
+
+def _negative_sampling_pools(target_triplets, all_true_triplets):
+    """
+    Build (true_set, heads_by_rel, tails_by_rel) exactly as negative_sampling_filtered always did:
+    rows of all_true_triplets inserted first (in order), then rows of target_triplets.
+
+    Memoised on the bytes of all_true_triplets. When every target triple is already contained in
+    all_true_triplets (the normal case: train/val/test positives are a subset of train+val+test),
+    inserting them again changes neither the sets nor their iteration order, so the cached
+    structures are identical to a fresh build. Otherwise we fall back to a fresh build.
+    """
+    import hashlib
+    target_triplets = np.asarray(target_triplets, dtype=np.int64)
+
+    def fresh_build(include_all_true):
+        true_set = set(map(tuple, target_triplets.tolist()))
+        heads, tails = {}, {}
+        if include_all_true:
+            all_true_arr = np.asarray(all_true_triplets, dtype=np.int64)
+            if all_true_arr.ndim == 2 and all_true_arr.shape[1] == 3:
+                true_set.update(map(tuple, all_true_arr.tolist()))
+            for h, r, t in all_true_arr:
+                heads.setdefault(int(r), set()).add(int(h))
+                tails.setdefault(int(r), set()).add(int(t))
+        for h, r, t in target_triplets:
+            heads.setdefault(int(r), set()).add(int(h))
+            tails.setdefault(int(r), set()).add(int(t))
+        heads = {r: np.array(list(v), dtype=np.int64) for r, v in heads.items()}
+        tails = {r: np.array(list(v), dtype=np.int64) for r, v in tails.items()}
+        return true_set, heads, tails
+
+    if all_true_triplets is None:
+        return fresh_build(False)
+
+    all_true_arr = np.ascontiguousarray(np.asarray(all_true_triplets, dtype=np.int64))
+    key = (all_true_arr.shape, hashlib.md5(all_true_arr.tobytes()).hexdigest())
+    if key not in _NEG_POOLS_CACHE:
+        if len(_NEG_POOLS_CACHE) > 8:
+            _NEG_POOLS_CACHE.clear()
+        true_set = set(map(tuple, all_true_arr.tolist()))
+        heads, tails = {}, {}
+        for h, r, t in all_true_arr:
+            heads.setdefault(int(r), set()).add(int(h))
+            tails.setdefault(int(r), set()).add(int(t))
+        _NEG_POOLS_CACHE[key] = (
+            true_set,
+            {r: np.array(list(v), dtype=np.int64) for r, v in heads.items()},
+            {r: np.array(list(v), dtype=np.int64) for r, v in tails.items()},
+        )
+    true_set, heads, tails = _NEG_POOLS_CACHE[key]
+    if all(tuple(x) in true_set for x in target_triplets.tolist()):
+        return true_set, heads, tails
+    return fresh_build(True)
+
+
 def negative_sampling_filtered(
     target_triplets,
     all_entities,           # tutti i nodi del grafo (array di id)
@@ -703,31 +759,11 @@ def negative_sampling_filtered(
     # --- FIX 1: usa tutte le entità del grafo ---
     all_entities = np.asarray(all_entities, dtype=np.int64)
 
-    # --- FIX 2: costruisci il set di tutti i triplet veri per filtrare falsi negativi ---
-    true_set = set(map(tuple, target_triplets.tolist()))
-    if all_true_triplets is not None:
-        all_true_arr = np.asarray(all_true_triplets, dtype=np.int64)
-        if all_true_arr.ndim == 2 and all_true_arr.shape[1] == 3:
-            true_set.update(map(tuple, all_true_arr.tolist()))
-
-    # --- FIX 3: type-constrained sampling ---
-    # Per relazioni Compound-TARGET-ExtGene ha senso perturbare:
-    # - la testa solo con altri Compound
-    # - la coda solo con altri ExtGene
-    # Inferisce i candidati validi per testa e coda dalla relazione
-    heads_by_rel = {}
-    tails_by_rel = {}
-    if all_true_triplets is not None:
-        all_true_arr = np.asarray(all_true_triplets, dtype=np.int64)
-        for h, r, t in all_true_arr:
-            heads_by_rel.setdefault(int(r), set()).add(int(h))
-            tails_by_rel.setdefault(int(r), set()).add(int(t))
-    for h, r, t in target_triplets:
-        heads_by_rel.setdefault(int(r), set()).add(int(h))
-        tails_by_rel.setdefault(int(r), set()).add(int(t))
-    # converti in array per np.choice
-    heads_by_rel = {r: np.array(list(v), dtype=np.int64) for r, v in heads_by_rel.items()}
-    tails_by_rel = {r: np.array(list(v), dtype=np.int64) for r, v in tails_by_rel.items()}
+    # --- FIX 2 + FIX 3: true-triple set and type-constrained candidate pools ---
+    # These only depend on (target_triplets, all_true_triplets) and were rebuilt with Python
+    # loops at EVERY call (every epoch). They are now memoised on the content of both arrays:
+    # the structures are built exactly as before, so np.choice draws are unchanged.
+    true_set, heads_by_rel, tails_by_rel = _negative_sampling_pools(target_triplets, all_true_triplets)
 
     neg_samples = np.empty((neg_num, 3), dtype=np.int64)
     filled = 0

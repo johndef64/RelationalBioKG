@@ -25,11 +25,16 @@ if [ "$WHICH" = "A" ]; then TSV="$TSV_A"; TASK="$TASK_A"; TGT="$TGT_A"
 else                        TSV="$TSV_B"; TASK="$TASK_B"; TGT="$TGT_B"; fi
 
 log="${LOG_DIR}/e4_${WHICH}_$(date +%Y%m%d_%H%M%S).log"
-echo "[E4] task=$WHICH model=$MODEL_FOLDER target_type=$TGT -> $log"
+# CANDIDATE_POOL: all (every node of the target type, PathogenKG case study) or relation (only nodes
+# occurring in the target relation = pool of training negatives and of the training evaluation).
+# Check `topK_outside_relation_pool` in the aggregate output: if the top-k is dominated by nodes that
+# were never negatives in training, prefer (or also report) CANDIDATE_POOL=relation.
+CANDIDATE_POOL="${CANDIDATE_POOL:-all}"
+echo "[E4] task=$WHICH model=$MODEL_FOLDER target_type=$TGT pool=$CANDIDATE_POOL -> $log"
 
 # 1) rank all compounds against all targets of the right type
 python drug_eval.py --model_folder "$MODEL_FOLDER" --tsv "$TSV" --task "$TASK" \
-  --target_type "$TGT" --compound all --topk "$TOPK" 2>&1 | tee "$log"
+  --target_type "$TGT" --compound all --topk "$TOPK" --candidate_pool "$CANDIDATE_POOL" 2>&1 | tee "$log"
 
 # 2) summarise
 python drug_eval_results.py 2>&1 | tee -a "$log" || echo "[E4] (drug_eval_results optional step skipped)"

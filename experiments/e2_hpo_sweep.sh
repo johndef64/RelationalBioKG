@@ -2,7 +2,8 @@
 # E2 — Hyperparameter optimisation  (PathogenKG §3.2/§3.3 — Bayesian W&B sweep).
 # Optimises the composite metric M = 0.2*AUROC + 0.4*AUPRC + 0.4*MRR on the validation set.
 # Runs one sweep per task; models swept = AVAILABLE_MODELS in tuning_hyperparameter.py
-# (rgcn + compgcn). Best configs then go into src/models_params.json for the final E1 runs.
+# (v2: rgcn + compgcn + distmult baseline). Best configs then go into src/models_params.json
+# (PKT-<TASK>-best-v2 for protocol v2) for the final E1 runs.
 #
 # PREREQUISITES:
 #   pip install wandb && wandb login
@@ -17,10 +18,16 @@ source experiments/config.sh
 
 WHICH="${1:-A}"
 
+# Training protocol of the sweep (tuning_hyperparameter.py): v2 = consolidated (default), v1 = legacy.
+# v2 sweeps log to separate W&B projects (suffix -v2) so they never mix with the v1 trials.
+export PKT_HPO_PROTOCOL="${PKT_HPO_PROTOCOL:-v2}"
+if [ "$PKT_HPO_PROTOCOL" = "v2" ]; then HPO_SUFFIX="${HPO_SUFFIX:--v2}"; else HPO_SUFFIX="${HPO_SUFFIX:-}"; fi
+export HPO_SUFFIX
+
 if [ "$WHICH" = "A" ]; then
-  export PKT_TSV="$TSV_A"; export PKT_TASK="$TASK_A"; export WANDB_PROJECT="RelationalPKT-DTI"
+  export PKT_TSV="$TSV_A"; export PKT_TASK="$TASK_A"; export WANDB_PROJECT="RelationalPKT-DTI${HPO_SUFFIX}"
 else
-  export PKT_TSV="$TSV_B"; export PKT_TASK="$TASK_B"; export WANDB_PROJECT="RelationalPKT-TREATS"
+  export PKT_TSV="$TSV_B"; export PKT_TASK="$TASK_B"; export WANDB_PROJECT="RelationalPKT-TREATS${HPO_SUFFIX}"
 fi
 export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-200}"
 export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-50}"

@@ -84,6 +84,9 @@ src/downloaders/
 src/drug-dataset/
 src/dataset-stats.py
 
+# Experiments
+experiments/hpo*
+
 # Bacterial / DRKG tuning & evaluation utilities
 # (RelationalPKT uses experiments/ + tuning_hyperparameter.py instead)
 tuning_dataset.py

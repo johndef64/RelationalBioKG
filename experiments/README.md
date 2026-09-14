@@ -30,20 +30,43 @@ relation) change. Run on the **server** (env `gnn`, a real GPU — see the TDR n
 - `tuning_hyperparameter.py`: dataset/task/W&B entity now read from env vars
   (`PKT_TSV`, `PKT_TASK`, `WANDB_ENTITY`, `WANDB_PROJECT`, `PKT_HPO_*`).
 
+## Protocol v1 vs v2 (read first)
+The pipeline has two training protocols, selected by flags of `train_and_eval.py` whose defaults
+reproduce the legacy one (verified bit-for-bit). Full rationale and evidence:
+[`docs/piano_consolidamento_v2.md`](../docs/piano_consolidamento_v2.md).
+
+| | v1 (legacy PathogenKG) | v2 (consolidated) |
+|---|---|---|
+| checkpoint / early stopping | validation loss | validation M (same as HPO) |
+| split | changes at every run | fixed (`--split_seed 42`) |
+| positives / negatives | oversample ×5, 1 negative | no oversampling, `--train_negative_rate k` |
+| background graph | 50% random undersampling | full graph |
+| training target edges | all inside the message-passing graph | `--disjoint_supervision 0.3` |
+| extra reporting | — | `--warm_eval` (no cold-start), best epoch, time |
+
+`experiments/config.sh` defines `FLAGS_V1`, `FLAGS_V2`, `PROTOCOL` (default `v1` until E0 validates
+v2) and exports `PYTHONHASHSEED=0` (without it identical commands gave different results).
+
 ## Run order
 ```bash
 # one-time: build the subgraphs (if not already present)
 python analysis/06_build_subgraphs.py
 
-# E1 — main training & model comparison (both tasks, compgcn + rgcn, 12 seeds, 400 epochs)
-bash experiments/e1_main_training.sh
+# E0 — protocol comparison v1 vs v2 (+ popularity and DistMult baselines). RUN THIS FIRST.
+TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh pair   # minimum
+bash experiments/e0_protocol_compare.sh                                  # full ladder
+python experiments/protocol_compare_summary.py        # -> experiments/protocol_compare_summary.md
 
-# E2 — hyperparameter optimisation (needs `wandb login`); do per task, then copy best config into models_params.json
-# W&B entity/project are hardcoded to RelationalPKT in tuning_hyperparameter.py (override via WANDB_ENTITY/WANDB_PROJECT)
-bash experiments/e2_hpo_sweep.sh A     # -> project RelationalPKT-DTI
-bash experiments/e2_hpo_sweep.sh B     # -> project RelationalPKT-TREATS
+# E2 — HPO under protocol v2 (default): W&B projects RelationalPKT-<TASK>-v2-<model>,
+#      models rgcn + compgcn + distmult baseline; best configs -> PKT-<TASK>-best-v2
+bash experiments/e2_hpo_tandem.sh
+#      (legacy sweep: PKT_HPO_PROTOCOL=v1 bash experiments/e2_hpo_sweep.sh A)
 
-# E3 — ablations on the DTI task (component machinery + relational context)
+# E1 — main training & model comparison with the v2 protocol and v2 configs
+PROTOCOL=v2 bash experiments/e1_main_training.sh
+
+# E3 — ablations (component machinery + relational context). NOTE: e3_ablation.sh still encodes the
+#      v1 component list; it is to be adapted to v2 after E0 (see docs/piano_consolidamento_v2.md §4)
 bash experiments/e3_ablation.sh          # or: component | context
 
 # E4 — repurposing + interpretability (point at a model folder from E1)
@@ -57,10 +80,10 @@ python analysis/08_build_node_labels.py
 All knobs (RUNS, EPOCHS, HP_CONFIG, MODELS, …) live in `experiments/config.sh` and can be
 overridden inline, e.g. `RUNS=3 EPOCHS=100 bash experiments/e1_main_training.sh` for a quick pass.
 
-## Evaluation protocol (unchanged from PathogenKG)
+## Evaluation protocol
 Edge-level stratified split, multi-seed, focal loss (α=0.25, γ=3.0) + adversarial negative
-weighting (α_adv=2.0), oversample target ×5 + undersample background ×0.5, type-constrained
-**filtered** evaluation. Metrics: AUROC, AUPRC, MRR, Hits@1/3/10 and composite
+weighting (α_adv=2.0), type-constrained **filtered** evaluation (candidates = nodes that occur in
+the target relation, known positives masked). Sampling/selection: v1 or v2, see above. Metrics: AUROC, AUPRC, MRR, Hits@1/3/10 and composite
 **M = 0.2·AUROC + 0.4·AUPRC + 0.4·MRR**.
 
 ## Interpretability vs validation (E4)

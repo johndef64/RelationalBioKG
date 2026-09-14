@@ -6,6 +6,16 @@ import torch.nn.functional as F
 from typing import Optional, Dict
 from torch.nn.modules.module import Module
 
+
+def circular_correlation(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    """Real circular cross-correlation along the last dim: out_k = sum_i a_i * b_{(i+k) mod d}."""
+    d = a.shape[-1]
+    # FFT backends (MKL on CPU) reject expanded / non-contiguous inputs such as loop_rel.expand(...)
+    fa = torch.fft.rfft(a.contiguous(), dim=-1)
+    fb = torch.fft.rfft(b.contiguous(), dim=-1)
+    return torch.fft.irfft(torch.conj(fa) * fb, n=d, dim=-1)
+
+
 class CompGCNConv(Module):
     """
     Compositional Graph Convolutional Layer implementation.
@@ -86,14 +96,14 @@ class CompGCNConv(Module):
         elif self.comp_fn == 'sub':
             return ent - rel
         elif self.comp_fn == 'corr':
-            # Handle real-valued FFT correlation
-            # dim = ent.shape[-1]
-            # ent_fft = torch.fft.rfft(ent, dim=-1)
-            # rel_fft = torch.fft.rfft(rel, dim=-1)
-            # ent_fft_conj = torch.conj(ent_fft)
-            # prod = ent_fft_conj * rel_fft
-            # return torch.fft.irfft(prod, n=dim, dim=-1)
+            # LEGACY name: historically this branch has always been an element-wise product
+            # (the FFT correlation was commented out). Kept as-is so that configs tuned with
+            # opn='corr' (PathogenKG, PKT HPO v1) stay reproducible. It is equivalent to 'mult'.
             return ent * rel
+        elif self.comp_fn == 'ccorr':
+            # True circular correlation (CompGCN paper, HolE-style):
+            # (ent * rel)_k = sum_i ent_i * rel_{(i+k) mod d}
+            return circular_correlation(ent, rel)
         else:
             raise ValueError(f"Unsupported composition: {self.comp_fn}")
 
@@ -248,7 +258,7 @@ class HeterogeneousCompGCN(nn.Module):
         for idx in range(conv_num_layers):
             in_dim = conv_hidden_channels[f'layer_{idx-1}'] if idx > 0 else mlp_out_emb_size
             rel_emb = nn.Parameter(torch.Tensor(2 * num_relations, in_dim))
-            if opn == 'corr':
+            if opn in ('corr', 'mult'):   # 'mult' == legacy 'corr' (same op, same init)
                 nn.init.eye_(rel_emb)
             else:
                 nn.init.xavier_uniform_(rel_emb)

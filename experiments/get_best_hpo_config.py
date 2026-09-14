@@ -24,8 +24,8 @@ from pathlib import Path
 
 PARAM_KEYS = ["conv_layer_num", "dropout", "layer_0", "layer_1", "layer_2", "mlp_out_layer",
               "learning_rate", "opn", "grad_norm", "num_bases", "regularization",
-              "weight_decay", "scheduler_gamma", "model_name"]
-REPORT_METRICS = ["val_mixed_metric", "final_mixed_metric", "val_auroc", "val_auprc", "val_mrr",
+              "weight_decay", "scheduler_gamma", "model_name", "train_negative_rate", "use_layer_norm"]
+REPORT_METRICS = ["best_val_mixed_metric", "best_epoch", "val_mixed_metric", "final_mixed_metric", "val_auroc", "val_auprc", "val_mrr",
                   "test_auroc", "test_auprc", "test_mrr"]
 
 DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY", "giovannimaria-defilippis-university-of-naples-federico-ii")
@@ -56,10 +56,14 @@ def ranked_runs(api, entity, project, metric):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--task", required=True, help="DTI or TREATS (matches the W&B project prefix)")
-    ap.add_argument("--models", nargs="+", default=["compgcn", "rgcn"])
+    ap.add_argument("--models", nargs="+", default=["compgcn", "rgcn", "distmult"])
     ap.add_argument("--entity", default=DEFAULT_ENTITY)
-    ap.add_argument("--metric", default="val_mixed_metric",
-                    help="metric to rank by (default val_mixed_metric; or final_mixed_metric)")
+    ap.add_argument("--metric", default="auto",
+                    help="metric to rank by. 'auto' (default) = best_val_mixed_metric when the sweep logged it "
+                         "(protocol v2), else val_mixed_metric (v1). Or e.g. final_mixed_metric")
+    ap.add_argument("--suffix", default="",
+                    help="W&B project suffix, e.g. '-v2' -> RelationalPKT-<TASK>-v2-<model>; also names the "
+                         "injected config PKT-<TASK>-best<suffix>")
     ap.add_argument("--top", type=int, default=15, help="leaderboard length")
     ap.add_argument("--write", action="store_true",
                     help="inject the best configs into src/models_params.json as PKT-<TASK>-best")
@@ -84,11 +88,11 @@ def main():
         params = {k: best_cfg[k] for k in PARAM_KEYS if k in best_cfg}
         params["model_name"] = model
         task_config[model] = params
-        (OUT_DIR / f"{args.task}_{model}_best.json").write_text(json.dumps(
-            {"metric": args.metric, "value": best_val, "run": best_name, "params": params}, indent=2))
+        (OUT_DIR / f"{args.task}{args.suffix}_{model}_best.json").write_text(json.dumps(
+            {"metric": metric, "value": best_val, "run": best_name, "params": params}, indent=2))
 
         # leaderboard -> CSV (top N)
-        lb_path = OUT_DIR / f"{args.task}_{model}_leaderboard.csv"
+        lb_path = OUT_DIR / f"{args.task}{args.suffix}_{model}_leaderboard.csv"
         with open(lb_path, "w", newline="", encoding="utf-8") as fh:
             w = csv.writer(fh)
             w.writerow(["rank", "run", "state"] + REPORT_METRICS + PARAM_KEYS)
@@ -96,12 +100,12 @@ def main():
                 w.writerow([i, name, state]
                            + [summ.get(m, "") for m in REPORT_METRICS]
                            + [cfg.get(k, "") for k in PARAM_KEYS])
-        print(f"  saved: {args.task}_{model}_best.json  +  {lb_path.name}")
+        print(f"  saved: {args.task}{args.suffix}_{model}_best.json  +  {lb_path.name}")
 
     if args.write and task_config:
         with open(PARAMS_JSON) as f:
             allp = json.load(f)
-        key = f"PKT-{args.task}-best"
+        key = f"PKT-{args.task}-best{args.suffix}"
         allp[key] = task_config
         with open(PARAMS_JSON, "w") as f:
             json.dump(allp, f, indent=4)

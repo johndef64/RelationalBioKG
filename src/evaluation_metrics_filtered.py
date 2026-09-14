@@ -8,38 +8,111 @@ of the same type (head vs head pool, tail vs tail pool) — as done
 in the papers on Hetionet and GP-KG for drug repurposing.
 """
 
+import os
 import torch
 from collections import defaultdict
+
+# Max number of (triple x candidate) rows scored at once by the batched ranking.
+# Each row costs ~3 x emb_dim floats of temporaries (s*r*o). 250k rows x 200 dims ~ 0.6 GB.
+EVAL_BATCH_ROWS = int(os.environ.get("PKT_EVAL_BATCH_ROWS", "250000"))
 
 
 def build_positive_maps(all_target_triplets):
     """
     Builds maps of known positives for the filtered setting.
-    
+
     Args:
-        all_target_triplets: tensor (N, 3) con TUTTE le triple positive 
+        all_target_triplets: tensor (N, 3) con TUTTE le triple positive
                              (train + val + test) della relazione target.
-    
+
     Returns:
         all_positives_tail: dict (h, r) -> set of t
         all_positives_head: dict (r, t) -> set of h
     """
     all_positives_tail = defaultdict(set)
     all_positives_head = defaultdict(set)
-    
-    for i in range(all_target_triplets.size(0)):
-        h = all_target_triplets[i, 0].item()
-        r = all_target_triplets[i, 1].item()
-        t = all_target_triplets[i, 2].item()
+
+    # tolist() once instead of 3 .item() calls per triple (same content, much faster)
+    for h, r, t in all_target_triplets.tolist():
         all_positives_tail[(h, r)].add(t)
         all_positives_head[(r, t)].add(h)
-    
+
     return all_positives_tail, all_positives_head
 
 
-def _compute_ranks(model, embeddings, test_triplets, candidate_nodes, 
+def _compute_ranks(model, embeddings, test_triplets, candidate_nodes,
                    all_positives_map, node_to_idx, device, mode, verbose):
     """
+    Batched version of `_compute_ranks_loop` with IDENTICAL semantics:
+    rank = #{non-filtered candidates with score >= true score}, min 1; triples whose
+    true node is not in the pool are skipped. Scores are computed with the same
+    `model.distmult` call on the same (triple, candidate) rows, only B triples at a time
+    instead of one, so each row's arithmetic is unchanged.
+    """
+    ranks = []
+    skipped = 0
+    num_candidates = candidate_nodes.size(0)
+    if test_triplets.size(0) == 0 or num_candidates == 0:
+        return ranks, skipped
+
+    cand_to_idx = {c: i for i, c in enumerate(candidate_nodes.tolist())}
+    batch = max(1, EVAL_BATCH_ROWS // num_candidates)
+    rows = test_triplets.tolist()
+
+    with torch.no_grad():
+        for start in range(0, len(rows), batch):
+            chunk = rows[start:start + batch]
+            keep, true_idx, mask_rows, mask_cols = [], [], [], []
+            for (h_i, r_i, t_i) in chunk:
+                true_node = t_i if mode == 'tail' else h_i
+                if true_node not in cand_to_idx:
+                    skipped += 1
+                    if verbose:
+                        print(f"  [SKIP] nodo {true_node} non nel pool candidati ({mode})")
+                    continue
+                b = len(keep)
+                keep.append((h_i, r_i, t_i))
+                true_idx.append(cand_to_idx[true_node])
+                key = (h_i, r_i) if mode == 'tail' else (r_i, t_i)
+                for known_node in all_positives_map.get(key, ()):
+                    if known_node != true_node and known_node in cand_to_idx:
+                        mask_rows.append(b)
+                        mask_cols.append(cand_to_idx[known_node])
+            if not keep:
+                continue
+
+            B = len(keep)
+            kt = torch.tensor(keep, dtype=torch.long, device=device)
+            anchor = kt[:, 0] if mode == 'tail' else kt[:, 2]
+            rel = kt[:, 1]
+            cands = candidate_nodes.to(device)
+            anchor_rep = anchor.repeat_interleave(num_candidates)
+            rel_rep = rel.repeat_interleave(num_candidates)
+            cand_rep = cands.repeat(B)
+            if mode == 'tail':
+                triples = torch.stack([anchor_rep, rel_rep, cand_rep], dim=1)
+            else:
+                triples = torch.stack([cand_rep, rel_rep, anchor_rep], dim=1)
+
+            scores = model.distmult(embeddings, triples).view(B, num_candidates)
+            true_scores = scores[torch.arange(B, device=device),
+                                 torch.tensor(true_idx, device=device)]
+            filter_mask = torch.ones((B, num_candidates), dtype=torch.bool, device=device)
+            if mask_rows:
+                filter_mask[torch.tensor(mask_rows, device=device),
+                            torch.tensor(mask_cols, device=device)] = False
+            batch_ranks = ((scores >= true_scores.unsqueeze(1)) & filter_mask).sum(dim=1).clamp(min=1)
+            ranks.extend(batch_ranks.tolist())
+
+    return ranks, skipped
+
+
+def _compute_ranks_loop(model, embeddings, test_triplets, candidate_nodes,
+                        all_positives_map, node_to_idx, device, mode, verbose):
+    """
+    ORIGINAL per-triple implementation, kept as the reference for the equivalence test
+    of the batched `_compute_ranks` (experiments/tests). Not used by the pipeline.
+
     Internal helper: calculates ranks for head or tail prediction.
 
     Args:
