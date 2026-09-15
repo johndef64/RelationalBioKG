@@ -1,8 +1,7 @@
 # Python dependencies of RelationalPKT (pinned to the verified environment).
-# PyTorch and the compiled PyG extensions (torch_scatter, torch_sparse, pyg_lib, ...) are NOT listed
-# here: their wheels depend on the CUDA version and are installed by create_env.sh.
+# PyTorch and PyG (torch-geometric + pyg_lib, torch_scatter, torch_sparse, ...) are NOT listed
+# here: they must match the torch/CUDA build and are installed by create_env.sh from the PyG wheel index.
 # Full setup:  bash create_env.sh
-torch-geometric==2.7.0
 torcheval==0.0.7
 numpy==2.2.6
 pandas==2.3.3
@@ -13,3 +12,7 @@ wandb==0.25.1
 tqdm==4.67.3
 termcolor==3.3.0
 requests
+# plots / KG statistics (evaluate_ranking.py, kg_stats_visualization.py)
+matplotlib==3.10.8
+seaborn==0.13.2
+networkx==3.4.2

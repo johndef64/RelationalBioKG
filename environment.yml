@@ -1,15 +1,10 @@
-name: graph-ml-cu128
+# Base conda environment for RelationalPKT (Python only).
+# PyTorch + PyG must match the machine's CUDA version, so the complete, verified setup is:
+#   bash create_env.sh
+# This file is kept for tools that expect an environment.yml; it does NOT install torch/PyG.
+name: gnn
 channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - pandas>=1.5.0
-  - numpy>=1.23.0
-  - scikit-learn>=1.2.0
-  - networkx>=3.0
-  - matplotlib>=3.7.0
-  - seaborn>=0.12.0
-  - tqdm>=4.65.0
   - pip
-  - pip:
-      - wandb>=0.15.0
