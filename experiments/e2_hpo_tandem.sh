@@ -11,12 +11,18 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 export PKT_HPO_RUNS="${PKT_HPO_RUNS:-30}"          # configs per model (v2: smaller space than v1)
-# Early stopping is the main time lever. From the E1 log a good config converges by ~epoch
-# 105 and would early-stop ~125; the tuning default (patience 50 evals) never triggers inside
-# 200 epochs, so every trial wastes the full budget. patience=6 (=~35 epochs of no gain) stops
-# plateaued trials ~epoch 125-140 -> ~35% faster, without cutting still-improving configs.
-export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-6}"   # evaluations (every 5 epochs) w/o improvement
-export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-200}"     # hard ceiling (rarely reached with the above)
+# Early stopping is the main time lever (evaluations every 5 epochs).
+# v1: a good config converged by ~epoch 105 -> patience 6 evals, 200-epoch ceiling.
+# v2: in E0 the R-GCN (v1 config, val-M selection, disjoint supervision) still had its best epoch
+# at 292/300, so a 200-epoch ceiling would truncate the GNNs and favour the fast-converging
+# DistMult. v2 uses a 500-epoch ceiling and patience 10 evals (= 50 epochs, as PATIENCE_V2 in E1).
+if [ "${PKT_HPO_PROTOCOL:-v2}" = "v2" ]; then
+  export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-10}"
+  export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-500}"
+else
+  export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-6}"
+  export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-200}"
+fi
 
 if [ "${PKT_HPO_PROTOCOL:-v2}" = "v2" ]; then N_MODELS=$(echo ${PKT_HPO_MODELS:-rgcn compgcn distmult} | wc -w); else N_MODELS=$(echo ${PKT_HPO_MODELS:-rgcn compgcn} | wc -w); fi
 echo "[E2-tandem] protocol=${PKT_HPO_PROTOCOL:-v2} PKT_HPO_RUNS=$PKT_HPO_RUNS per model x ${N_MODELS} models  ->  $((PKT_HPO_RUNS*N_MODELS)) runs/task, $((PKT_HPO_RUNS*N_MODELS*2)) total"

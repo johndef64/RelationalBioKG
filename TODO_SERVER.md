@@ -14,7 +14,8 @@ Contesto e motivazioni: `docs/piano_consolidamento_v2.md`.
 
 ```bash
 git pull                                   # dopo il tuo commit su main
-conda activate gnn && python -c "import torch; print(torch.cuda.is_available())"
+bash create_env.sh                         # crea (o aggiorna) l'env "gnn" e lo verifica
+conda activate gnn
 wandb login                                # serve per l'HPO
 ls dataset/PKT_subgraphs/                  # pkt_taskA_dti.tsv.zip, pkt_taskB_treats.tsv.zip, ablation/
 ```
@@ -62,6 +63,9 @@ nettamente peggiore di `+ fixed split`. Se succede, fermati e portami la tabella
 bash experiments/e2_hpo_tandem.sh
 ```
 - entrambi i task, 3 modelli, 30 trial ciascuno (`PKT_HPO_RUNS=20` per accorciare);
+- tetto di 500 epoche e patience di 10 valutazioni (= 50 epoche). In E0 R-GCN aveva la best epoch a
+  292/300, quindi con le vecchie 200 epoche le GNN sarebbero state troncate. **Check su W&B:** se molti
+  trial GNN hanno `best_epoch` vicino a 500, rilancia con `PKT_HPO_EPOCHS=800`;
 - progetti W&B: `RelationalPKT-DTI-v2-{rgcn,compgcn,distmult}` e `RelationalPKT-TREATS-v2-...`;
 - alla fine scrive da solo le config migliori in `src/models_params.json` come
   `PKT-DTI-best-v2` e `PKT-TREATS-best-v2`.

@@ -29,8 +29,13 @@ if [ "$WHICH" = "A" ]; then
 else
   export PKT_TSV="$TSV_B"; export PKT_TASK="$TASK_B"; export WANDB_PROJECT="RelationalPKT-TREATS${HPO_SUFFIX}"
 fi
-export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-200}"
-export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-50}"
+if [ "$PKT_HPO_PROTOCOL" = "v2" ]; then   # v2 GNNs converge later (E0: best epoch 292/300)
+  export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-500}"
+  export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-10}"   # evaluations (every 5 epochs)
+else
+  export PKT_HPO_EPOCHS="${PKT_HPO_EPOCHS:-200}"
+  export PKT_HPO_PATIENCE="${PKT_HPO_PATIENCE:-50}"
+fi
 export PKT_HPO_RUNS="${PKT_HPO_RUNS:-100}"
 
 log="${LOG_DIR}/e2_hpo_${WHICH}_$(date +%Y%m%d_%H%M%S).log"

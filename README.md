@@ -109,21 +109,19 @@ RelationalBioKG/
 
 ## Environment setup
 
-Use the conda env **`gnn`** (already provisioned with all requirements). To recreate from scratch:
+One command builds the conda env **`gnn`** exactly as verified (Python 3.10, PyTorch 2.7.0,
+PyG 2.7.0, pinned `requirements.txt`), picking the CUDA build from the NVIDIA driver and checking
+imports, GPU kernels and data files at the end:
 
 ```bash
-conda create -n gnn python=3.10 -y && conda activate gnn
-pip install -r requirements.txt
+bash create_env.sh                    # create or update env "gnn"
+CUDA_TAG=cu126 bash create_env.sh     # force a build: cu128 | cu126 | cu118 | cpu
+RECREATE=1 bash create_env.sh         # rebuild from scratch
+conda activate gnn && wandb login     # W&B is needed for the HPO only
 ```
 
-If `torch-sparse` fails, install PyTorch/PyG wheels separately (match your CUDA, e.g. `cu128`):
-
-```bash
-pip install --index-url https://download.pytorch.org/whl/cu128 torch torchvision torchaudio
-pip install --no-cache-dir --only-binary=:all: \
-  pyg_lib torch-geometric torch-scatter torch-sparse torch-cluster torch-spline-conv \
-  termcolor torcheval -f https://data.pyg.org/whl/torch-2.7.1+cu128.html
-```
+`requirements.txt` lists everything except PyTorch and the compiled PyG extensions, whose wheels
+depend on the CUDA version and are installed by the script.
 
 **Requirements:** Python 3.10, a CUDA GPU with adequate VRAM (the full-graph ranking needs a real
 GPU — see the TDR note in `experiments/README.md`). Full experiment runs are meant for the **server**.

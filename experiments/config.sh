@@ -50,7 +50,9 @@ resolve_config () {   # $1 = task interaction (DTI / TREATS); echoes the config 
 
 # ---- training budget (PathogenKG Table-4 protocol) ----
 export RUNS="${RUNS:-12}"
-export EPOCHS="${EPOCHS:-400}"
+# v2: early stopping on val M (patience 50) is the real stop; in E0 the v1-tuned R-GCN still had
+# its best epoch at 292/300, so the v2 ceiling is higher to avoid truncating slow-converging GNNs.
+if [ "${PROTOCOL:-v1}" = "v2" ]; then export EPOCHS="${EPOCHS:-800}"; else export EPOCHS="${EPOCHS:-400}"; fi
 export PATIENCE="${PATIENCE:-20}"
 
 # ---- training protocols (see docs/piano_consolidamento_v2.md) ----
