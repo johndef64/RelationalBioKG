@@ -618,6 +618,19 @@ def run_hyperparameter_optimization():
 
 		# Run the sweep (configurable via PKT_HPO_RUNS)
 		number_of_runs = HPO_RUNS
+		if HPO_RESUME and os.path.exists(id_path):
+			# on resume PKT_HPO_RUNS is the TOTAL per model: only run the trials still missing,
+			# so a model whose sweep already completed is not re-run
+			try:
+				sweep = wandb.Api().sweep(f"{ENTITY}/{model_project}/{sweep_id}")
+				done = sum(1 for r in sweep.runs if r.state == "finished")
+				number_of_runs = max(0, HPO_RUNS - done)
+				print(f"[resume] {model_name}: {done} finished trials, {number_of_runs} to go (target {HPO_RUNS})")
+			except Exception as e:
+				print(f"[resume] could not count finished trials ({e}); running {number_of_runs} more")
+			if number_of_runs == 0:
+				print(f"[resume] {model_name}: sweep already complete, skipping")
+				continue
 		wandb.agent(
 			sweep_id,
 			train_model,

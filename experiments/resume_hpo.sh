@@ -3,14 +3,16 @@
 # (experiments/hpo_sweeps/<project>.txt) instead of starting a new sweep. The Bayesian
 # search continues, reusing the trials already logged on W&B.
 #
-# Note: this runs PKT_HPO_RUNS MORE trials on the existing sweep (there is no "finish to N
-# total" in W&B). Lower it to add fewer, e.g. PKT_HPO_RUNS=15.
+# PKT_HPO_RUNS is the TOTAL number of trials per model (default 30, as e2_hpo_tandem.sh):
+# the finished trials are counted on W&B and only the missing ones are run; a model whose
+# sweep is already complete is skipped, a model whose sweep never started gets a new sweep.
 #
-# Usage:  bash experiments/resume_hpo.sh A        # resume Task A sweeps (rgcn + compgcn)
-#         PKT_HPO_RUNS=15 bash experiments/resume_hpo.sh B
+# Usage:  bash experiments/resume_hpo.sh A        # resume Task A (DTI) sweeps
+#         bash experiments/resume_hpo.sh B        # resume Task B (TREATS) sweeps
 set -euo pipefail
 cd "$(dirname "$0")/.."
 WHICH="${1:-A}"
 export PKT_HPO_RESUME=1
-echo "[resume] re-attaching agents to saved sweep(s) for task $WHICH (PKT_HPO_RUNS=${PKT_HPO_RUNS:-100})"
+export PKT_HPO_RUNS="${PKT_HPO_RUNS:-30}"
+echo "[resume] task $WHICH: completing sweeps up to PKT_HPO_RUNS=$PKT_HPO_RUNS trials per model"
 bash experiments/e2_hpo_sweep.sh "$WHICH"

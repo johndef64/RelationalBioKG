@@ -49,11 +49,31 @@ TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh pair
 python experiments/protocol_compare_summary.py          # -> experiments/protocol_compare_summary.md
 ```
 
-Facoltativo, se c'è tempo (dice quale modifica ha l'effetto maggiore, utile per la sezione metodi):
-`bash experiments/e0_protocol_compare.sh` (scala completa, entrambi i task, entrambe le GNN).
-
 **Check prima di andare avanti:** in `protocol_compare_summary.md` la riga `v2` non deve avere M
 nettamente peggiore di `+ fixed split`. Se succede, fermati e portami la tabella.
+
+> ✅ **Fatto (2026-09-15), check superato.** R-GCN DTI: M 0.534 → 0.741 (p=0.002), MRR 0.127 → 0.436.
+> DistMult (lr 0.03): M 0.795, MRR 0.598 — sopra R-GCN in MRR, sotto in AUROC/AUPRC (confronto non
+> ancora equo: config R-GCN tunata sotto v1, best epoch 292/300). Da qui il tetto epoche alzato nell'HPO v2.
+
+### E0-ladder — quanto pesa ogni correzione (dopo l'HPO, a GPU libera; < 1 ora)
+
+`pair` applica in un colpo solo le 4 modifiche di v2, quindi non dice quale ha prodotto il salto.
+La scala le aggiunge **una alla volta** (split fisso → selezione su val M → negativi espliciti invece
+dell'oversampling → grafo completo → supervisione disgiunta = v2). Le varianti già fatte (`v1`,
+`v1_fixsplit`, `v2`, baseline) vengono saltate: girano solo `s1_selectM`, `s2_negatives`, `s3_fullgraph`.
+
+```bash
+TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh ladder
+python experiments/protocol_compare_summary.py          # rigenera experiments/protocol_compare_summary.md
+```
+- Leggi la colonna **ΔM vs fixsplit** riga per riga: la differenza tra una riga e la precedente è il
+  contributo di quella correzione; guarda anche **best ep.** (atteso: il salto grande a `+ select on val M`).
+- Non lanciarla in parallelo all'HPO (stessa GPU).
+- Facoltativo, più lungo: `bash experiments/e0_protocol_compare.sh` (scala completa, entrambi i task,
+  R-GCN e CompGCN, circa 72 training).
+
+Serve alla sezione metodi della tesi: "contributo di ogni correzione del protocollo". Portami la tabella.
 
 ---
 
@@ -70,11 +90,27 @@ bash experiments/e2_hpo_tandem.sh
 - alla fine scrive da solo le config migliori in `src/models_params.json` come
   `PKT-DTI-best-v2` e `PKT-TREATS-best-v2`.
 
-Se si interrompe: `bash experiments/resume_hpo.sh A` (oppure `B`), poi di nuovo l'estrazione:
-```bash
-python experiments/get_best_hpo_config.py --task DTI    --suffix -v2 --write
-python experiments/get_best_hpo_config.py --task TREATS --suffix -v2 --write
-```
+Il tandem fa in sequenza: **Task A = DTI** (rgcn → compgcn → distmult), poi **Task B = TREATS**
+(stessi 3 modelli), poi l'estrazione delle config migliori. Se si interrompe:
+
+1. guarda nel terminale/log a che task era arrivato;
+2. riprendi quel task — completa ogni modello fino a 30 trial *terminati* (conta quelli già fatti su
+   W&B, salta i modelli già completi, avvia da zero quelli mai partiti):
+   ```bash
+   bash experiments/resume_hpo.sh A        # se era fermo durante il DTI ...
+   bash experiments/e2_hpo_sweep.sh B      # ... e poi il TREATS, che non era ancora partito
+   # oppure, se era fermo durante il TREATS (DTI già completo):
+   bash experiments/resume_hpo.sh B
+   ```
+   (con `PKT_HPO_RUNS=20 bash ...` se avevi lanciato il tandem con 20 trial);
+3. rifai a mano l'estrazione, che il tandem avrebbe fatto alla fine. Un comando per task: legge da W&B
+   il trial migliore di ogni modello e con `--write` lo salva in `src/models_params.json` come
+   `PKT-DTI-best-v2` / `PKT-TREATS-best-v2` (è la config che poi usa E1); scrive anche
+   `experiments/hpo_best/<TASK>-v2_<modello>_best.json` e la leaderboard `.csv`:
+   ```bash
+   python experiments/get_best_hpo_config.py --task DTI    --suffix -v2 --write
+   python experiments/get_best_hpo_config.py --task TREATS --suffix -v2 --write
+   ```
 **Check:** `python -c "import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if k.endswith('-v2')})"`
 deve mostrare `rgcn`, `compgcn`, `distmult` per entrambi i task.
 
