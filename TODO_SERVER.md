@@ -141,21 +141,38 @@ M 0,478 · MRR 0,117 — R-GCN v2 M 0,741 · MRR 0,436 — DistMult M 0,795 · M
 
 ## 3. HPO `-v2b` — entrambi i task sui dati definitivi (il passo più lungo)
 
-```bash
-HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_tandem.sh
-```
-- Task A poi Task B, tre modelli ciascuno, **15 trial per modello** invece di 30: i 112 trial già
-  fatti dicono dove sta l'ottimo (learning rate al bordo superiore della griglia, un solo layer di
-  convoluzione, 10 negativi per positivo);
-- tetto 500 epoche e patience 10 valutazioni (default v2 di `e2_hpo_sweep.sh`);
-- progetti W&B nuovi: `RelationalPKT-DTI-v2b-*` e `RelationalPKT-TREATS-v2b-*`;
-- alla fine il tandem estrae da solo le config e scrive `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`.
+I due task si lanciano **separati**, con budget diversi (`e2_hpo_tandem.sh` userebbe un solo
+`PKT_HPO_RUNS` per entrambi). Il tempo sta quasi tutto in Task B, quindi si spende dove costa poco.
 
-**Se l'estrazione automatica fallisce**, rifalla a mano:
 ```bash
+# Task A — economico (10.305 archi bersaglio su 1,16 M): un trial R-GCN sono un paio di minuti
+HPO_SUFFIX=-v2b PKT_HPO_RUNS=30 bash experiments/e2_hpo_sweep.sh A
+
+# Task B — il pesante (168.157 archi bersaglio su 1,87 M, CompGCN a grafo pieno rischia l'OOM)
+HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_sweep.sh B
+
+# estrazione delle config migliori (il tandem la faceva da solo, qui va lanciata a mano)
 python experiments/get_best_hpo_config.py --task DTI    --suffix=-v2b --write
 python experiments/get_best_hpo_config.py --task TREATS --suffix=-v2b --write
 ```
+- tre modelli per task (rgcn, compgcn, distmult), tetto 500 epoche e patience 10 valutazioni
+  (default v2 di `e2_hpo_sweep.sh`);
+- `PKT_HPO_RUNS` va passato sempre: lanciato da solo, `e2_hpo_sweep.sh` ha come default **100**
+  trial per modello (era il tandem a portarlo a 30);
+- progetti W&B nuovi: `RelationalPKT-DTI-v2b-*` e `RelationalPKT-TREATS-v2b-*`;
+- **30 trial su Task A, 15 su Task B.** I 112 trial vecchi dicevano dove stava l'ottimo, ma la
+  griglia del learning rate è stata allargata a `3e-2` e `1e-1` (vedi sotto): quei due valori non
+  sono mai stati provati, e E0 dice che l'ottimo sta proprio lì. Su Task A quindi si esplora, non si
+  rifinisce, e costa poco. Su Task B il budget resta basso perché è dieci volte più caro — pur
+  avendo meno storia alle spalle (il vecchio sweep si era fermato a 22 trial e solo su R-GCN).
+
+**Griglia del learning rate allargata** (`tuning_hyperparameter.py`, blocco `_V2`):
+`[1e-3, 3e-3, 1e-2, 3e-2, 1e-1]`, prima si fermava a `1e-2`. In full-batch si fa un solo passo di
+ottimizzatore per epoca, quindi il learning rate decide tutto: in E0 DistMult ha fatto M 0,300 →
+0,346 → 0,531 passando da 1e-2 a 3e-2 a 1e-1, e R-GCN a 1e-3 stava ancora migliorando contro il
+tetto delle epoche (best epoch 297/300). Senza questa modifica la baseline avrebbe cercato fino a
+1e-1 e le GNN solo fino a 1e-2: passi dieci volte più corti per il modello che deve batterla.
+**Serve un `git pull` sul server prima di lanciare.**
 
 **Check:** i comandi devono stampare `[RelationalPKT-<TASK>-v2b-<modello>] ranking by
 'best_val_mixed_metric'` per rgcn, compgcn e distmult. Poi:
@@ -164,8 +181,9 @@ python -c "import json;d=json.load(open('src/models_params.json'));print({k:list
 ```
 deve mostrare `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`, con tre modelli ciascuno.
 
-Se lo sweep si interrompe: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/resume_hpo.sh A`
-(oppure `B`) completa fino a 15 trial per modello e salta quelli già finiti; poi ripeti l'estrazione.
+Se lo sweep si interrompe: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=30 bash experiments/resume_hpo.sh A`
+(per Task B: `PKT_HPO_RUNS=15 ... resume_hpo.sh B`) completa fino al budget del task e salta i
+modelli già finiti; poi ripeti l'estrazione.
 
 Nota memoria: CompGCN su TREATS a grafo pieno è il caso più pesante; i trial in OOM vengono
 registrati come saltati e lo sweep continua.
