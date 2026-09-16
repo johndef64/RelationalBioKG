@@ -34,7 +34,8 @@
 # USAGE:
 #   bash experiments/e0_protocol_compare.sh                    # ladder, both tasks, rgcn+compgcn
 #   bash experiments/e0_protocol_compare.sh pair
-#   TASKS=DTI CMP_CONFIG=PKT-DTI-best-v2 bash experiments/e0_protocol_compare.sh quick
+#   TASKS=DTI CMP_CONFIG=PKT-DTI-best-v2 CMP_DIR=experiments/logs/e0_v2b bash experiments/e0_protocol_compare.sh quick
+#     (new data -> new log dir, otherwise the crash-resume mistakes the old runs for done work)
 #   TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 bash experiments/e0_protocol_compare.sh
 #   python experiments/protocol_compare_summary.py             # table (also run at the end)
 #
@@ -56,7 +57,9 @@ CMP_EPOCHS="${CMP_EPOCHS:-300}"
 CMP_BASELINES="${CMP_BASELINES:-1}"
 CMP_DISTMULT_LRS="${CMP_DISTMULT_LRS:-0.01 0.03 0.1}"
 CMP_RESUME="${CMP_RESUME:-1}"
-CMP_DIR="${LOG_DIR}/e0"
+# CMP_DIR is where runs are logged AND where the crash-resume looks for completed runs:
+# point it somewhere new when the DATA changed, or old logs will be mistaken for done work
+CMP_DIR="${CMP_DIR:-${LOG_DIR}/e0}"
 mkdir -p "$CMP_DIR"
 
 # ---- variant flags: v1 flags + overrides (argparse keeps the LAST occurrence of a flag) ----
@@ -103,6 +106,7 @@ run_variant () {   # $1 task  $2 model  $3 variant  $4 config  $5.. flags
 }
 
 echo "[E0] mode=$MODE tasks='$TASKS' models='$CMP_MODELS' runs=$CMP_RUNS epochs=$CMP_EPOCHS variants='$VARIANTS'"
+echo "[E0] logs and crash-resume: $CMP_DIR (CMP_RESUME=$CMP_RESUME)"
 for task in $TASKS; do
   # protocol comparison uses the v1-tuned configs on both sides (conservative for v2);
   # CMP_CONFIG overrides it, e.g. when checking a new target relation with the best config available

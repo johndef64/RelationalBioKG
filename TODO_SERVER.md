@@ -113,10 +113,18 @@ e confronta R-GCN con il pavimento di popolarità e con DistMult su una piccola 
 rate. Circa un'ora.
 
 ```bash
-TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 CMP_CONFIG=PKT-DTI-best-v2 \
+# archivia i log di E0 sul dataset vecchio: il resume li scambierebbe per lavoro già fatto
+mkdir -p experiments/logs/archive_e0_biochem
+mv experiments/logs/e0/* experiments/logs/archive_e0_biochem/ 2>/dev/null
+
+TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 CMP_CONFIG=PKT-DTI-best-v2 CMP_DIR=experiments/logs/e0_v2b \
   bash experiments/e0_protocol_compare.sh quick
-python experiments/protocol_compare_summary.py     # -> experiments/protocol_compare_summary.md
+python experiments/protocol_compare_summary.py --logdir experiments/logs/e0_v2b --out experiments
 ```
+
+**Controlla le prime righe:** deve allenare davvero. Se stampa `skip ... (already complete)` per
+tutte le varianti, sta leggendo log vecchi: `CMP_DIR` punta a una cartella già usata.
+La tabella riporta l'ora di fine e il tempo per run, usali per accorgertene.
 
 Come leggere la tabella:
 
