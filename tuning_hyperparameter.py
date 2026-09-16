@@ -225,8 +225,12 @@ if _V2:
 	SWEEP_CONFIG['parameters']['opn'] = {'values': ['sub', 'mult', 'ccorr']}
 	# negatives per positive in training (replaces the x5 oversampling, which only acted as 5 negatives)
 	SWEEP_CONFIG['parameters']['train_negative_rate'] = {'values': [1, 5, 10]}
-	# v1 winners sat on the upper bound (3e-3): full-batch training does one step per epoch
-	SWEEP_CONFIG['parameters']['learning_rate'] = {'values': [3e-4, 1e-3, 3e-3, 1e-2]}
+	# v1 winners sat on the upper bound (3e-3): full-batch training does one step per epoch, so the
+	# usual mini-batch learning rates are far too small here. E0 on the pharmacological target made
+	# this concrete: DistMult scored M 0.300 / 0.346 / 0.531 at lr 1e-2 / 3e-2 / 1e-1, and R-GCN at
+	# its tuned 1e-3 was still improving at the epoch ceiling. The grid reaches 1e-1 so the GNNs are
+	# searched over the same range as the baseline they have to beat.
+	SWEEP_CONFIG['parameters']['learning_rate'] = {'values': [1e-3, 3e-3, 1e-2, 3e-2, 1e-1]}
 
 # Embedding-only DistMult baseline (no message passing): only optimisation params + embedding size.
 DISTMULT_PARAMS = {

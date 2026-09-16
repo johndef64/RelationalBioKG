@@ -7,18 +7,16 @@ Mean ± sample std over runs (test set). M = 0.2·AUROC + 0.4·AUPRC + 0.4·MRR.
 
 | variant | n | AUROC | AUPRC | MRR | Hits@10 | **M** | warm MRR | ΔM vs fixsplit | p(M) | best ep. | time/run (s) |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| v1 (legacy) | 3 | 0.811 ± 0.015 | 0.813 ± 0.018 | 0.135 ± 0.019 | 0.191 ± 0.022 | **0.542 ± 0.018** | 0.147 ± 0.020 | +0.008 | 0.642 | 38 | 54 |
-| + fixed split | 3 | 0.803 ± 0.024 | 0.805 ± 0.028 | 0.127 ± 0.015 | 0.182 ± 0.022 | **0.534 ± 0.022** | 0.138 ± 0.016 | — | — | 37 | 53 |
-| + disjoint supervision = **v2** | 3 | 0.936 ± 0.001 | 0.948 ± 0.001 | 0.436 ± 0.013 | 0.558 ± 0.016 | **0.741 ± 0.005** | 0.474 ± 0.013 | +0.207 | 0.002 | 292 | 183 |
+| + disjoint supervision = **v2** | 3 | 0.779 ± 0.044 | 0.781 ± 0.048 | 0.060 ± 0.042 | 0.097 ± 0.058 | **0.492 ± 0.044** | 0.065 ± 0.046 | — | — | 297 | 38 |
 
 ## DTI — baselines (fixed split)
 
 | baseline | n | AUROC | AUPRC | MRR | Hits@10 | **M** | warm MRR | note |
 |---|---|---|---|---|---|---|---|---|
-| DistMult (no GNN) `v2_lr0.01` | 3 | 0.901 ± 0.001 | 0.932 ± 0.001 | 0.587 ± 0.003 | 0.662 ± 0.002 | **0.788 ± 0.001** | 0.638 ± 0.004 | embeddings only, no message passing (v2 protocol) |
-| DistMult (no GNN) `v2_lr0.03` | 3 | 0.907 ± 0.001 | 0.936 ± 0.001 | 0.598 ± 0.005 | 0.683 ± 0.004 | **0.795 ± 0.002** | 0.650 ± 0.006 | embeddings only, no message passing (v2 protocol) |
-| DistMult (no GNN) `v2_lr0.1` | 3 | 0.899 ± 0.004 | 0.929 ± 0.002 | 0.551 ± 0.002 | 0.651 ± 0.001 | **0.772 ± 0.001** | 0.600 ± 0.002 | embeddings only, no message passing (v2 protocol) |
-| popularity (node degree) | 1 | 0.735 ± 0.000 | 0.710 ± 0.000 | 0.117 ± 0.000 | 0.188 ± 0.000 | **0.478 ± 0.000** | 0.126 ± 0.000 | MRR with random tie-breaking: 0.118 |
+| DistMult (no GNN) `v2_lr0.01` | 3 | 0.496 ± 0.016 | 0.499 ± 0.016 | 0.004 ± 0.001 | 0.004 ± 0.000 | **0.300 ± 0.010** | 0.003 ± 0.000 | embeddings only, no message passing (v2 protocol) |
+| DistMult (no GNN) `v2_lr0.03` | 3 | 0.546 ± 0.103 | 0.565 ± 0.127 | 0.026 ± 0.040 | 0.043 ± 0.069 | **0.346 ± 0.087** | 0.028 ± 0.044 | embeddings only, no message passing (v2 protocol) |
+| DistMult (no GNN) `v2_lr0.1` | 3 | 0.783 ± 0.011 | 0.811 ± 0.014 | 0.124 ± 0.044 | 0.212 ± 0.045 | **0.531 ± 0.025** | 0.137 ± 0.049 | embeddings only, no message passing (v2 protocol) |
+| popularity (node degree) | 1 | 0.665 ± 0.000 | 0.683 ± 0.000 | 0.041 ± 0.000 | 0.088 ± 0.000 | **0.423 ± 0.000** | 0.044 ± 0.000 | MRR with random tie-breaking: 0.041 |
 
 ### How to read it
 
