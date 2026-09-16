@@ -227,7 +227,7 @@ run list for the next server session is in **[`TODO_SERVER.md`](TODO_SERVER.md)*
 |---|---|---|
 | **E0** | protocol comparison v1 vs v2 + popularity and DistMult baselines | `experiments/e0_protocol_compare.sh` |
 | **E1** | main training: R-GCN vs CompGCN vs **DistMult baseline** | `experiments/e1_main_training.sh` |
-| **E2** | Bayesian hyperparameter optimisation (W&B), baseline tuned too | `experiments/e2_hpo_tandem.sh` |
+| **E2** | Bayesian hyperparameter optimisation (W&B), baseline tuned too | `experiments/e2_hpo_tandem2.sh` |
 | **E3** | ablations (component machinery + relational context) | `experiments/e3_ablation.sh` |
 | **E4** | compound-centric repurposing + interpretability + expert review | `experiments/e4_repurposing.sh` |
 

@@ -69,9 +69,12 @@ TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh pair   # minim
 bash experiments/e0_protocol_compare.sh                                  # full ladder
 python experiments/protocol_compare_summary.py        # -> experiments/protocol_compare_summary.md
 
-# E2 — HPO under protocol v2 (default): W&B projects RelationalPKT-<TASK>-v2-<model>,
-#      models rgcn + compgcn + distmult baseline; best configs -> PKT-<TASK>-best-v2
-bash experiments/e2_hpo_tandem.sh
+# E2 — HPO under protocol v2 (default): W&B projects RelationalPKT-<TASK><SUFFIX>-<model>,
+#      models rgcn + compgcn + distmult baseline; best configs -> PKT-<TASK>-best<SUFFIX>
+bash experiments/e2_hpo_tandem2.sh    # suffix -v2b, 30 trials/model on Task A, 15 on Task B
+#      Task B costs ~10x a Task A trial, so the two no longer share one budget. Use tandem2.
+#      (one task only:  bash experiments/e2_hpo_tandem2.sh A)
+#      (same budget for both, older behaviour: PKT_HPO_RUNS=30 bash experiments/e2_hpo_tandem.sh)
 #      (legacy sweep: PKT_HPO_PROTOCOL=v1 bash experiments/e2_hpo_sweep.sh A)
 
 # E1 — main training & model comparison with the v2 protocol and v2 configs

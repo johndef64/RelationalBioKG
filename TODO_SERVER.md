@@ -141,30 +141,37 @@ M 0,478 · MRR 0,117 — R-GCN v2 M 0,741 · MRR 0,436 — DistMult M 0,795 · M
 
 ## 3. HPO `-v2b` — entrambi i task sui dati definitivi (il passo più lungo)
 
-I due task si lanciano **separati**, con budget diversi (`e2_hpo_tandem.sh` userebbe un solo
-`PKT_HPO_RUNS` per entrambi). Il tempo sta quasi tutto in Task B, quindi si spende dove costa poco.
+Usa la **seconda versione del tandem**, `e2_hpo_tandem2.sh`: stessa logica di prima (Task A poi
+Task B in sequenza, poi l'estrazione automatica delle config), ma i due task non condividono più un
+unico budget di trial. Non costano uguale e non hanno alle spalle la stessa storia.
 
 ```bash
-# Task A — economico (10.305 archi bersaglio su 1,16 M): un trial R-GCN sono un paio di minuti
-HPO_SUFFIX=-v2b PKT_HPO_RUNS=30 bash experiments/e2_hpo_sweep.sh A
-
-# Task B — il pesante (168.157 archi bersaglio su 1,87 M, CompGCN a grafo pieno rischia l'OOM)
-HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_sweep.sh B
-
-# estrazione delle config migliori (il tandem la faceva da solo, qui va lanciata a mano)
-python experiments/get_best_hpo_config.py --task DTI    --suffix=-v2b --write
-python experiments/get_best_hpo_config.py --task TREATS --suffix=-v2b --write
+bash experiments/e2_hpo_tandem2.sh
 ```
-- tre modelli per task (rgcn, compgcn, distmult), tetto 500 epoche e patience 10 valutazioni
-  (default v2 di `e2_hpo_sweep.sh`);
-- `PKT_HPO_RUNS` va passato sempre: lanciato da solo, `e2_hpo_sweep.sh` ha come default **100**
-  trial per modello (era il tandem a portarlo a 30);
-- progetti W&B nuovi: `RelationalPKT-DTI-v2b-*` e `RelationalPKT-TREATS-v2b-*`;
-- **30 trial su Task A, 15 su Task B.** I 112 trial vecchi dicevano dove stava l'ottimo, ma la
-  griglia del learning rate è stata allargata a `3e-2` e `1e-1` (vedi sotto): quei due valori non
-  sono mai stati provati, e E0 dice che l'ottimo sta proprio lì. Su Task A quindi si esplora, non si
-  rifinisce, e costa poco. Su Task B il budget resta basso perché è dieci volte più caro — pur
-  avendo meno storia alle spalle (il vecchio sweep si era fermato a 22 trial e solo su R-GCN).
+Tutto il resto è già dentro: suffisso `-v2b`, 30 trial per modello su Task A, 15 su Task B, tetto
+500 epoche, patience 10 valutazioni, estrazione finale di `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`.
+
+Prima di lanciare, controlla la testata: deve stampare
+`Task A: 30 trials/model -> 90 runs` e `Task B: 15 trials/model -> 45 runs`.
+
+Varianti utili:
+```bash
+bash experiments/e2_hpo_tandem2.sh A                          # solo Task A (+ la sua estrazione)
+PKT_HPO_RUNS_A=40 PKT_HPO_RUNS_B=20 bash experiments/e2_hpo_tandem2.sh   # budget diversi
+PKT_HPO_MODELS="rgcn" bash experiments/e2_hpo_tandem2.sh A    # un modello solo, per provare
+```
+
+- tre modelli per task (rgcn, compgcn, distmult); progetti W&B nuovi
+  `RelationalPKT-DTI-v2b-*` e `RelationalPKT-TREATS-v2b-*`;
+- **perché 30 e 15.** I 112 trial vecchi dicevano dove stava l'ottimo, ma la griglia del learning
+  rate è stata allargata a `3e-2` e `1e-1` (vedi sotto): quei due valori non li ha mai provati
+  nessuno, e E0 dice che l'ottimo sta proprio lì. Su Task A quindi si **esplora**, non si rifinisce,
+  e costa poco (10.305 archi bersaglio su 1,16 M: un trial R-GCN sono un paio di minuti). Su Task B
+  il budget resta basso perché costa una decina di volte tanto (168.157 archi bersaglio su 1,87 M,
+  e CompGCN a grafo pieno è il caso che rischia l'OOM) — pur avendo meno storia alle spalle, visto
+  che il vecchio sweep si era fermato a 22 trial e solo su R-GCN.
+- il vecchio `e2_hpo_tandem.sh` resta com'era (un solo `PKT_HPO_RUNS` per entrambi i task): non
+  usarlo qui, o Task B si prende lo stesso budget di Task A.
 
 **Griglia del learning rate allargata** (`tuning_hyperparameter.py`, blocco `_V2`):
 `[1e-3, 3e-3, 1e-2, 3e-2, 1e-1]`, prima si fermava a `1e-2`. In full-batch si fa un solo passo di
@@ -182,8 +189,9 @@ python -c "import json;d=json.load(open('src/models_params.json'));print({k:list
 deve mostrare `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`, con tre modelli ciascuno.
 
 Se lo sweep si interrompe: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=30 bash experiments/resume_hpo.sh A`
-(per Task B: `PKT_HPO_RUNS=15 ... resume_hpo.sh B`) completa fino al budget del task e salta i
-modelli già finiti; poi ripeti l'estrazione.
+(per Task B: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/resume_hpo.sh B`) completa fino al
+budget del task e salta i modelli già finiti; poi ripeti l'estrazione. In alternativa si può
+rilanciare `e2_hpo_tandem2.sh A` (o `B`): lo sweep W&B riprende dallo stesso sweep id.
 
 Nota memoria: CompGCN su TREATS a grafo pieno è il caso più pesante; i trial in OOM vengono
 registrati come saltati e lo sweep continua.
