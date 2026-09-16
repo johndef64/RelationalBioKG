@@ -46,6 +46,8 @@ NODE_LABELS = ROOT / "dataset" / "PKT_subgraphs" / "node_labels.tsv"
 TASK_A = ROOT / "dataset" / "PKT_subgraphs" / "pkt_taskA_dti.tsv.zip"
 OUT_EDGES = ROOT / "dataset" / "PKT_subgraphs" / "dti_drugbank_edges.tsv"
 OUT_REPORT = ROOT / "analysis" / "out" / "10_dti_drugbank_report.md"
+PKT_DIR = ROOT / "dataset" / "PKT"                      # raw KG (fallback GO source)
+GO_CACHE = ROOT / "dataset" / "PKT_subgraphs" / "protein_go_terms.tsv"   # derived, gitignored
 
 UNIPROT_SEARCH = "https://rest.uniprot.org/uniprotkb/search"
 UNIPROT_QUERY = "(organism_id:9606) AND (reviewed:true) AND (database:drugbank)"
@@ -171,16 +173,61 @@ CARRIER_LABEL = re.compile(r"^(albumin|serum albumin|alpha-1-acid glycoprotein|t
                            r"sex hormone-binding globulin|alpha-1-antitrypsin)", re.I)
 
 
-def adme_proteins(labels):
-    """Proteins of the task graph that DrugBank would list as enzymes / transporters / carriers."""
+def protein_go_terms(labels):
+    """Protein node -> {GO term label}.
+
+    Read from the built Task A graph when it exists (fast). This script, however, also runs BEFORE
+    the graphs are built (they depend on its output), so the fallback streams the raw KG once and
+    caches the result in analysis/out/, making the two scripts independent of each other.
+    """
     go_of = collections.defaultdict(set)
-    with zipfile.ZipFile(TASK_A) as z:
-        with z.open(z.namelist()[0]) as fh:
-            r = csv.reader(io.TextIOWrapper(fh, encoding="utf-8"), delimiter="\t")
-            next(r)
-            for row in r:
-                if row[1].startswith("PROTEIN_GO"):
-                    go_of[row[0]].add(labels.get(row[2], "").lower())
+    if TASK_A.exists():
+        with zipfile.ZipFile(TASK_A) as z:
+            with z.open(z.namelist()[0]) as fh:
+                r = csv.reader(io.TextIOWrapper(fh, encoding="utf-8"), delimiter="\t")
+                next(r)
+                for row in r:
+                    if row[1].startswith("PROTEIN_GO"):
+                        go_of[row[0]].add(labels.get(row[2], "").lower())
+        return go_of
+
+    if GO_CACHE.exists():
+        print(f"      protein--GO annotations from cache {GO_CACHE.relative_to(ROOT)}")
+        with open(GO_CACHE, encoding="utf-8") as fh:
+            for line in fh:
+                node, terms = line.rstrip("\n").split("\t", 1)
+                go_of[node] = set(terms.split("; ")) if terms else set()
+        return go_of
+
+    print("      task graph not built yet: reading protein--GO annotations from the raw KG "
+          "(one pass, a few minutes) ...")
+    import ijson                                     # only needed on this path
+    uri2node = {}
+    with zipfile.ZipFile(PKT_DIR / "nodes.zip") as z, z.open("nodes.json") as f:
+        for o in ijson.items(f, "item"):
+            bt = o.get("bioentity_type")
+            if bt in ("protein", "go") and o.get("entity_id"):
+                prefix = "Protein" if bt == "protein" else "GO"
+                uri2node[o["uri"]] = (f"{prefix}::{o['entity_id']}", bt, (o.get("label") or "").lower())
+    GO_PREDICATES = {"participates in", "has function", "located_in"}
+    with zipfile.ZipFile(PKT_DIR / "edges.zip") as z, z.open("edges.json") as f:
+        for e in ijson.items(f, "item"):
+            if e.get("predicate_label") not in GO_PREDICATES:
+                continue
+            s = uri2node.get(e.get("source_uri")); t = uri2node.get(e.get("target_uri"))
+            if s and t and s[1] == "protein" and t[1] == "go":
+                go_of[s[0]].add(t[2])
+    GO_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    with open(GO_CACHE, "w", encoding="utf-8") as fh:
+        for node, terms in go_of.items():
+            fh.write(f"{node}\t{'; '.join(sorted(terms))}\n")
+    print(f"      cached {len(go_of):,} proteins -> {GO_CACHE.relative_to(ROOT)}")
+    return go_of
+
+
+def adme_proteins(labels):
+    """Proteins that DrugBank would list as enzymes / transporters / carriers rather than targets."""
+    go_of = protein_go_terms(labels)
     flagged = {p for p, terms in go_of.items() if any(ADME_GO.search(t) for t in terms)}
     flagged |= {p for p in labels if p.startswith("Protein::") and CARRIER_LABEL.search(labels[p])}
     return flagged
@@ -192,8 +239,14 @@ def node_labels():
 
 
 def existing_dti():
-    """Compound--protein pairs asserted by PheKnowLator itself (biochemical relation)."""
+    """Compound--protein pairs asserted by PheKnowLator itself (biochemical relation).
+
+    Only used for a statistic in the report; the graph may not be built yet, in which case the
+    overlap is simply reported as unavailable.
+    """
     pairs = set()
+    if not TASK_A.exists():
+        return pairs
     with zipfile.ZipFile(TASK_A) as z:
         with z.open(z.namelist()[0]) as fh:
             r = csv.reader(io.TextIOWrapper(fh, encoding="utf-8"), delimiter="\t")
@@ -308,8 +361,9 @@ def main():
           f"({100 * len(adme_edges) / max(1, len(edges)):.1f}%) |",
           f"| Distinct drugs / proteins in `{args.relation}` | {len(per_drug):,} / {len(per_prot):,} |",
           ] + [f"| rule — {rule} | {n:,} |" for rule, n in rule_counts.most_common()] + [
-          f"| Edges already asserted in the current Task A relation | {overlap:,} "
-          f"({100 * overlap / max(1, len(edges)):.1f}%) |",
+          (f"| Edges already asserted as `CPI_BIOCHEM` by PheKnowLator | {overlap:,} "
+           f"({100 * overlap / max(1, len(edges)):.1f}%) |" if TASK_A.exists() else
+           "| Edges already asserted as `CPI_BIOCHEM` by PheKnowLator | n/d (task graph not built yet) |"),
           "\n## Most connected drugs\n", "| targets | drug |", "|---:|---|"]
     for node, n in per_drug.most_common(20):
         md.append(f"| {n} | {label.get(node, node)} |")

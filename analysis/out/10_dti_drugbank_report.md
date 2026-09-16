@@ -21,7 +21,7 @@ Mode: all drugs with a cross-reference. Relation name: `DTI`.
 | rule — GO: no ADME annotation | 7,493 |
 | rule — drugbank: no ADME protein declared | 2,812 |
 | rule — drugbank: no target declared | 1,529 |
-| Edges already asserted in the current Task A relation | 263 (1.4%) |
+| Edges already asserted as `CPI_BIOCHEM` by PheKnowLator | n/d (task graph not built yet) |
 
 ## Most connected drugs
 
@@ -57,8 +57,8 @@ Mode: all drugs with a cross-reference. Relation name: `DTI`.
 | 99 | prostaglandin G/H synthase 1 (human) |
 | 93 | muscarinic acetylcholine receptor M1 (human) |
 | 89 | gamma-aminobutyric acid receptor subunit alpha-1 (human) |
-| 84 | alpha-1B adrenergic receptor (human) |
 | 84 | alpha-2A adrenergic receptor (human) |
+| 84 | alpha-1B adrenergic receptor (human) |
 | 82 | muscarinic acetylcholine receptor M2 (human) |
 | 80 | 5-hydroxytryptamine receptor 1A (human) |
 | 79 | muscarinic acetylcholine receptor M3 (human) |
@@ -70,8 +70,8 @@ Mode: all drugs with a cross-reference. Relation name: `DTI`.
 | 72 | beta-1 adrenergic receptor (human) |
 | 72 | alpha-1D adrenergic receptor (human) |
 | 70 | estrogen receptor (human) |
-| 70 | gamma-aminobutyric acid receptor subunit alpha-4 (human) |
 | 70 | gamma-aminobutyric acid receptor subunit alpha-6 (human) |
+| 70 | gamma-aminobutyric acid receptor subunit alpha-4 (human) |
 
 ## Proteins moved to `DRUG_ADME`
 
