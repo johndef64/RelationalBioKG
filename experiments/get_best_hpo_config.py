@@ -75,11 +75,20 @@ def main():
 
     task_config = {}
     for model in args.models:
-        project = f"RelationalPKT-{args.task}-{model}"
-        print(f"\n[{project}] ranking by '{args.metric}' ...")
-        runs = ranked_runs(api, args.entity, project, args.metric)
+        project = f"RelationalPKT-{args.task}{args.suffix}-{model}"
+        # 'auto': v2 sweeps log best_val_mixed_metric (best checkpoint), v1 only val_mixed_metric
+        if args.metric == "auto":
+            metric = "best_val_mixed_metric"
+            runs = ranked_runs(api, args.entity, project, metric)
+            if not runs:
+                metric = "val_mixed_metric"
+                runs = ranked_runs(api, args.entity, project, metric)
+        else:
+            metric = args.metric
+            runs = ranked_runs(api, args.entity, project, metric)
+        print(f"\n[{project}] ranking by '{metric}' ...")
         if not runs:
-            print(f"  no runs with metric '{args.metric}' yet — skipping")
+            print(f"  no runs with metric '{metric}' yet — skipping")
             continue
         print(f"  {len(runs)} trials with metric; best = {runs[0][0]:.4f} ({runs[0][3]}, {runs[0][4]})")
 

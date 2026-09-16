@@ -6,15 +6,23 @@
 #
 # Usage:   PROTOCOL=v2 bash experiments/e1_main_training.sh      # rgcn, compgcn, distmult baseline
 #          RUNS=12 EPOCHS=400 MODELS="compgcn rgcn" bash experiments/e1_main_training.sh   # legacy v1
+#          TASKS=A bash experiments/e1_main_training.sh          # only Task A (DTI)
+#          CFG_A=PKT-DTI-best-v2b bash experiments/e1_main_training.sh   # force a tuned config
 # Logs: experiments/logs/e1_<task>_<model>_<ts>.log (v1) or experiments/logs/v2/e1_... (v2).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source experiments/config.sh
 
-run_one () {  # $1=tsv  $2=task  $3=model
-  local tsv="$1" task="$2" model="$3"
-  local cfg; cfg="$(resolve_config "$task")"   # v2: PKT-<task>-best-v2 ; v1: PKT-<task>-best ; else $HP_CONFIG
-  if [ "$PROTOCOL" = "v2" ] && [ "$cfg" != "PKT-${task}-best-v2" ]; then
+TASKS="${TASKS:-A B}"          # which task graphs to train on
+CFG_A="${CFG_A:-}"             # optional config override per task (e.g. a differently-suffixed HPO)
+CFG_B="${CFG_B:-}"
+
+run_one () {  # $1=tsv  $2=task  $3=model  $4=config override (may be empty)
+  local tsv="$1" task="$2" model="$3" override="${4:-}"
+  local cfg
+  if [ -n "$override" ]; then cfg="$override"; else cfg="$(resolve_config "$task")"; fi
+  # a config counts as v2-tuned when its name carries the v2 suffix (-v2, -v2b, ...)
+  if [ "$PROTOCOL" = "v2" ] && [[ "$cfg" != "PKT-${task}-best-v2"* ]]; then
     echo "[E1] WARNING: PROTOCOL=v2 but config '$cfg' was not tuned under v2 (run the v2 HPO first)."
     if [ "$model" = "distmult" ]; then
       echo "[E1] skipping distmult: without a v2 config it would reuse the R-GCN learning rate (unfair baseline)."
@@ -28,7 +36,12 @@ run_one () {  # $1=tsv  $2=task  $3=model
     --runs "$RUNS" --epochs "$EPOCHS" $COMMON_FLAGS 2>&1 | tee "$log"
 }
 
-for m in $MODELS; do run_one "$TSV_A" "$TASK_A" "$m"; done   # Task A (DTI)
-for m in $MODELS; do run_one "$TSV_B" "$TASK_B" "$m"; done   # Task B (TREATS)
+for t in $TASKS; do
+  case "$t" in
+    A|a) for m in $MODELS; do run_one "$TSV_A" "$TASK_A" "$m" "$CFG_A"; done ;;
+    B|b) for m in $MODELS; do run_one "$TSV_B" "$TASK_B" "$m" "$CFG_B"; done ;;
+    *) echo "[E1] unknown task '$t' (use A, B or \"A B\")" >&2; exit 1 ;;
+  esac
+done
 
 echo "[E1] done. Trained models are in models/ ; logs in ${LOG_DIR}/"

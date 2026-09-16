@@ -1,0 +1,3758 @@
+compound	entity_id	dti_edges	n_roles	roles
+Compound::CHEBI_15378	CHEBI_15378	2070	0	
+Compound::CHEBI_15377	CHEBI_15377	1156	6	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; amphiprotic solvent; greenhouse gas; human metabolite; mouse metabolite
+Compound::CHEBI_30616	CHEBI_30616	976	3	cofactor; fundamental metabolite; human metabolite
+Compound::CHEBI_456216	CHEBI_456216	861	2	fundamental metabolite; human metabolite
+Compound::CHEBI_43474	CHEBI_43474	569	2	Saccharomyces cerevisiae metabolite; cofactor
+Compound::CHEBI_18420	CHEBI_18420	547	1	cofactor
+Compound::CHEBI_29999	CHEBI_29999	501	0	
+Compound::CHEBI_30013	CHEBI_30013	477	0	
+Compound::CHEBI_83421	CHEBI_83421	460	0	
+Compound::CHEBI_61977	CHEBI_61977	447	0	
+Compound::CHEBI_29105	CHEBI_29105	316	2	cofactor; human metabolite
+Compound::CHEBI_29035	CHEBI_29035	260	1	cofactor
+Compound::CHEBI_29108	CHEBI_29108	217	2	cofactor; human metabolite
+Compound::CHEBI_15379	CHEBI_15379	212	8	Saccharomyces cerevisiae metabolite; anti-inflammatory drug; food packaging gas; human metabolite; micronutrient; nutrient; oxidising agent; reagent
+Compound::CHEBI_46858	CHEBI_46858	209	0	
+Compound::CHEBI_57287	CHEBI_57287	205	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_82620	CHEBI_82620	201	0	
+Compound::CHEBI_33019	CHEBI_33019	196	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57540	CHEBI_57540	183	4	Saccharomyces cerevisiae metabolite; cofactor; human metabolite; hydrogen acceptor
+Compound::CHEBI_59789	CHEBI_59789	147	1	cofactor
+Compound::CHEBI_58349	CHEBI_58349	134	4	Saccharomyces cerevisiae metabolite; cofactor; human metabolite; hydrogen acceptor
+Compound::CHEBI_57856	CHEBI_57856	134	0	
+Compound::CHEBI_16526	CHEBI_16526	132	12	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; anaesthetic; antagonist; food packaging gas; food propellant; greenhouse gas; human metabolite; mouse metabolite; refrigerant; solvent; vasodilator agent
+Compound::CHEBI_57783	CHEBI_57783	128	4	Saccharomyces cerevisiae metabolite; cofactor; human metabolite; hydrogen donor
+Compound::CHEBI_456215	CHEBI_456215	127	3	cofactor; fundamental metabolite; human metabolite
+Compound::CHEBI_58223	CHEBI_58223	126	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_29969	CHEBI_29969	123	0	
+Compound::CHEBI_57945	CHEBI_57945	121	4	Saccharomyces cerevisiae metabolite; cofactor; human metabolite; hydrogen donor
+Compound::CHEBI_29033	CHEBI_29033	113	4	Saccharomyces cerevisiae metabolite; cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_57379	CHEBI_57379	107	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57692	CHEBI_57692	104	2	Saccharomyces cerevisiae metabolite; cofactor
+Compound::CHEBI_58189	CHEBI_58189	98	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_37565	CHEBI_37565	98	1	human metabolite
+Compound::CHEBI_7896	CHEBI_7896	94	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_28938	CHEBI_28938	84	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_16810	CHEBI_16810	81	3	Saccharomyces cerevisiae metabolite; algal metabolite; human metabolite
+Compound::CHEBI_29950	CHEBI_29950	78	0	
+Compound::CHEBI_57288	CHEBI_57288	77	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_32395	CHEBI_32395	75	1	human metabolite
+Compound::CHEBI_30823	CHEBI_30823	75	3	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_30413	CHEBI_30413	75	2	metabolite; prosthetic group
+Compound::CHEBI_58210	CHEBI_58210	71	4	Saccharomyces cerevisiae metabolite; coenzyme; cofactor; human metabolite
+Compound::CHEBI_57643	CHEBI_57643	65	0	
+Compound::CHEBI_30031	CHEBI_30031	65	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_28868	CHEBI_28868	63	0	
+Compound::CHEBI_57387	CHEBI_57387	59	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57394	CHEBI_57394	58	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_597326	CHEBI_597326	56	3	Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_29985	CHEBI_29985	54	3	EC 6.3.1.2 (glutamate--ammonia ligase) inhibitor; Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_30879	CHEBI_30879	53	0	
+Compound::CHEBI_57925	CHEBI_57925	53	3	Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_16240	CHEBI_16240	50	16	Escherichia coli metabolite; GABA antagonist; Saccharomyces cerevisiae metabolite; antimicrobial agent; apoptosis inducer; biomarker; bleaching agent; cofactor; disinfectant; emetic; explosive; genotoxin; human xenobiotic metabolite; mouse metabolite; neurotoxin; oxidising agent
+Compound::CHEBI_57618	CHEBI_57618	50	2	Saccharomyces cerevisiae metabolite; cofactor
+Compound::CHEBI_57385	CHEBI_57385	49	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_30089	CHEBI_30089	49	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_72998	CHEBI_72998	48	1	mouse metabolite
+Compound::CHEBI_17815	CHEBI_17815	48	0	
+Compound::CHEBI_60240	CHEBI_60240	47	0	
+Compound::CHEBI_17154	CHEBI_17154	46	12	EC 2.4.2.30 (NAD(+) ADP-ribosyltransferase) inhibitor; EC 3.5.1.98 (histone deacetylase) inhibitor; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; Sir2 inhibitor; anti-inflammatory agent; antioxidant; cofactor; human urinary metabolite; metabolite; mouse metabolite; neuroprotective agent
+Compound::CHEBI_30245	CHEBI_30245	45	2	human blood serum metabolite; plant metabolite
+Compound::CHEBI_58608	CHEBI_58608	45	0	
+Compound::CHEBI_78442	CHEBI_78442	45	0	
+Compound::CHEBI_58342	CHEBI_58342	42	0	
+Compound::CHEBI_61930	CHEBI_61930	42	0	
+Compound::CHEBI_58343	CHEBI_58343	40	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_61961	CHEBI_61961	40	0	
+Compound::CHEBI_58168	CHEBI_58168	39	0	
+Compound::CHEBI_57368	CHEBI_57368	38	1	human metabolite
+Compound::CHEBI_58456	CHEBI_58456	38	0	
+Compound::CHEBI_29034	CHEBI_29034	38	4	Escherichia coli metabolite; cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_57375	CHEBI_57375	37	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_49883	CHEBI_49883	37	1	cofactor
+Compound::CHEBI_90779	CHEBI_90779	36	0	
+Compound::CHEBI_16469	CHEBI_16469	36	6	Daphnia magna metabolite; EC 1.2.3.1 (aldehyde oxidase) inhibitor; estrogen; geroprotector; human metabolite; mouse metabolite
+Compound::CHEBI_57705	CHEBI_57705	36	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_61560	CHEBI_61560	36	0	
+Compound::CHEBI_17336	CHEBI_17336	35	3	human metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_83833	CHEBI_83833	35	0	
+Compound::CHEBI_83834	CHEBI_83834	35	0	
+Compound::CHEBI_57880	CHEBI_57880	35	1	human metabolite
+Compound::CHEBI_58339	CHEBI_58339	35	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16113	CHEBI_16113	35	4	Daphnia galeata metabolite; algal metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_58052	CHEBI_58052	35	1	human metabolite
+Compound::CHEBI_61557	CHEBI_61557	34	0	
+Compound::CHEBI_15361	CHEBI_15361	34	2	cofactor; fundamental metabolite
+Compound::CHEBI_74151	CHEBI_74151	33	0	
+Compound::CHEBI_57383	CHEBI_57383	32	0	
+Compound::CHEBI_60377	CHEBI_60377	32	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_67138	CHEBI_67138	32	0	
+Compound::CHEBI_38290	CHEBI_38290	32	3	Daphnia magna metabolite; cofactor; human metabolite
+Compound::CHEBI_61929	CHEBI_61929	31	0	
+Compound::CHEBI_52639	CHEBI_52639	31	1	human metabolite
+Compound::CHEBI_16842	CHEBI_16842	31	8	EC 3.5.1.4 (amidase) inhibitor; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; allergen; carcinogenic agent; disinfectant; environmental contaminant; mouse metabolite
+Compound::CHEBI_17263	CHEBI_17263	31	5	antineoplastic agent; bone density conservation agent; estrogen; human metabolite; mouse metabolite
+Compound::CHEBI_30807	CHEBI_30807	31	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_24875	CHEBI_24875	30	1	cofactor
+Compound::CHEBI_74546	CHEBI_74546	30	0	
+Compound::CHEBI_52333	CHEBI_52333	30	1	mouse metabolite
+Compound::CHEBI_13193	CHEBI_13193	29	0	
+Compound::CHEBI_57305	CHEBI_57305	29	0	
+Compound::CHEBI_17499	CHEBI_17499	29	0	
+Compound::CHEBI_64612	CHEBI_64612	29	0	
+Compound::CHEBI_25629	CHEBI_25629	28	3	Saccharomyces cerevisiae metabolite; human metabolite; plant metabolite
+Compound::CHEBI_72999	CHEBI_72999	28	2	mouse metabolite; surfactant
+Compound::CHEBI_57386	CHEBI_57386	28	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57930	CHEBI_57930	27	0	
+Compound::CHEBI_18262	CHEBI_18262	27	2	Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_17754	CHEBI_17754	27	8	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; algal metabolite; detergent; human metabolite; mouse metabolite; osmolyte; solvent
+Compound::CHEBI_61430	CHEBI_61430	27	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_73001	CHEBI_73001	27	1	mouse metabolite
+Compound::CHEBI_4167	CHEBI_4167	26	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_17898	CHEBI_17898	26	3	gap junctional intercellular communication inhibitor; human metabolite; mouse metabolite
+Compound::CHEBI_73004	CHEBI_73004	25	0	
+Compound::CHEBI_57967	CHEBI_57967	25	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74544	CHEBI_74544	25	0	
+Compound::CHEBI_77016	CHEBI_77016	25	1	human metabolite
+Compound::CHEBI_50058	CHEBI_50058	25	0	
+Compound::CHEBI_61976	CHEBI_61976	24	0	
+Compound::CHEBI_57371	CHEBI_57371	24	1	human metabolite
+Compound::CHEBI_57756	CHEBI_57756	24	1	human metabolite
+Compound::CHEBI_17544	CHEBI_17544	24	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_48828	CHEBI_48828	24	1	cofactor
+Compound::CHEBI_16042	CHEBI_16042	23	0	
+Compound::CHEBI_57518	CHEBI_57518	23	0	
+Compound::CHEBI_142491	CHEBI_142491	23	0	
+Compound::CHEBI_17347	CHEBI_17347	23	4	Daphnia magna metabolite; androgen; human metabolite; mouse metabolite
+Compound::CHEBI_57380	CHEBI_57380	23	0	
+Compound::CHEBI_58165	CHEBI_58165	23	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17792	CHEBI_17792	23	0	
+Compound::CHEBI_25646	CHEBI_25646	23	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_60344	CHEBI_60344	22	2	Saccharomyces cerevisiae metabolite; cofactor
+Compound::CHEBI_29965	CHEBI_29965	22	0	
+Compound::CHEBI_62620	CHEBI_62620	22	0	
+Compound::CHEBI_16330	CHEBI_16330	22	4	Daphnia magna metabolite; androgen; human metabolite; mouse metabolite
+Compound::CHEBI_66914	CHEBI_66914	22	0	
+Compound::CHEBI_58115	CHEBI_58115	22	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_61526	CHEBI_61526	22	1	human metabolite
+Compound::CHEBI_203600	CHEBI_203600	22	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57746	CHEBI_57746	21	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16870	CHEBI_16870	21	6	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite; neuroprotective agent; parasympatholytic
+Compound::CHEBI_132367	CHEBI_132367	21	0	
+Compound::CHEBI_58359	CHEBI_58359	21	1	metabolite
+Compound::CHEBI_16422	CHEBI_16422	21	4	Daphnia magna metabolite; androgen; human metabolite; mouse metabolite
+Compound::CHEBI_74411	CHEBI_74411	21	0	
+Compound::CHEBI_29067	CHEBI_29067	21	0	
+Compound::CHEBI_132368	CHEBI_132368	21	0	
+Compound::CHEBI_57597	CHEBI_57597	21	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57262	CHEBI_57262	21	0	
+Compound::CHEBI_58178	CHEBI_58178	20	1	human metabolite
+Compound::CHEBI_87075	CHEBI_87075	20	1	epitope
+Compound::CHEBI_53604	CHEBI_53604	20	1	epitope
+Compound::CHEBI_17968	CHEBI_17968	20	3	EC 3.5.1.98 (histone deacetylase) inhibitor; human metabolite; metabolite
+Compound::CHEBI_29991	CHEBI_29991	20	2	fundamental metabolite; human metabolite
+Compound::CHEBI_65315	CHEBI_65315	20	0	
+Compound::CHEBI_57844	CHEBI_57844	20	0	
+Compound::CHEBI_53753	CHEBI_53753	20	2	Caenorhabditis elegans metabolite; plant metabolite
+Compound::CHEBI_83400	CHEBI_83400	20	0	
+Compound::CHEBI_29973	CHEBI_29973	20	0	
+Compound::CHEBI_57970	CHEBI_57970	19	1	human metabolite
+Compound::CHEBI_17478	CHEBI_17478	19	0	
+Compound::CHEBI_61540	CHEBI_61540	19	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57683	CHEBI_57683	19	1	human metabolite
+Compound::CHEBI_73003	CHEBI_73003	19	1	mouse metabolite
+Compound::CHEBI_58043	CHEBI_58043	19	0	
+Compound::CHEBI_33384	CHEBI_33384	19	0	
+Compound::CHEBI_65052	CHEBI_65052	19	0	
+Compound::CHEBI_16452	CHEBI_16452	18	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_27689	CHEBI_27689	18	3	Saccharomyces cerevisiae metabolite; human metabolite; plant metabolite
+Compound::CHEBI_18035	CHEBI_18035	18	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_82748	CHEBI_82748	18	0	
+Compound::CHEBI_28610	CHEBI_28610	18	0	
+Compound::CHEBI_58088	CHEBI_58088	18	1	human metabolite
+Compound::CHEBI_64496	CHEBI_64496	18	1	metabolite
+Compound::CHEBI_49601	CHEBI_49601	18	0	
+Compound::CHEBI_73316	CHEBI_73316	18	0	
+Compound::CHEBI_17996	CHEBI_17996	17	3	Escherichia coli metabolite; cofactor; human metabolite
+Compound::CHEBI_37563	CHEBI_37563	17	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_23378	CHEBI_23378	17	1	cofactor
+Compound::CHEBI_17026	CHEBI_17026	17	5	contraceptive drug; human metabolite; mouse metabolite; progesterone receptor agonist; progestin
+Compound::CHEBI_64839	CHEBI_64839	17	0	
+Compound::CHEBI_73990	CHEBI_73990	17	0	
+Compound::CHEBI_73009	CHEBI_73009	17	0	
+Compound::CHEBI_58297	CHEBI_58297	17	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17855	CHEBI_17855	17	0	
+Compound::CHEBI_75342	CHEBI_75342	17	1	plant metabolite
+Compound::CHEBI_29961	CHEBI_29961	17	0	
+Compound::CHEBI_57973	CHEBI_57973	16	1	human metabolite
+Compound::CHEBI_17976	CHEBI_17976	16	2	Escherichia coli metabolite; mouse metabolite
+Compound::CHEBI_57817	CHEBI_57817	16	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_31014	CHEBI_31014	16	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17120	CHEBI_17120	16	2	human metabolite; plant metabolite
+Compound::CHEBI_29103	CHEBI_29103	16	2	cofactor; human metabolite
+Compound::CHEBI_83828	CHEBI_83828	16	0	
+Compound::CHEBI_58885	CHEBI_58885	16	0	
+Compound::CHEBI_57392	CHEBI_57392	16	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57812	CHEBI_57812	16	1	human metabolite
+Compound::CHEBI_73002	CHEBI_73002	16	0	
+Compound::CHEBI_58562	CHEBI_58562	16	1	human metabolite
+Compound::CHEBI_52392	CHEBI_52392	16	1	human metabolite
+Compound::CHEBI_142540	CHEBI_142540	15	0	
+Compound::CHEBI_15354	CHEBI_15354	15	9	Daphnia magna metabolite; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; allergen; human metabolite; mouse metabolite; neurotransmitter; nutrient; plant metabolite
+Compound::CHEBI_138102	CHEBI_138102	15	0	
+Compound::CHEBI_16389	CHEBI_16389	15	2	Escherichia coli metabolite; mouse metabolite
+Compound::CHEBI_35291	CHEBI_35291	15	1	human metabolite
+Compound::CHEBI_15994	CHEBI_15994	15	1	mouse metabolite
+Compound::CHEBI_57453	CHEBI_57453	15	2	cofactor; human metabolite
+Compound::CHEBI_73008	CHEBI_73008	15	0	
+Compound::CHEBI_58388	CHEBI_58388	15	0	
+Compound::CHEBI_58053	CHEBI_58053	14	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58307	CHEBI_58307	14	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57875	CHEBI_57875	14	0	
+Compound::CHEBI_57634	CHEBI_57634	14	1	fundamental metabolite
+Compound::CHEBI_73858	CHEBI_73858	14	2	apoptosis inducer; mouse metabolite
+Compound::CHEBI_133507	CHEBI_133507	14	0	
+Compound::CHEBI_58937	CHEBI_58937	14	1	cofactor
+Compound::CHEBI_57405	CHEBI_57405	14	1	human metabolite
+Compound::CHEBI_57384	CHEBI_57384	14	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_132124	CHEBI_132124	13	0	
+Compound::CHEBI_32682	CHEBI_32682	13	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78272	CHEBI_78272	13	0	
+Compound::CHEBI_1156	CHEBI_1156	13	1	human metabolite
+Compound::CHEBI_77091	CHEBI_77091	13	0	
+Compound::CHEBI_82961	CHEBI_82961	13	0	
+Compound::CHEBI_57836	CHEBI_57836	13	1	human metabolite
+Compound::CHEBI_57603	CHEBI_57603	13	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75466	CHEBI_75466	13	1	mouse metabolite
+Compound::CHEBI_59776	CHEBI_59776	13	0	
+Compound::CHEBI_295975	CHEBI_295975	13	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75728	CHEBI_75728	13	0	
+Compound::CHEBI_28744	CHEBI_28744	13	5	carcinogenic agent; human metabolite; metabolite; mouse metabolite; prodrug
+Compound::CHEBI_57292	CHEBI_57292	13	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74269	CHEBI_74269	12	0	
+Compound::CHEBI_78273	CHEBI_78273	12	0	
+Compound::CHEBI_68546	CHEBI_68546	12	0	
+Compound::CHEBI_28689	CHEBI_28689	12	3	androgen; human metabolite; mouse metabolite
+Compound::CHEBI_606564	CHEBI_606564	12	2	human metabolite; oxytocic
+Compound::CHEBI_75757	CHEBI_75757	12	0	
+Compound::CHEBI_60119	CHEBI_60119	12	1	human metabolite
+Compound::CHEBI_58315	CHEBI_58315	12	0	
+Compound::CHEBI_61548	CHEBI_61548	12	1	human metabolite
+Compound::CHEBI_2700	CHEBI_2700	12	3	human blood serum metabolite; neurotransmitter; vasodilator agent
+Compound::CHEBI_65314	CHEBI_65314	12	0	
+Compound::CHEBI_17636	CHEBI_17636	12	0	
+Compound::CHEBI_76079	CHEBI_76079	12	0	
+Compound::CHEBI_83139	CHEBI_83139	12	0	
+Compound::CHEBI_24646	CHEBI_24646	12	0	
+Compound::CHEBI_35235	CHEBI_35235	12	0	
+Compound::CHEBI_57446	CHEBI_57446	12	1	human metabolite
+Compound::CHEBI_43176	CHEBI_43176	12	0	
+Compound::CHEBI_57795	CHEBI_57795	12	1	human metabolite
+Compound::CHEBI_36713	CHEBI_36713	11	2	Daphnia magna metabolite; human metabolite
+Compound::CHEBI_18390	CHEBI_18390	11	1	human metabolite
+Compound::CHEBI_85452	CHEBI_85452	11	0	
+Compound::CHEBI_57286	CHEBI_57286	11	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_30909	CHEBI_30909	11	0	
+Compound::CHEBI_131964	CHEBI_131964	11	0	
+Compound::CHEBI_57658	CHEBI_57658	11	1	human metabolite
+Compound::CHEBI_57972	CHEBI_57972	11	0	
+Compound::CHEBI_57560	CHEBI_57560	11	0	
+Compound::CHEBI_17950	CHEBI_17950	11	2	human metabolite; mouse metabolite
+Compound::CHEBI_16032	CHEBI_16032	11	7	androgen; anticonvulsant; human blood serum metabolite; human metabolite; human urinary metabolite; mouse metabolite; pheromone
+Compound::CHEBI_67140	CHEBI_67140	11	0	
+Compound::CHEBI_131965	CHEBI_131965	11	0	
+Compound::CHEBI_17160	CHEBI_17160	11	2	estrogen; geroprotector
+Compound::CHEBI_75158	CHEBI_75158	11	0	
+Compound::CHEBI_52323	CHEBI_52323	11	0	
+Compound::CHEBI_50342	CHEBI_50342	11	0	
+Compound::CHEBI_90726	CHEBI_90726	11	0	
+Compound::CHEBI_72959	CHEBI_72959	11	2	Mycoplasma genitalium metabolite; human blood serum metabolite
+Compound::CHEBI_83099	CHEBI_83099	11	0	
+Compound::CHEBI_30011	CHEBI_30011	11	0	
+Compound::CHEBI_136412	CHEBI_136412	10	0	
+Compound::CHEBI_22801	CHEBI_22801	10	0	
+Compound::CHEBI_58017	CHEBI_58017	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74617	CHEBI_74617	10	0	
+Compound::CHEBI_57865	CHEBI_57865	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_175763	CHEBI_175763	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17006	CHEBI_17006	10	1	mouse metabolite
+Compound::CHEBI_73007	CHEBI_73007	10	0	
+Compound::CHEBI_57444	CHEBI_57444	10	1	human metabolite
+Compound::CHEBI_44811	CHEBI_44811	10	5	antihypertensive agent; beta-adrenergic antagonist; bronchoconstrictor agent; hematologic agent; vasodilator agent
+Compound::CHEBI_16382	CHEBI_16382	10	1	human metabolite
+Compound::CHEBI_15636	CHEBI_15636	10	2	cofactor; human metabolite
+Compound::CHEBI_46398	CHEBI_46398	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_140626	CHEBI_140626	10	0	
+Compound::CHEBI_71466	CHEBI_71466	10	2	EC 3.5.1.23 (ceramidase) inhibitor; PPARalpha agonist
+Compound::CHEBI_78097	CHEBI_78097	10	0	
+Compound::CHEBI_78568	CHEBI_78568	10	0	
+Compound::CHEBI_36707	CHEBI_36707	10	0	
+Compound::CHEBI_33738	CHEBI_33738	10	0	
+Compound::CHEBI_57349	CHEBI_57349	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75945	CHEBI_75945	10	0	
+Compound::CHEBI_87602	CHEBI_87602	10	3	carcinogenic agent; estrogen; human urinary metabolite
+Compound::CHEBI_74565	CHEBI_74565	10	0	
+Compound::CHEBI_32372	CHEBI_32372	10	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17509	CHEBI_17509	10	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; algal metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_57450	CHEBI_57450	10	1	human metabolite
+Compound::CHEBI_58211	CHEBI_58211	10	0	
+Compound::CHEBI_33737	CHEBI_33737	10	0	
+Compound::CHEBI_74986	CHEBI_74986	9	0	
+Compound::CHEBI_58272	CHEBI_58272	9	2	fundamental metabolite; human metabolite
+Compound::CHEBI_72961	CHEBI_72961	9	1	mouse metabolite
+Compound::CHEBI_57912	CHEBI_57912	9	0	
+Compound::CHEBI_128769	CHEBI_128769	9	4	Saccharomyces cerevisiae metabolite; epitope; human metabolite; phosphoantigen
+Compound::CHEBI_134178	CHEBI_134178	9	0	
+Compound::CHEBI_57454	CHEBI_57454	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_72745	CHEBI_72745	9	0	
+Compound::CHEBI_58289	CHEBI_58289	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78445	CHEBI_78445	9	0	
+Compound::CHEBI_76078	CHEBI_76078	9	0	
+Compound::CHEBI_33853	CHEBI_33853	9	0	
+Compound::CHEBI_57273	CHEBI_57273	9	0	
+Compound::CHEBI_15740	CHEBI_15740	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58702	CHEBI_58702	9	1	fundamental metabolite
+Compound::CHEBI_58601	CHEBI_58601	9	2	fundamental metabolite; human metabolite
+Compound::CHEBI_62845	CHEBI_62845	9	1	metabolite
+Compound::CHEBI_57905	CHEBI_57905	9	1	human metabolite
+Compound::CHEBI_46898	CHEBI_46898	9	1	mouse metabolite
+Compound::CHEBI_58433	CHEBI_58433	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_83767	CHEBI_83767	9	0	
+Compound::CHEBI_57632	CHEBI_57632	9	1	human metabolite
+Compound::CHEBI_64381	CHEBI_64381	9	0	
+Compound::CHEBI_507393	CHEBI_507393	9	0	
+Compound::CHEBI_59560	CHEBI_59560	9	4	coenzyme; cofactor; diagnostic agent; human metabolite
+Compound::CHEBI_57404	CHEBI_57404	9	1	human metabolite
+Compound::CHEBI_57642	CHEBI_57642	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75735	CHEBI_75735	9	0	
+Compound::CHEBI_57466	CHEBI_57466	9	1	human metabolite
+Compound::CHEBI_57604	CHEBI_57604	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17616	CHEBI_17616	9	3	Escherichia coli metabolite; antioxidant; human xenobiotic metabolite
+Compound::CHEBI_57834	CHEBI_57834	9	2	fundamental metabolite; human metabolite
+Compound::CHEBI_37721	CHEBI_37721	9	0	
+Compound::CHEBI_57410	CHEBI_57410	9	0	
+Compound::CHEBI_65059	CHEBI_65059	9	0	
+Compound::CHEBI_57529	CHEBI_57529	9	0	
+Compound::CHEBI_57895	CHEBI_57895	9	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17272	CHEBI_17272	9	1	human metabolite
+Compound::CHEBI_72859	CHEBI_72859	9	0	
+Compound::CHEBI_78346	CHEBI_78346	9	0	
+Compound::CHEBI_61405	CHEBI_61405	8	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58190	CHEBI_58190	8	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_90725	CHEBI_90725	8	0	
+Compound::CHEBI_139493	CHEBI_139493	8	0	
+Compound::CHEBI_72841	CHEBI_72841	8	0	
+Compound::CHEBI_14649	CHEBI_14649	8	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_45479	CHEBI_45479	8	1	human metabolite
+Compound::CHEBI_77580	CHEBI_77580	8	0	
+Compound::CHEBI_17268	CHEBI_17268	8	8	Daphnia magna metabolite; EC 3.1.4.11 (phosphoinositide phospholipase C) inhibitor; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; compatible osmolytes; human metabolite; mouse metabolite; nutrient
+Compound::CHEBI_58130	CHEBI_58130	8	3	Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_34310	CHEBI_34310	8	3	biomarker; human blood serum metabolite; mouse metabolite
+Compound::CHEBI_17319	CHEBI_17319	8	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_32966	CHEBI_32966	8	0	
+Compound::CHEBI_75937	CHEBI_75937	8	0	
+Compound::CHEBI_74483	CHEBI_74483	8	0	
+Compound::CHEBI_60065	CHEBI_60065	8	1	human metabolite
+Compound::CHEBI_58856	CHEBI_58856	8	0	
+Compound::CHEBI_13705	CHEBI_13705	8	1	human metabolite
+Compound::CHEBI_77098	CHEBI_77098	8	0	
+Compound::CHEBI_131970	CHEBI_131970	8	0	
+Compound::CHEBI_138370	CHEBI_138370	8	0	
+Compound::CHEBI_57923	CHEBI_57923	8	1	human metabolite
+Compound::CHEBI_15589	CHEBI_15589	8	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74551	CHEBI_74551	8	0	
+Compound::CHEBI_82639	CHEBI_82639	8	0	
+Compound::CHEBI_74669	CHEBI_74669	8	0	
+Compound::CHEBI_132093	CHEBI_132093	8	0	
+Compound::CHEBI_35924	CHEBI_35924	8	0	
+Compound::CHEBI_62077	CHEBI_62077	8	0	
+Compound::CHEBI_47788	CHEBI_47788	8	0	
+Compound::CHEBI_36234	CHEBI_36234	8	1	human metabolite
+Compound::CHEBI_59869	CHEBI_59869	8	0	
+Compound::CHEBI_61694	CHEBI_61694	8	3	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58414	CHEBI_58414	8	1	human metabolite
+Compound::CHEBI_18329	CHEBI_18329	8	2	Daphnia magna metabolite; human metabolite
+Compound::CHEBI_74963	CHEBI_74963	8	1	mouse metabolite
+Compound::CHEBI_61406	CHEBI_61406	8	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_29979	CHEBI_29979	8	0	
+Compound::CHEBI_133902	CHEBI_133902	8	0	
+Compound::CHEBI_137323	CHEBI_137323	8	0	
+Compound::CHEBI_74971	CHEBI_74971	8	0	
+Compound::CHEBI_59558	CHEBI_59558	8	0	
+Compound::CHEBI_62242	CHEBI_62242	8	0	
+Compound::CHEBI_29036	CHEBI_29036	8	1	cofactor
+Compound::CHEBI_58095	CHEBI_58095	8	0	
+Compound::CHEBI_16302	CHEBI_16302	8	2	human metabolite; mouse metabolite
+Compound::CHEBI_90546	CHEBI_90546	8	0	
+Compound::CHEBI_76625	CHEBI_76625	8	0	
+Compound::CHEBI_84024	CHEBI_84024	8	0	
+Compound::CHEBI_64868	CHEBI_64868	8	0	
+Compound::CHEBI_43074	CHEBI_43074	8	0	
+Compound::CHEBI_167181	CHEBI_167181	7	0	
+Compound::CHEBI_72864	CHEBI_72864	7	0	
+Compound::CHEBI_64716	CHEBI_64716	7	0	
+Compound::CHEBI_57332	CHEBI_57332	7	1	human metabolite
+Compound::CHEBI_75612	CHEBI_75612	7	0	
+Compound::CHEBI_77709	CHEBI_77709	7	0	
+Compound::CHEBI_57959	CHEBI_57959	7	0	
+Compound::CHEBI_61527	CHEBI_61527	7	1	fundamental metabolite
+Compound::CHEBI_35681	CHEBI_35681	7	0	
+Compound::CHEBI_57406	CHEBI_57406	7	1	human metabolite
+Compound::CHEBI_79210	CHEBI_79210	7	0	
+Compound::CHEBI_71464	CHEBI_71464	7	4	anti-inflammatory drug; anticonvulsant; antihypertensive agent; neuroprotective agent
+Compound::CHEBI_57743	CHEBI_57743	7	4	Daphnia magna metabolite; Escherichia coli metabolite; human metabolite; plant metabolite
+Compound::CHEBI_75936	CHEBI_75936	7	0	
+Compound::CHEBI_67042	CHEBI_67042	7	1	mouse metabolite
+Compound::CHEBI_29747	CHEBI_29747	7	2	human metabolite; mouse metabolite
+Compound::CHEBI_143200	CHEBI_143200	7	0	
+Compound::CHEBI_61965	CHEBI_61965	7	0	
+Compound::CHEBI_32360	CHEBI_32360	7	1	human metabolite
+Compound::CHEBI_77288	CHEBI_77288	7	0	
+Compound::CHEBI_76634	CHEBI_76634	7	0	
+Compound::CHEBI_17562	CHEBI_17562	7	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_16347	CHEBI_16347	7	5	Saccharomyces cerevisiae metabolite; antilipemic drug; nootropic agent; nutraceutical; water-soluble vitamin (role)
+Compound::CHEBI_74449	CHEBI_74449	7	0	
+Compound::CHEBI_506227	CHEBI_506227	7	1	bacterial metabolite
+Compound::CHEBI_75542	CHEBI_75542	7	0	
+Compound::CHEBI_16581	CHEBI_16581	7	2	human metabolite; mouse metabolite
+Compound::CHEBI_57463	CHEBI_57463	7	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74034	CHEBI_74034	7	0	
+Compound::CHEBI_79208	CHEBI_79208	7	0	
+Compound::CHEBI_58199	CHEBI_58199	7	1	fundamental metabolite
+Compound::CHEBI_75020	CHEBI_75020	7	0	
+Compound::CHEBI_76071	CHEBI_76071	7	0	
+Compound::CHEBI_71302	CHEBI_71302	7	0	
+Compound::CHEBI_36655	CHEBI_36655	7	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_157695	CHEBI_157695	7	0	
+Compound::CHEBI_16044	CHEBI_16044	7	0	
+Compound::CHEBI_75029	CHEBI_75029	7	0	
+Compound::CHEBI_35418	CHEBI_35418	7	1	human metabolite
+Compound::CHEBI_71412	CHEBI_71412	7	0	
+Compound::CHEBI_74307	CHEBI_74307	7	0	
+Compound::CHEBI_74938	CHEBI_74938	7	0	
+Compound::CHEBI_57502	CHEBI_57502	7	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_18254	CHEBI_18254	7	0	
+Compound::CHEBI_59513	CHEBI_59513	7	1	human metabolite
+Compound::CHEBI_74965	CHEBI_74965	7	1	mouse metabolite
+Compound::CHEBI_82929	CHEBI_82929	7	1	mouse metabolite
+Compound::CHEBI_16189	CHEBI_16189	7	3	Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_90736	CHEBI_90736	7	0	
+Compound::CHEBI_60152	CHEBI_60152	7	0	
+Compound::CHEBI_72829	CHEBI_72829	7	0	
+Compound::CHEBI_82637	CHEBI_82637	7	0	
+Compound::CHEBI_60039	CHEBI_60039	7	0	
+Compound::CHEBI_57595	CHEBI_57595	7	0	
+Compound::CHEBI_77137	CHEBI_77137	7	0	
+Compound::CHEBI_57586	CHEBI_57586	7	3	Saccharomyces cerevisiae metabolite; cofactor; human metabolite
+Compound::CHEBI_90718	CHEBI_90718	7	0	
+Compound::CHEBI_136410	CHEBI_136410	7	0	
+Compound::CHEBI_16704	CHEBI_16704	7	3	drug metabolite; fundamental metabolite; human metabolite
+Compound::CHEBI_70975	CHEBI_70975	7	0	
+Compound::CHEBI_17087	CHEBI_17087	7	0	
+Compound::CHEBI_76624	CHEBI_76624	7	0	
+Compound::CHEBI_74693	CHEBI_74693	7	0	
+Compound::CHEBI_29744	CHEBI_29744	7	2	human metabolite; mouse metabolite
+Compound::CHEBI_61631	CHEBI_61631	7	0	
+Compound::CHEBI_776	CHEBI_776	6	4	estrogen; human blood serum metabolite; human urinary metabolite; mouse metabolite
+Compound::CHEBI_132105	CHEBI_132105	6	0	
+Compound::CHEBI_16066	CHEBI_16066	6	3	chromophore; human metabolite; mouse metabolite
+Compound::CHEBI_78043	CHEBI_78043	6	0	
+Compound::CHEBI_17716	CHEBI_17716	6	1	human metabolite
+Compound::CHEBI_78832	CHEBI_78832	6	0	
+Compound::CHEBI_73542	CHEBI_73542	6	0	
+Compound::CHEBI_79218	CHEBI_79218	6	0	
+Compound::CHEBI_65221	CHEBI_65221	6	0	
+Compound::CHEBI_17103	CHEBI_17103	6	2	human metabolite; mouse metabolite
+Compound::CHEBI_34115	CHEBI_34115	6	0	
+Compound::CHEBI_57525	CHEBI_57525	6	0	
+Compound::CHEBI_58725	CHEBI_58725	6	1	human metabolite
+Compound::CHEBI_77097	CHEBI_77097	6	1	mouse metabolite
+Compound::CHEBI_143093	CHEBI_143093	6	0	
+Compound::CHEBI_64479	CHEBI_64479	6	0	
+Compound::CHEBI_75455	CHEBI_75455	6	1	algal metabolite
+Compound::CHEBI_36257	CHEBI_36257	6	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74309	CHEBI_74309	6	0	
+Compound::CHEBI_71502	CHEBI_71502	6	1	human metabolite
+Compound::CHEBI_57939	CHEBI_57939	6	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_85217	CHEBI_85217	6	0	
+Compound::CHEBI_136641	CHEBI_136641	6	0	
+Compound::CHEBI_136411	CHEBI_136411	6	0	
+Compound::CHEBI_76091	CHEBI_76091	6	0	
+Compound::CHEBI_57427	CHEBI_57427	6	0	
+Compound::CHEBI_59874	CHEBI_59874	6	0	
+Compound::CHEBI_42977	CHEBI_42977	6	1	human metabolite
+Compound::CHEBI_75457	CHEBI_75457	6	0	
+Compound::CHEBI_16125	CHEBI_16125	6	2	algal metabolite; human metabolite
+Compound::CHEBI_63867	CHEBI_63867	6	0	
+Compound::CHEBI_57409	CHEBI_57409	6	0	
+Compound::CHEBI_46911	CHEBI_46911	6	0	
+Compound::CHEBI_65341	CHEBI_65341	6	0	
+Compound::CHEBI_140317	CHEBI_140317	6	0	
+Compound::CHEBI_60651	CHEBI_60651	6	0	
+Compound::CHEBI_57867	CHEBI_57867	6	0	
+Compound::CHEBI_74667	CHEBI_74667	6	0	
+Compound::CHEBI_149509	CHEBI_149509	6	0	
+Compound::CHEBI_85454	CHEBI_85454	6	0	
+Compound::CHEBI_57330	CHEBI_57330	6	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_59087	CHEBI_59087	6	1	mouse metabolite
+Compound::CHEBI_83728	CHEBI_83728	6	0	
+Compound::CHEBI_326268	CHEBI_326268	6	2	fundamental metabolite; human metabolite
+Compound::CHEBI_58464	CHEBI_58464	6	0	
+Compound::CHEBI_29101	CHEBI_29101	6	2	cofactor; human metabolite
+Compound::CHEBI_55430	CHEBI_55430	6	0	
+Compound::CHEBI_17650	CHEBI_17650	6	6	anti-allergic agent; anti-asthmatic drug; anti-inflammatory drug; drug allergen; human metabolite; mouse metabolite
+Compound::CHEBI_67033	CHEBI_67033	6	1	mouse metabolite
+Compound::CHEBI_77636	CHEBI_77636	6	0	
+Compound::CHEBI_74691	CHEBI_74691	6	0	
+Compound::CHEBI_64563	CHEBI_64563	6	1	metabolite
+Compound::CHEBI_83228	CHEBI_83228	6	0	
+Compound::CHEBI_131975	CHEBI_131975	6	0	
+Compound::CHEBI_137321	CHEBI_137321	6	0	
+Compound::CHEBI_84201	CHEBI_84201	6	0	
+Compound::CHEBI_74491	CHEBI_74491	6	0	
+Compound::CHEBI_75562	CHEBI_75562	6	1	Caenorhabditis elegans metabolite
+Compound::CHEBI_57986	CHEBI_57986	6	2	Saccharomyces cerevisiae metabolite; cofactor
+Compound::CHEBI_84025	CHEBI_84025	6	0	
+Compound::CHEBI_15734	CHEBI_15734	6	0	
+Compound::CHEBI_133470	CHEBI_133470	6	0	
+Compound::CHEBI_16335	CHEBI_16335	6	5	analgesic; anti-arrhythmia drug; fundamental metabolite; human metabolite; vasodilator agent
+Compound::CHEBI_74563	CHEBI_74563	6	0	
+Compound::CHEBI_17933	CHEBI_17933	6	5	bone density conservation agent; human metabolite; metabolite; mouse metabolite; nutraceutical
+Compound::CHEBI_83100	CHEBI_83100	6	0	
+Compound::CHEBI_57737	CHEBI_57737	6	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_15642	CHEBI_15642	6	0	
+Compound::CHEBI_78436	CHEBI_78436	6	0	
+Compound::CHEBI_58332	CHEBI_58332	6	1	human metabolite
+Compound::CHEBI_143199	CHEBI_143199	6	0	
+Compound::CHEBI_45764	CHEBI_45764	6	0	
+Compound::CHEBI_74552	CHEBI_74552	6	0	
+Compound::CHEBI_75824	CHEBI_75824	6	0	
+Compound::CHEBI_29806	CHEBI_29806	6	3	Saccharomyces cerevisiae metabolite; human metabolite; metabolite
+Compound::CHEBI_58048	CHEBI_58048	6	0	
+Compound::CHEBI_75568	CHEBI_75568	6	2	antiviral agent; plant metabolite
+Compound::CHEBI_59002	CHEBI_59002	6	1	human metabolite
+Compound::CHEBI_29032	CHEBI_29032	6	2	Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_140607	CHEBI_140607	6	0	
+Compound::CHEBI_34116	CHEBI_34116	6	0	
+Compound::CHEBI_131969	CHEBI_131969	6	0	
+Compound::CHEBI_88069	CHEBI_88069	6	0	
+Compound::CHEBI_57338	CHEBI_57338	6	1	human metabolite
+Compound::CHEBI_62619	CHEBI_62619	6	0	
+Compound::CHEBI_62548	CHEBI_62548	6	0	
+Compound::CHEBI_42156	CHEBI_42156	6	3	estrogen; estrogen receptor agonist; human urinary metabolite
+Compound::CHEBI_58717	CHEBI_58717	6	0	
+Compound::CHEBI_133606	CHEBI_133606	6	0	
+Compound::CHEBI_74928	CHEBI_74928	6	0	
+Compound::CHEBI_57527	CHEBI_57527	6	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_64489	CHEBI_64489	6	0	
+Compound::CHEBI_138734	CHEBI_138734	6	0	
+Compound::CHEBI_132085	CHEBI_132085	6	0	
+Compound::CHEBI_143890	CHEBI_143890	6	0	
+Compound::CHEBI_77130	CHEBI_77130	5	0	
+Compound::CHEBI_133506	CHEBI_133506	5	0	
+Compound::CHEBI_57483	CHEBI_57483	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_62932	CHEBI_62932	5	0	
+Compound::CHEBI_58579	CHEBI_58579	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16235	CHEBI_16235	5	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; algal metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_74578	CHEBI_74578	5	0	
+Compound::CHEBI_17292	CHEBI_17292	5	1	mouse metabolite
+Compound::CHEBI_34477	CHEBI_34477	5	3	Daphnia magna metabolite; androgen; human metabolite
+Compound::CHEBI_142554	CHEBI_142554	5	0	
+Compound::CHEBI_58248	CHEBI_58248	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_71589	CHEBI_71589	5	0	
+Compound::CHEBI_17935	CHEBI_17935	5	1	plant metabolite
+Compound::CHEBI_58539	CHEBI_58539	5	0	
+Compound::CHEBI_82940	CHEBI_82940	5	0	
+Compound::CHEBI_149522	CHEBI_149522	5	0	
+Compound::CHEBI_77287	CHEBI_77287	5	0	
+Compound::CHEBI_58121	CHEBI_58121	5	2	fundamental metabolite; human metabolite
+Compound::CHEBI_63528	CHEBI_63528	5	1	human metabolite
+Compound::CHEBI_35179	CHEBI_35179	5	0	
+Compound::CHEBI_29746	CHEBI_29746	5	1	human metabolite
+Compound::CHEBI_133977	CHEBI_133977	5	0	
+Compound::CHEBI_63410	CHEBI_63410	5	0	
+Compound::CHEBI_17359	CHEBI_17359	5	0	
+Compound::CHEBI_35915	CHEBI_35915	5	0	
+Compound::CHEBI_76478	CHEBI_76478	5	0	
+Compound::CHEBI_85440	CHEBI_85440	5	0	
+Compound::CHEBI_57400	CHEBI_57400	5	0	
+Compound::CHEBI_58282	CHEBI_58282	5	1	human metabolite
+Compound::CHEBI_65317	CHEBI_65317	5	0	
+Compound::CHEBI_74894	CHEBI_74894	5	0	
+Compound::CHEBI_78452	CHEBI_78452	5	0	
+Compound::CHEBI_64765	CHEBI_64765	5	0	
+Compound::CHEBI_4139	CHEBI_4139	5	2	Escherichia coli metabolite; mouse metabolite
+Compound::CHEBI_17408	CHEBI_17408	5	0	
+Compound::CHEBI_83397	CHEBI_83397	5	0	
+Compound::CHEBI_16947	CHEBI_16947	5	1	fundamental metabolite
+Compound::CHEBI_16651	CHEBI_16651	5	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_74558	CHEBI_74558	5	0	
+Compound::CHEBI_58422	CHEBI_58422	5	0	
+Compound::CHEBI_69081	CHEBI_69081	5	2	algal metabolite; plant metabolite
+Compound::CHEBI_147403	CHEBI_147403	5	0	
+Compound::CHEBI_74579	CHEBI_74579	5	0	
+Compound::CHEBI_132090	CHEBI_132090	5	0	
+Compound::CHEBI_74298	CHEBI_74298	5	0	
+Compound::CHEBI_15444	CHEBI_15444	5	0	
+Compound::CHEBI_28563	CHEBI_28563	5	1	epitope
+Compound::CHEBI_78227	CHEBI_78227	5	0	
+Compound::CHEBI_17759	CHEBI_17759	5	2	human metabolite; mouse metabolite
+Compound::CHEBI_83423	CHEBI_83423	5	0	
+Compound::CHEBI_84472	CHEBI_84472	5	0	
+Compound::CHEBI_57378	CHEBI_57378	5	1	human metabolite
+Compound::CHEBI_57623	CHEBI_57623	5	4	Saccharomyces cerevisiae metabolite; epitope; human metabolite; phosphoantigen
+Compound::CHEBI_45815	CHEBI_45815	5	0	
+Compound::CHEBI_78520	CHEBI_78520	5	0	
+Compound::CHEBI_28913	CHEBI_28913	5	3	antibacterial agent; flavouring agent; plant metabolite
+Compound::CHEBI_57373	CHEBI_57373	5	1	human metabolite
+Compound::CHEBI_58045	CHEBI_58045	5	0	
+Compound::CHEBI_35020	CHEBI_35020	5	5	EC 3.5.1.98 (histone deacetylase) inhibitor; antineoplastic agent; apoptosis inducer; prodrug; protective agent
+Compound::CHEBI_64428	CHEBI_64428	5	0	
+Compound::CHEBI_58628	CHEBI_58628	5	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_15889	CHEBI_15889	5	0	
+Compound::CHEBI_83088	CHEBI_83088	5	1	cofactor
+Compound::CHEBI_84475	CHEBI_84475	5	0	
+Compound::CHEBI_72683	CHEBI_72683	5	0	
+Compound::CHEBI_20489	CHEBI_20489	5	0	
+Compound::CHEBI_18155	CHEBI_18155	5	0	
+Compound::CHEBI_27938	CHEBI_27938	5	1	mouse metabolite
+Compound::CHEBI_78385	CHEBI_78385	5	0	
+Compound::CHEBI_31488	CHEBI_31488	5	2	human metabolite; mouse metabolite
+Compound::CHEBI_16269	CHEBI_16269	5	0	
+Compound::CHEBI_77593	CHEBI_77593	5	0	
+Compound::CHEBI_58735	CHEBI_58735	5	1	fundamental metabolite
+Compound::CHEBI_57461	CHEBI_57461	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74547	CHEBI_74547	5	0	
+Compound::CHEBI_143103	CHEBI_143103	5	0	
+Compound::CHEBI_45487	CHEBI_45487	5	1	human metabolite
+Compound::CHEBI_75539	CHEBI_75539	5	0	
+Compound::CHEBI_74116	CHEBI_74116	5	0	
+Compound::CHEBI_60050	CHEBI_60050	5	1	human metabolite
+Compound::CHEBI_133442	CHEBI_133442	5	0	
+Compound::CHEBI_79214	CHEBI_79214	5	0	
+Compound::CHEBI_77996	CHEBI_77996	5	1	mouse metabolite
+Compound::CHEBI_74278	CHEBI_74278	5	0	
+Compound::CHEBI_29919	CHEBI_29919	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58069	CHEBI_58069	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57455	CHEBI_57455	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136409	CHEBI_136409	5	0	
+Compound::CHEBI_74692	CHEBI_74692	5	0	
+Compound::CHEBI_57947	CHEBI_57947	5	0	
+Compound::CHEBI_57566	CHEBI_57566	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58402	CHEBI_58402	5	0	
+Compound::CHEBI_32551	CHEBI_32551	5	3	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_47909	CHEBI_47909	5	0	
+Compound::CHEBI_4194	CHEBI_4194	5	0	
+Compound::CHEBI_57926	CHEBI_57926	5	0	
+Compound::CHEBI_23858	CHEBI_23858	5	1	human metabolite
+Compound::CHEBI_16827	CHEBI_16827	5	2	human metabolite; mouse metabolite
+Compound::CHEBI_82939	CHEBI_82939	5	0	
+Compound::CHEBI_71407	CHEBI_71407	5	0	
+Compound::CHEBI_78597	CHEBI_78597	5	0	
+Compound::CHEBI_57318	CHEBI_57318	5	0	
+Compound::CHEBI_77126	CHEBI_77126	5	0	
+Compound::CHEBI_57401	CHEBI_57401	5	1	human metabolite
+Compound::CHEBI_136408	CHEBI_136408	5	0	
+Compound::CHEBI_30921	CHEBI_30921	5	1	human metabolite
+Compound::CHEBI_28453	CHEBI_28453	5	2	human metabolite; mouse metabolite
+Compound::CHEBI_78934	CHEBI_78934	5	0	
+Compound::CHEBI_17735	CHEBI_17735	5	0	
+Compound::CHEBI_57652	CHEBI_57652	5	0	
+Compound::CHEBI_58779	CHEBI_58779	5	0	
+Compound::CHEBI_61567	CHEBI_61567	5	0	
+Compound::CHEBI_139507	CHEBI_139507	5	0	
+Compound::CHEBI_16608	CHEBI_16608	5	2	human metabolite; mouse metabolite
+Compound::CHEBI_62537	CHEBI_62537	5	0	
+Compound::CHEBI_133992	CHEBI_133992	5	0	
+Compound::CHEBI_57720	CHEBI_57720	5	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_84968	CHEBI_84968	5	0	
+Compound::CHEBI_90632	CHEBI_90632	5	0	
+Compound::CHEBI_58521	CHEBI_58521	5	0	
+Compound::CHEBI_37640	CHEBI_37640	5	1	human metabolite
+Compound::CHEBI_75231	CHEBI_75231	5	0	
+Compound::CHEBI_75216	CHEBI_75216	5	0	
+Compound::CHEBI_58968	CHEBI_58968	5	0	
+Compound::CHEBI_90781	CHEBI_90781	5	0	
+Compound::CHEBI_76627	CHEBI_76627	5	0	
+Compound::CHEBI_136407	CHEBI_136407	5	0	
+Compound::CHEBI_61897	CHEBI_61897	5	0	
+Compound::CHEBI_87620	CHEBI_87620	5	2	anti-inflammatory drug; human xenobiotic metabolite
+Compound::CHEBI_57674	CHEBI_57674	5	1	human metabolite
+Compound::CHEBI_2710	CHEBI_2710	5	4	androgen; human metabolite; mouse metabolite; radiation protective agent
+Compound::CHEBI_57485	CHEBI_57485	5	0	
+Compound::CHEBI_17490	CHEBI_17490	5	3	EC 3.6.3.9 (Na(+)/K(+)-transporting ATPase) inhibitor; human metabolite; mouse metabolite
+Compound::CHEBI_65111	CHEBI_65111	5	0	
+Compound::CHEBI_16150	CHEBI_16150	5	2	human xenobiotic metabolite; plant metabolite
+Compound::CHEBI_140576	CHEBI_140576	5	0	
+Compound::CHEBI_60628	CHEBI_60628	5	0	
+Compound::CHEBI_15562	CHEBI_15562	5	1	fundamental metabolite
+Compound::CHEBI_64615	CHEBI_64615	5	0	
+Compound::CHEBI_35346	CHEBI_35346	4	0	
+Compound::CHEBI_75547	CHEBI_75547	4	0	
+Compound::CHEBI_17389	CHEBI_17389	4	0	
+Compound::CHEBI_77061	CHEBI_77061	4	0	
+Compound::CHEBI_32387	CHEBI_32387	4	1	human metabolite
+Compound::CHEBI_17600	CHEBI_17600	4	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_31013	CHEBI_31013	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_82852	CHEBI_82852	4	0	
+Compound::CHEBI_133443	CHEBI_133443	4	0	
+Compound::CHEBI_149507	CHEBI_149507	4	0	
+Compound::CHEBI_138442	CHEBI_138442	4	0	
+Compound::CHEBI_141205	CHEBI_141205	4	0	
+Compound::CHEBI_57533	CHEBI_57533	4	0	
+Compound::CHEBI_75026	CHEBI_75026	4	0	
+Compound::CHEBI_77983	CHEBI_77983	4	0	
+Compound::CHEBI_77589	CHEBI_77589	4	0	
+Compound::CHEBI_62613	CHEBI_62613	4	0	
+Compound::CHEBI_74450	CHEBI_74450	4	1	mouse metabolite
+Compound::CHEBI_156049	CHEBI_156049	4	0	
+Compound::CHEBI_146021	CHEBI_146021	4	0	
+Compound::CHEBI_75468	CHEBI_75468	4	1	mouse metabolite
+Compound::CHEBI_33308	CHEBI_33308	4	0	
+Compound::CHEBI_142515	CHEBI_142515	4	0	
+Compound::CHEBI_74549	CHEBI_74549	4	0	
+Compound::CHEBI_139607	CHEBI_139607	4	0	
+Compound::CHEBI_72682	CHEBI_72682	4	0	
+Compound::CHEBI_74550	CHEBI_74550	4	0	
+Compound::CHEBI_84023	CHEBI_84023	4	0	
+Compound::CHEBI_48775	CHEBI_48775	4	1	cofactor
+Compound::CHEBI_17002	CHEBI_17002	4	0	
+Compound::CHEBI_28691	CHEBI_28691	4	1	mouse metabolite
+Compound::CHEBI_18102	CHEBI_18102	4	1	human metabolite
+Compound::CHEBI_77075	CHEBI_77075	4	0	
+Compound::CHEBI_16763	CHEBI_16763	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_72956	CHEBI_72956	4	0	
+Compound::CHEBI_72827	CHEBI_72827	4	0	
+Compound::CHEBI_67026	CHEBI_67026	4	0	
+Compound::CHEBI_76636	CHEBI_76636	4	0	
+Compound::CHEBI_36204	CHEBI_36204	4	0	
+Compound::CHEBI_57369	CHEBI_57369	4	0	
+Compound::CHEBI_541975	CHEBI_541975	4	2	androgen; human metabolite
+Compound::CHEBI_136991	CHEBI_136991	4	1	human xenobiotic metabolite
+Compound::CHEBI_17596	CHEBI_17596	4	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_85778	CHEBI_85778	4	1	human metabolite
+Compound::CHEBI_58875	CHEBI_58875	4	2	human metabolite; mouse metabolite
+Compound::CHEBI_85223	CHEBI_85223	4	0	
+Compound::CHEBI_64683	CHEBI_64683	4	0	
+Compound::CHEBI_78569	CHEBI_78569	4	0	
+Compound::CHEBI_139521	CHEBI_139521	4	0	
+Compound::CHEBI_63166	CHEBI_63166	4	0	
+Compound::CHEBI_78836	CHEBI_78836	4	0	
+Compound::CHEBI_17368	CHEBI_17368	4	1	fundamental metabolite
+Compound::CHEBI_73862	CHEBI_73862	4	0	
+Compound::CHEBI_86021	CHEBI_86021	4	0	
+Compound::CHEBI_90799	CHEBI_90799	4	0	
+Compound::CHEBI_10986	CHEBI_10986	4	1	human metabolite
+Compound::CHEBI_58677	CHEBI_58677	4	1	human metabolite
+Compound::CHEBI_58629	CHEBI_58629	4	0	
+Compound::CHEBI_83111	CHEBI_83111	4	0	
+Compound::CHEBI_57513	CHEBI_57513	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_45725	CHEBI_45725	4	2	fundamental metabolite; human metabolite
+Compound::CHEBI_84410	CHEBI_84410	4	0	
+Compound::CHEBI_17252	CHEBI_17252	4	4	human metabolite; metabolite; mouse metabolite; progestin
+Compound::CHEBI_11851	CHEBI_11851	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78463	CHEBI_78463	4	0	
+Compound::CHEBI_58273	CHEBI_58273	4	1	fundamental metabolite
+Compound::CHEBI_136117	CHEBI_136117	4	0	
+Compound::CHEBI_73852	CHEBI_73852	4	0	
+Compound::CHEBI_138282	CHEBI_138282	4	0	
+Compound::CHEBI_77015	CHEBI_77015	4	0	
+Compound::CHEBI_133661	CHEBI_133661	4	3	human urinary metabolite; mouse metabolite; rat metabolite
+Compound::CHEBI_57706	CHEBI_57706	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_76084	CHEBI_76084	4	0	
+Compound::CHEBI_90357	CHEBI_90357	4	0	
+Compound::CHEBI_17823	CHEBI_17823	4	11	antineoplastic agent; antipsoriatic; bone density conservation agent; calcium channel agonist; calcium channel modulator; hormone; human metabolite; immunomodulator; metabolite; mouse metabolite; nutraceutical
+Compound::CHEBI_83243	CHEBI_83243	4	0	
+Compound::CHEBI_17775	CHEBI_17775	4	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_65342	CHEBI_65342	4	0	
+Compound::CHEBI_58720	CHEBI_58720	4	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_34718	CHEBI_34718	4	3	allergen; epitope; sensitiser
+Compound::CHEBI_58029	CHEBI_58029	4	1	human metabolite
+Compound::CHEBI_139520	CHEBI_139520	4	0	
+Compound::CHEBI_59888	CHEBI_59888	4	0	
+Compound::CHEBI_75036	CHEBI_75036	4	0	
+Compound::CHEBI_58301	CHEBI_58301	4	1	human metabolite
+Compound::CHEBI_78599	CHEBI_78599	4	0	
+Compound::CHEBI_140991	CHEBI_140991	4	0	
+Compound::CHEBI_59080	CHEBI_59080	4	1	mouse metabolite
+Compound::CHEBI_83416	CHEBI_83416	4	0	
+Compound::CHEBI_75163	CHEBI_75163	4	0	
+Compound::CHEBI_58437	CHEBI_58437	4	0	
+Compound::CHEBI_83273	CHEBI_83273	4	0	
+Compound::CHEBI_76613	CHEBI_76613	4	0	
+Compound::CHEBI_58759	CHEBI_58759	4	1	fundamental metabolite
+Compound::CHEBI_55329	CHEBI_55329	4	1	plant metabolite
+Compound::CHEBI_58432	CHEBI_58432	4	2	human metabolite; mouse metabolite
+Compound::CHEBI_15368	CHEBI_15368	4	3	herbicide; human xenobiotic metabolite; toxin
+Compound::CHEBI_142606	CHEBI_142606	4	0	
+Compound::CHEBI_27731	CHEBI_27731	4	1	mouse metabolite
+Compound::CHEBI_138445	CHEBI_138445	4	0	
+Compound::CHEBI_136931	CHEBI_136931	4	0	
+Compound::CHEBI_85428	CHEBI_85428	4	0	
+Compound::CHEBI_62543	CHEBI_62543	4	0	
+Compound::CHEBI_77128	CHEBI_77128	4	0	
+Compound::CHEBI_83865	CHEBI_83865	4	0	
+Compound::CHEBI_90376	CHEBI_90376	4	0	
+Compound::CHEBI_15903	CHEBI_15903	4	2	epitope; mouse metabolite
+Compound::CHEBI_77890	CHEBI_77890	4	1	apoptosis inducer
+Compound::CHEBI_72828	CHEBI_72828	4	0	
+Compound::CHEBI_77081	CHEBI_77081	4	0	
+Compound::CHEBI_36835	CHEBI_36835	4	0	
+Compound::CHEBI_57327	CHEBI_57327	4	1	human metabolite
+Compound::CHEBI_16199	CHEBI_16199	4	7	Daphnia magna metabolite; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; fertilizer; flour treatment agent; human metabolite; mouse metabolite
+Compound::CHEBI_133409	CHEBI_133409	4	0	
+Compound::CHEBI_139605	CHEBI_139605	4	0	
+Compound::CHEBI_64723	CHEBI_64723	4	0	
+Compound::CHEBI_16605	CHEBI_16605	4	5	antibacterial agent; fungicide; herbicide; insecticide; plant metabolite
+Compound::CHEBI_58454	CHEBI_58454	4	1	human metabolite
+Compound::CHEBI_32154	CHEBI_32154	4	3	algal metabolite; human metabolite; plant metabolite
+Compound::CHEBI_71009	CHEBI_71009	4	0	
+Compound::CHEBI_64771	CHEBI_64771	4	0	
+Compound::CHEBI_74012	CHEBI_74012	4	0	
+Compound::CHEBI_57991	CHEBI_57991	4	1	human metabolite
+Compound::CHEBI_63904	CHEBI_63904	4	0	
+Compound::CHEBI_75555	CHEBI_75555	4	2	Caenorhabditis elegans metabolite; algal metabolite
+Compound::CHEBI_83120	CHEBI_83120	4	0	
+Compound::CHEBI_17826	CHEBI_17826	4	3	carcinogenic agent; human xenobiotic metabolite; poison
+Compound::CHEBI_136642	CHEBI_136642	4	0	
+Compound::CHEBI_58092	CHEBI_58092	4	1	human metabolite
+Compound::CHEBI_149504	CHEBI_149504	4	0	
+Compound::CHEBI_140992	CHEBI_140992	4	0	
+Compound::CHEBI_78521	CHEBI_78521	4	0	
+Compound::CHEBI_90230	CHEBI_90230	4	1	human metabolite
+Compound::CHEBI_57433	CHEBI_57433	4	0	
+Compound::CHEBI_74966	CHEBI_74966	4	0	
+Compound::CHEBI_75587	CHEBI_75587	4	0	
+Compound::CHEBI_137009	CHEBI_137009	4	0	
+Compound::CHEBI_76090	CHEBI_76090	4	0	
+Compound::CHEBI_74344	CHEBI_74344	4	1	mouse metabolite
+Compound::CHEBI_77644	CHEBI_77644	4	0	
+Compound::CHEBI_149524	CHEBI_149524	4	0	
+Compound::CHEBI_74946	CHEBI_74946	4	0	
+Compound::CHEBI_27974	CHEBI_27974	4	4	estrogen; human metabolite; human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_75121	CHEBI_75121	4	0	
+Compound::CHEBI_57397	CHEBI_57397	4	1	human metabolite
+Compound::CHEBI_64583	CHEBI_64583	4	0	
+Compound::CHEBI_61042	CHEBI_61042	4	2	Papio hamadryas metabolite; human metabolite
+Compound::CHEBI_78608	CHEBI_78608	4	0	
+Compound::CHEBI_136545	CHEBI_136545	4	0	
+Compound::CHEBI_23614	CHEBI_23614	4	1	human metabolite
+Compound::CHEBI_77092	CHEBI_77092	4	1	antinematodal drug
+Compound::CHEBI_28952	CHEBI_28952	4	2	human metabolite; progestogen
+Compound::CHEBI_88221	CHEBI_88221	4	0	
+Compound::CHEBI_18067	CHEBI_18067	4	3	cofactor; human metabolite; plant metabolite
+Compound::CHEBI_58299	CHEBI_58299	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75583	CHEBI_75583	4	0	
+Compound::CHEBI_75586	CHEBI_75586	4	0	
+Compound::CHEBI_57344	CHEBI_57344	4	1	human metabolite
+Compound::CHEBI_46979	CHEBI_46979	4	0	
+Compound::CHEBI_72965	CHEBI_72965	4	1	mouse metabolite
+Compound::CHEBI_57700	CHEBI_57700	4	1	human metabolite
+Compound::CHEBI_76979	CHEBI_76979	4	0	
+Compound::CHEBI_57451	CHEBI_57451	4	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78911	CHEBI_78911	4	0	
+Compound::CHEBI_76298	CHEBI_76298	4	0	
+Compound::CHEBI_16973	CHEBI_16973	4	2	human metabolite; mouse metabolite
+Compound::CHEBI_136914	CHEBI_136914	4	0	
+Compound::CHEBI_74011	CHEBI_74011	4	0	
+Compound::CHEBI_64124	CHEBI_64124	4	0	
+Compound::CHEBI_57762	CHEBI_57762	4	0	
+Compound::CHEBI_74054	CHEBI_74054	4	0	
+Compound::CHEBI_32392	CHEBI_32392	4	1	human metabolite
+Compound::CHEBI_16962	CHEBI_16962	4	2	human metabolite; mouse metabolite
+Compound::CHEBI_77224	CHEBI_77224	4	1	human metabolite
+Compound::CHEBI_138191	CHEBI_138191	4	0	
+Compound::CHEBI_76299	CHEBI_76299	4	0	
+Compound::CHEBI_142593	CHEBI_142593	4	0	
+Compound::CHEBI_140572	CHEBI_140572	4	0	
+Compound::CHEBI_74905	CHEBI_74905	4	0	
+Compound::CHEBI_138444	CHEBI_138444	4	0	
+Compound::CHEBI_75219	CHEBI_75219	4	1	platelet-activating factor receptor agonist
+Compound::CHEBI_52450	CHEBI_52450	3	5	antihypertensive agent; beta-adrenergic antagonist; bronchoconstrictor agent; hematologic agent; vasodilator agent
+Compound::CHEBI_133771	CHEBI_133771	3	0	
+Compound::CHEBI_63837	CHEBI_63837	3	0	
+Compound::CHEBI_65296	CHEBI_65296	3	0	
+Compound::CHEBI_87785	CHEBI_87785	3	0	
+Compound::CHEBI_140349	CHEBI_140349	3	0	
+Compound::CHEBI_136370	CHEBI_136370	3	0	
+Compound::CHEBI_57402	CHEBI_57402	3	0	
+Compound::CHEBI_136309	CHEBI_136309	3	0	
+Compound::CHEBI_76304	CHEBI_76304	3	0	
+Compound::CHEBI_72962	CHEBI_72962	3	1	mouse metabolite
+Compound::CHEBI_77136	CHEBI_77136	3	0	
+Compound::CHEBI_62616	CHEBI_62616	3	0	
+Compound::CHEBI_60657	CHEBI_60657	3	0	
+Compound::CHEBI_136902	CHEBI_136902	3	0	
+Compound::CHEBI_78438	CHEBI_78438	3	0	
+Compound::CHEBI_132062	CHEBI_132062	3	0	
+Compound::CHEBI_77342	CHEBI_77342	3	0	
+Compound::CHEBI_17790	CHEBI_17790	3	6	Escherichia coli metabolite; Mycoplasma genitalium metabolite; amphiprotic solvent; fuel; human metabolite; mouse metabolite
+Compound::CHEBI_9407	CHEBI_9407	3	1	human metabolite
+Compound::CHEBI_10702	CHEBI_10702	3	0	
+Compound::CHEBI_136302	CHEBI_136302	3	0	
+Compound::CHEBI_84467	CHEBI_84467	3	0	
+Compound::CHEBI_34071	CHEBI_34071	3	0	
+Compound::CHEBI_85376	CHEBI_85376	3	0	
+Compound::CHEBI_62117	CHEBI_62117	3	0	
+Compound::CHEBI_74941	CHEBI_74941	3	0	
+Compound::CHEBI_75038	CHEBI_75038	3	0	
+Compound::CHEBI_65264	CHEBI_65264	3	0	
+Compound::CHEBI_78477	CHEBI_78477	3	0	
+Compound::CHEBI_1722	CHEBI_1722	3	0	
+Compound::CHEBI_75243	CHEBI_75243	3	0	
+Compound::CHEBI_73000	CHEBI_73000	3	1	mouse metabolite
+Compound::CHEBI_77125	CHEBI_77125	3	0	
+Compound::CHEBI_28733	CHEBI_28733	3	1	mouse metabolite
+Compound::CHEBI_17568	CHEBI_17568	3	7	Daphnia magna metabolite; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; allergen; human metabolite; mouse metabolite; prodrug
+Compound::CHEBI_83242	CHEBI_83242	3	0	
+Compound::CHEBI_57876	CHEBI_57876	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78776	CHEBI_78776	3	0	
+Compound::CHEBI_84654	CHEBI_84654	3	0	
+Compound::CHEBI_16521	CHEBI_16521	3	5	Saccharomyces cerevisiae metabolite; bacterial metabolite; human metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_131859	CHEBI_131859	3	0	
+Compound::CHEBI_52962	CHEBI_52962	3	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_18313	CHEBI_18313	3	2	antigen; mouse metabolite
+Compound::CHEBI_8988	CHEBI_8988	3	4	EC 5.99.1.2 (DNA topoisomerase) inhibitor; antineoplastic agent; apoptosis inducer; drug metabolite
+Compound::CHEBI_78497	CHEBI_78497	3	0	
+Compound::CHEBI_132154	CHEBI_132154	3	0	
+Compound::CHEBI_17737	CHEBI_17737	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_67021	CHEBI_67021	3	1	mouse metabolite
+Compound::CHEBI_155838	CHEBI_155838	3	0	
+Compound::CHEBI_90956	CHEBI_90956	3	2	human xenobiotic metabolite; rat metabolite
+Compound::CHEBI_87787	CHEBI_87787	3	0	
+Compound::CHEBI_74264	CHEBI_74264	3	0	
+Compound::CHEBI_136937	CHEBI_136937	3	0	
+Compound::CHEBI_78467	CHEBI_78467	3	0	
+Compound::CHEBI_16480	CHEBI_16480	3	8	Escherichia coli metabolite; bronchodilator agent; human metabolite; mouse metabolite; neurotransmitter; radical scavenger; signalling molecule; vasodilator agent
+Compound::CHEBI_86160	CHEBI_86160	3	0	
+Compound::CHEBI_132259	CHEBI_132259	3	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_78784	CHEBI_78784	3	0	
+Compound::CHEBI_131958	CHEBI_131958	3	0	
+Compound::CHEBI_67143	CHEBI_67143	3	1	protein synthesis inhibitor
+Compound::CHEBI_17748	CHEBI_17748	3	4	Escherichia coli metabolite; human metabolite; metabolite; mouse metabolite
+Compound::CHEBI_82629	CHEBI_82629	3	0	
+Compound::CHEBI_90233	CHEBI_90233	3	1	human metabolite
+Compound::CHEBI_136989	CHEBI_136989	3	1	human xenobiotic metabolite
+Compound::CHEBI_55474	CHEBI_55474	3	0	
+Compound::CHEBI_82612	CHEBI_82612	3	0	
+Compound::CHEBI_84032	CHEBI_84032	3	0	
+Compound::CHEBI_87044	CHEBI_87044	3	1	mouse metabolite
+Compound::CHEBI_138019	CHEBI_138019	3	0	
+Compound::CHEBI_18036	CHEBI_18036	3	1	human metabolite
+Compound::CHEBI_136524	CHEBI_136524	3	0	
+Compound::CHEBI_57567	CHEBI_57567	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_73995	CHEBI_73995	3	0	
+Compound::CHEBI_131974	CHEBI_131974	3	0	
+Compound::CHEBI_90840	CHEBI_90840	3	0	
+Compound::CHEBI_57464	CHEBI_57464	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_132200	CHEBI_132200	3	0	
+Compound::CHEBI_33409	CHEBI_33409	3	0	
+Compound::CHEBI_356416	CHEBI_356416	3	0	
+Compound::CHEBI_88073	CHEBI_88073	3	0	
+Compound::CHEBI_85222	CHEBI_85222	3	0	
+Compound::CHEBI_73543	CHEBI_73543	3	0	
+Compound::CHEBI_35812	CHEBI_35812	3	1	antinematodal drug
+Compound::CHEBI_43120	CHEBI_43120	3	0	
+Compound::CHEBI_136373	CHEBI_136373	3	0	
+Compound::CHEBI_17180	CHEBI_17180	3	1	human metabolite
+Compound::CHEBI_57460	CHEBI_57460	3	1	human metabolite
+Compound::CHEBI_90339	CHEBI_90339	3	0	
+Compound::CHEBI_58465	CHEBI_58465	3	0	
+Compound::CHEBI_57345	CHEBI_57345	3	1	human metabolite
+Compound::CHEBI_77140	CHEBI_77140	3	0	
+Compound::CHEBI_136904	CHEBI_136904	3	0	
+Compound::CHEBI_90680	CHEBI_90680	3	0	
+Compound::CHEBI_15893	CHEBI_15893	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_138443	CHEBI_138443	3	0	
+Compound::CHEBI_134090	CHEBI_134090	3	0	
+Compound::CHEBI_78454	CHEBI_78454	3	0	
+Compound::CHEBI_77286	CHEBI_77286	3	0	
+Compound::CHEBI_75938	CHEBI_75938	3	0	
+Compound::CHEBI_138222	CHEBI_138222	3	0	
+Compound::CHEBI_58161	CHEBI_58161	3	0	
+Compound::CHEBI_137403	CHEBI_137403	3	0	
+Compound::CHEBI_78458	CHEBI_78458	3	0	
+Compound::CHEBI_85097	CHEBI_85097	3	0	
+Compound::CHEBI_75067	CHEBI_75067	3	0	
+Compound::CHEBI_156397	CHEBI_156397	3	0	
+Compound::CHEBI_29317	CHEBI_29317	3	0	
+Compound::CHEBI_29256	CHEBI_29256	3	0	
+Compound::CHEBI_57955	CHEBI_57955	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57309	CHEBI_57309	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_77159	CHEBI_77159	3	0	
+Compound::CHEBI_15927	CHEBI_15927	3	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_90716	CHEBI_90716	3	0	
+Compound::CHEBI_76639	CHEBI_76639	3	0	
+Compound::CHEBI_77295	CHEBI_77295	3	0	
+Compound::CHEBI_116314	CHEBI_116314	3	2	human metabolite; plant metabolite
+Compound::CHEBI_57733	CHEBI_57733	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136901	CHEBI_136901	3	0	
+Compound::CHEBI_64677	CHEBI_64677	3	0	
+Compound::CHEBI_18421	CHEBI_18421	3	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_75610	CHEBI_75610	3	0	
+Compound::CHEBI_58475	CHEBI_58475	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_18252	CHEBI_18252	3	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_71451	CHEBI_71451	3	0	
+Compound::CHEBI_52961	CHEBI_52961	3	2	Saccharomyces cerevisiae metabolite; mouse metabolite
+Compound::CHEBI_78837	CHEBI_78837	3	0	
+Compound::CHEBI_132060	CHEBI_132060	3	0	
+Compound::CHEBI_76635	CHEBI_76635	3	0	
+Compound::CHEBI_75105	CHEBI_75105	3	0	
+Compound::CHEBI_17158	CHEBI_17158	3	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_36836	CHEBI_36836	3	0	
+Compound::CHEBI_57670	CHEBI_57670	3	0	
+Compound::CHEBI_77096	CHEBI_77096	3	0	
+Compound::CHEBI_78229	CHEBI_78229	3	0	
+Compound::CHEBI_29917	CHEBI_29917	3	0	
+Compound::CHEBI_77460	CHEBI_77460	3	0	
+Compound::CHEBI_83690	CHEBI_83690	3	0	
+Compound::CHEBI_60909	CHEBI_60909	3	0	
+Compound::CHEBI_77163	CHEBI_77163	3	0	
+Compound::CHEBI_78449	CHEBI_78449	3	0	
+Compound::CHEBI_78455	CHEBI_78455	3	0	
+Compound::CHEBI_72845	CHEBI_72845	3	0	
+Compound::CHEBI_78530	CHEBI_78530	3	0	
+Compound::CHEBI_82949	CHEBI_82949	3	0	
+Compound::CHEBI_142556	CHEBI_142556	3	0	
+Compound::CHEBI_77158	CHEBI_77158	3	0	
+Compound::CHEBI_78533	CHEBI_78533	3	0	
+Compound::CHEBI_42534	CHEBI_42534	3	2	androgen antagonist; human metabolite
+Compound::CHEBI_59720	CHEBI_59720	3	0	
+Compound::CHEBI_17224	CHEBI_17224	3	2	antineoplastic agent; hyaluronic acid synthesis inhibitor
+Compound::CHEBI_149482	CHEBI_149482	3	0	
+Compound::CHEBI_58409	CHEBI_58409	3	1	human metabolite
+Compound::CHEBI_17378	CHEBI_17378	3	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_80788	CHEBI_80788	3	3	central nervous system depressant; fumigant insecticide; plant metabolite
+Compound::CHEBI_59996	CHEBI_59996	3	0	
+Compound::CHEBI_78534	CHEBI_78534	3	0	
+Compound::CHEBI_132153	CHEBI_132153	3	0	
+Compound::CHEBI_58905	CHEBI_58905	3	0	
+Compound::CHEBI_74897	CHEBI_74897	3	0	
+Compound::CHEBI_136882	CHEBI_136882	3	0	
+Compound::CHEBI_64738	CHEBI_64738	3	0	
+Compound::CHEBI_75104	CHEBI_75104	3	0	
+Compound::CHEBI_65115	CHEBI_65115	3	0	
+Compound::CHEBI_156396	CHEBI_156396	3	0	
+Compound::CHEBI_132416	CHEBI_132416	3	0	
+Compound::CHEBI_62989	CHEBI_62989	3	0	
+Compound::CHEBI_74281	CHEBI_74281	3	0	
+Compound::CHEBI_57259	CHEBI_57259	3	0	
+Compound::CHEBI_57443	CHEBI_57443	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74554	CHEBI_74554	3	0	
+Compound::CHEBI_28115	CHEBI_28115	3	3	cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_77167	CHEBI_77167	3	0	
+Compound::CHEBI_566274	CHEBI_566274	3	1	biomarker
+Compound::CHEBI_85226	CHEBI_85226	3	0	
+Compound::CHEBI_76076	CHEBI_76076	3	1	human metabolite
+Compound::CHEBI_140310	CHEBI_140310	3	0	
+Compound::CHEBI_59905	CHEBI_59905	3	1	human metabolite
+Compound::CHEBI_133408	CHEBI_133408	3	0	
+Compound::CHEBI_139596	CHEBI_139596	3	0	
+Compound::CHEBI_17899	CHEBI_17899	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_138021	CHEBI_138021	3	0	
+Compound::CHEBI_133370	CHEBI_133370	3	0	
+Compound::CHEBI_83264	CHEBI_83264	3	0	
+Compound::CHEBI_17310	CHEBI_17310	3	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_136567	CHEBI_136567	3	0	
+Compound::CHEBI_64722	CHEBI_64722	3	0	
+Compound::CHEBI_65280	CHEBI_65280	3	0	
+Compound::CHEBI_15698	CHEBI_15698	3	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_16708	CHEBI_16708	3	5	Daphnia magna metabolite; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_133396	CHEBI_133396	3	0	
+Compound::CHEBI_85342	CHEBI_85342	3	0	
+Compound::CHEBI_88079	CHEBI_88079	3	0	
+Compound::CHEBI_67027	CHEBI_67027	3	1	mouse metabolite
+Compound::CHEBI_149554	CHEBI_149554	3	0	
+Compound::CHEBI_28324	CHEBI_28324	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_246422	CHEBI_246422	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_156461	CHEBI_156461	3	0	
+Compound::CHEBI_137941	CHEBI_137941	3	0	
+Compound::CHEBI_62287	CHEBI_62287	3	2	antigen; epitope
+Compound::CHEBI_17763	CHEBI_17763	3	1	plant metabolite
+Compound::CHEBI_74296	CHEBI_74296	3	0	
+Compound::CHEBI_85195	CHEBI_85195	3	0	
+Compound::CHEBI_49786	CHEBI_49786	3	1	cofactor
+Compound::CHEBI_18135	CHEBI_18135	3	3	allelochemical; genotoxin; plant metabolite
+Compound::CHEBI_76615	CHEBI_76615	3	0	
+Compound::CHEBI_57504	CHEBI_57504	3	0	
+Compound::CHEBI_85166	CHEBI_85166	3	1	human metabolite
+Compound::CHEBI_156395	CHEBI_156395	3	0	
+Compound::CHEBI_76083	CHEBI_76083	3	0	
+Compound::CHEBI_61723	CHEBI_61723	3	1	prosthetic group
+Compound::CHEBI_58321	CHEBI_58321	3	0	
+Compound::CHEBI_71481	CHEBI_71481	3	0	
+Compound::CHEBI_136990	CHEBI_136990	3	1	human xenobiotic metabolite
+Compound::CHEBI_77184	CHEBI_77184	3	0	
+Compound::CHEBI_84031	CHEBI_84031	3	0	
+Compound::CHEBI_73504	CHEBI_73504	3	2	metabolite; nonionic surfactant
+Compound::CHEBI_16520	CHEBI_16520	3	0	
+Compound::CHEBI_73856	CHEBI_73856	3	0	
+Compound::CHEBI_149555	CHEBI_149555	3	0	
+Compound::CHEBI_17135	CHEBI_17135	3	0	
+Compound::CHEBI_90717	CHEBI_90717	3	0	
+Compound::CHEBI_16144	CHEBI_16144	3	1	human metabolite
+Compound::CHEBI_17168	CHEBI_17168	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_62877	CHEBI_62877	3	0	
+Compound::CHEBI_132078	CHEBI_132078	3	0	
+Compound::CHEBI_140627	CHEBI_140627	3	0	
+Compound::CHEBI_58401	CHEBI_58401	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57336	CHEBI_57336	3	1	human metabolite
+Compound::CHEBI_28955	CHEBI_28955	3	6	angiogenesis modulating agent; antimitotic; antineoplastic agent; human metabolite; metabolite; mouse metabolite
+Compound::CHEBI_28433	CHEBI_28433	3	0	
+Compound::CHEBI_90615	CHEBI_90615	3	0	
+Compound::CHEBI_18408	CHEBI_18408	3	5	Escherichia coli metabolite; coenzyme; cofactor; human metabolite; prosthetic group
+Compound::CHEBI_74445	CHEBI_74445	3	0	
+Compound::CHEBI_90151	CHEBI_90151	3	0	
+Compound::CHEBI_17245	CHEBI_17245	3	13	EC 1.9.3.1 (cytochrome c oxidase) inhibitor; P450 inhibitor; biomarker; human metabolite; ligand; metabolite; mitochondrial respiratory-chain inhibitor; mouse metabolite; neurotoxin; neurotransmitter; probe; signalling molecule; vasodilator agent
+Compound::CHEBI_77553	CHEBI_77553	3	0	
+Compound::CHEBI_133411	CHEBI_133411	3	0	
+Compound::CHEBI_17500	CHEBI_17500	3	1	mouse metabolite
+Compound::CHEBI_17412	CHEBI_17412	3	0	
+Compound::CHEBI_136315	CHEBI_136315	3	0	
+Compound::CHEBI_35491	CHEBI_35491	3	0	
+Compound::CHEBI_84139	CHEBI_84139	3	0	
+Compound::CHEBI_78459	CHEBI_78459	3	0	
+Compound::CHEBI_82751	CHEBI_82751	3	2	antibacterial agent; mouse metabolite
+Compound::CHEBI_78228	CHEBI_78228	3	0	
+Compound::CHEBI_78421	CHEBI_78421	3	0	
+Compound::CHEBI_149486	CHEBI_149486	3	0	
+Compound::CHEBI_16304	CHEBI_16304	3	2	cofactor; human metabolite
+Compound::CHEBI_58125	CHEBI_58125	3	0	
+Compound::CHEBI_75034	CHEBI_75034	3	0	
+Compound::CHEBI_73110	CHEBI_73110	3	0	
+Compound::CHEBI_17172	CHEBI_17172	3	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_74100	CHEBI_74100	3	1	mouse metabolite
+Compound::CHEBI_132076	CHEBI_132076	3	0	
+Compound::CHEBI_90694	CHEBI_90694	3	0	
+Compound::CHEBI_83670	CHEBI_83670	3	3	anti-inflammatory agent; human metabolite; hypoglycemic agent
+Compound::CHEBI_78904	CHEBI_78904	3	0	
+Compound::CHEBI_132024	CHEBI_132024	3	0	
+Compound::CHEBI_138266	CHEBI_138266	3	0	
+Compound::CHEBI_137480	CHEBI_137480	3	0	
+Compound::CHEBI_136312	CHEBI_136312	3	0	
+Compound::CHEBI_18364	CHEBI_18364	3	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_132415	CHEBI_132415	3	0	
+Compound::CHEBI_133374	CHEBI_133374	3	0	
+Compound::CHEBI_58773	CHEBI_58773	3	0	
+Compound::CHEBI_16953	CHEBI_16953	3	4	antioxidant; human metabolite; mouse metabolite; rat metabolite
+Compound::CHEBI_64315	CHEBI_64315	3	0	
+Compound::CHEBI_13601	CHEBI_13601	3	0	
+Compound::CHEBI_143593	CHEBI_143593	3	0	
+Compound::CHEBI_142617	CHEBI_142617	3	0	
+Compound::CHEBI_90616	CHEBI_90616	3	0	
+Compound::CHEBI_156398	CHEBI_156398	3	0	
+Compound::CHEBI_57391	CHEBI_57391	3	1	human metabolite
+Compound::CHEBI_15759	CHEBI_15759	3	0	
+Compound::CHEBI_138735	CHEBI_138735	3	0	
+Compound::CHEBI_18608	CHEBI_18608	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136886	CHEBI_136886	3	0	
+Compound::CHEBI_79072	CHEBI_79072	3	1	human metabolite
+Compound::CHEBI_61085	CHEBI_61085	3	1	human metabolite
+Compound::CHEBI_90085	CHEBI_90085	3	0	
+Compound::CHEBI_57363	CHEBI_57363	3	1	human metabolite
+Compound::CHEBI_63224	CHEBI_63224	3	0	
+Compound::CHEBI_138218	CHEBI_138218	3	0	
+Compound::CHEBI_88528	CHEBI_88528	3	1	human urinary metabolite
+Compound::CHEBI_85291	CHEBI_85291	3	0	
+Compound::CHEBI_61891	CHEBI_61891	3	0	
+Compound::CHEBI_62237	CHEBI_62237	3	0	
+Compound::CHEBI_17813	CHEBI_17813	3	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_76088	CHEBI_76088	3	0	
+Compound::CHEBI_136982	CHEBI_136982	3	0	
+Compound::CHEBI_58266	CHEBI_58266	3	0	
+Compound::CHEBI_137017	CHEBI_137017	3	0	
+Compound::CHEBI_58718	CHEBI_58718	3	0	
+Compound::CHEBI_136731	CHEBI_136731	3	0	
+Compound::CHEBI_132201	CHEBI_132201	3	0	
+Compound::CHEBI_137949	CHEBI_137949	3	0	
+Compound::CHEBI_65107	CHEBI_65107	3	0	
+Compound::CHEBI_85263	CHEBI_85263	3	0	
+Compound::CHEBI_36242	CHEBI_36242	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136967	CHEBI_136967	3	0	
+Compound::CHEBI_75584	CHEBI_75584	3	1	metabolite
+Compound::CHEBI_65073	CHEBI_65073	3	0	
+Compound::CHEBI_49552	CHEBI_49552	3	1	cofactor
+Compound::CHEBI_138663	CHEBI_138663	3	0	
+Compound::CHEBI_16664	CHEBI_16664	3	3	anthelminthic drug; microtubule-destabilising agent; tubulin modulator
+Compound::CHEBI_58533	CHEBI_58533	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_77756	CHEBI_77756	3	0	
+Compound::CHEBI_76085	CHEBI_76085	3	0	
+Compound::CHEBI_145465	CHEBI_145465	3	0	
+Compound::CHEBI_137950	CHEBI_137950	3	0	
+Compound::CHEBI_140623	CHEBI_140623	3	0	
+Compound::CHEBI_141005	CHEBI_141005	3	0	
+Compound::CHEBI_58336	CHEBI_58336	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136335	CHEBI_136335	3	0	
+Compound::CHEBI_84973	CHEBI_84973	3	0	
+Compound::CHEBI_73863	CHEBI_73863	3	0	
+Compound::CHEBI_136303	CHEBI_136303	3	0	
+Compound::CHEBI_58734	CHEBI_58734	3	0	
+Compound::CHEBI_76614	CHEBI_76614	3	0	
+Compound::CHEBI_58589	CHEBI_58589	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16959	CHEBI_16959	3	0	
+Compound::CHEBI_67237	CHEBI_67237	3	0	
+Compound::CHEBI_78468	CHEBI_78468	3	0	
+Compound::CHEBI_74418	CHEBI_74418	3	0	
+Compound::CHEBI_147404	CHEBI_147404	3	0	
+Compound::CHEBI_75585	CHEBI_75585	3	0	
+Compound::CHEBI_74582	CHEBI_74582	3	0	
+Compound::CHEBI_155830	CHEBI_155830	3	0	
+Compound::CHEBI_78513	CHEBI_78513	3	0	
+Compound::CHEBI_140604	CHEBI_140604	3	0	
+Compound::CHEBI_78531	CHEBI_78531	3	0	
+Compound::CHEBI_57853	CHEBI_57853	3	0	
+Compound::CHEBI_78447	CHEBI_78447	3	0	
+Compound::CHEBI_50169	CHEBI_50169	3	5	GABA modulator; antidepressant; human metabolite; intravenous anaesthetic; sedative
+Compound::CHEBI_132025	CHEBI_132025	3	0	
+Compound::CHEBI_77165	CHEBI_77165	3	0	
+Compound::CHEBI_149523	CHEBI_149523	3	0	
+Compound::CHEBI_58921	CHEBI_58921	3	0	
+Compound::CHEBI_57306	CHEBI_57306	3	0	
+Compound::CHEBI_33542	CHEBI_33542	3	0	
+Compound::CHEBI_78827	CHEBI_78827	3	0	
+Compound::CHEBI_58451	CHEBI_58451	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_138220	CHEBI_138220	3	0	
+Compound::CHEBI_15801	CHEBI_15801	3	0	
+Compound::CHEBI_74581	CHEBI_74581	3	0	
+Compound::CHEBI_79027	CHEBI_79027	3	0	
+Compound::CHEBI_57316	CHEBI_57316	3	1	human metabolite
+Compound::CHEBI_83414	CHEBI_83414	3	0	
+Compound::CHEBI_136970	CHEBI_136970	3	0	
+Compound::CHEBI_87830	CHEBI_87830	3	0	
+Compound::CHEBI_74586	CHEBI_74586	3	0	
+Compound::CHEBI_58448	CHEBI_58448	3	0	
+Compound::CHEBI_83142	CHEBI_83142	3	0	
+Compound::CHEBI_147405	CHEBI_147405	3	0	
+Compound::CHEBI_2181	CHEBI_2181	3	2	Escherichia coli metabolite; mouse metabolite
+Compound::CHEBI_77139	CHEBI_77139	3	0	
+Compound::CHEBI_85277	CHEBI_85277	3	0	
+Compound::CHEBI_74671	CHEBI_74671	3	1	mouse metabolite
+Compound::CHEBI_77537	CHEBI_77537	3	0	
+Compound::CHEBI_78522	CHEBI_78522	3	0	
+Compound::CHEBI_78215	CHEBI_78215	3	0	
+Compound::CHEBI_132522	CHEBI_132522	3	0	
+Compound::CHEBI_75322	CHEBI_75322	3	0	
+Compound::CHEBI_78048	CHEBI_78048	3	0	
+Compound::CHEBI_90838	CHEBI_90838	3	0	
+Compound::CHEBI_16753	CHEBI_16753	3	3	human metabolite; metabolite; mouse metabolite
+Compound::CHEBI_85335	CHEBI_85335	3	0	
+Compound::CHEBI_72957	CHEBI_72957	3	0	
+Compound::CHEBI_78762	CHEBI_78762	3	0	
+Compound::CHEBI_59871	CHEBI_59871	3	0	
+Compound::CHEBI_132077	CHEBI_132077	3	0	
+Compound::CHEBI_78611	CHEBI_78611	3	0	
+Compound::CHEBI_140575	CHEBI_140575	3	0	
+Compound::CHEBI_58228	CHEBI_58228	3	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_87828	CHEBI_87828	3	0	
+Compound::CHEBI_58066	CHEBI_58066	3	0	
+Compound::CHEBI_132072	CHEBI_132072	3	0	
+Compound::CHEBI_76374	CHEBI_76374	3	0	
+Compound::CHEBI_77291	CHEBI_77291	3	0	
+Compound::CHEBI_136286	CHEBI_136286	3	0	
+Compound::CHEBI_77160	CHEBI_77160	3	0	
+Compound::CHEBI_58285	CHEBI_58285	3	0	
+Compound::CHEBI_18005	CHEBI_18005	3	3	Saccharomyces cerevisiae metabolite; chromogenic compound; human metabolite
+Compound::CHEBI_64840	CHEBI_64840	3	0	
+Compound::CHEBI_76978	CHEBI_76978	3	2	anticonvulsant; plant metabolite
+Compound::CHEBI_47907	CHEBI_47907	3	0	
+Compound::CHEBI_62615	CHEBI_62615	3	0	
+Compound::CHEBI_78600	CHEBI_78600	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_77164	CHEBI_77164	3	0	
+Compound::CHEBI_136330	CHEBI_136330	3	0	
+Compound::CHEBI_17122	CHEBI_17122	3	1	human metabolite
+Compound::CHEBI_78268	CHEBI_78268	3	0	
+Compound::CHEBI_41509	CHEBI_41509	3	2	human metabolite; mouse metabolite
+Compound::CHEBI_57389	CHEBI_57389	3	0	
+Compound::CHEBI_136634	CHEBI_136634	3	0	
+Compound::CHEBI_132071	CHEBI_132071	3	0	
+Compound::CHEBI_36252	CHEBI_36252	3	1	human metabolite
+Compound::CHEBI_131803	CHEBI_131803	3	0	
+Compound::CHEBI_57346	CHEBI_57346	3	1	human metabolite
+Compound::CHEBI_60625	CHEBI_60625	3	1	mouse metabolite
+Compound::CHEBI_85489	CHEBI_85489	3	0	
+Compound::CHEBI_60615	CHEBI_60615	3	1	mouse metabolite
+Compound::CHEBI_83677	CHEBI_83677	3	3	anti-inflammatory agent; human metabolite; hypoglycemic agent
+Compound::CHEBI_64379	CHEBI_64379	3	0	
+Compound::CHEBI_136282	CHEBI_136282	3	0	
+Compound::CHEBI_136115	CHEBI_136115	3	0	
+Compound::CHEBI_136304	CHEBI_136304	3	0	
+Compound::CHEBI_58444	CHEBI_58444	3	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_77268	CHEBI_77268	3	0	
+Compound::CHEBI_64795	CHEBI_64795	2	0	
+Compound::CHEBI_57445	CHEBI_57445	2	1	human metabolite
+Compound::CHEBI_143575	CHEBI_143575	2	0	
+Compound::CHEBI_37623	CHEBI_37623	2	1	human metabolite
+Compound::CHEBI_76305	CHEBI_76305	2	0	
+Compound::CHEBI_75590	CHEBI_75590	2	0	
+Compound::CHEBI_74477	CHEBI_74477	2	0	
+Compound::CHEBI_10036	CHEBI_10036	2	0	
+Compound::CHEBI_133000	CHEBI_133000	2	0	
+Compound::CHEBI_74001	CHEBI_74001	2	0	
+Compound::CHEBI_71008	CHEBI_71008	2	0	
+Compound::CHEBI_78402	CHEBI_78402	2	0	
+Compound::CHEBI_88066	CHEBI_88066	2	0	
+Compound::CHEBI_28349	CHEBI_28349	2	1	mouse metabolite
+Compound::CHEBI_75472	CHEBI_75472	2	0	
+Compound::CHEBI_85350	CHEBI_85350	2	1	human metabolite
+Compound::CHEBI_27975	CHEBI_27975	2	0	
+Compound::CHEBI_59879	CHEBI_59879	2	0	
+Compound::CHEBI_78481	CHEBI_78481	2	0	
+Compound::CHEBI_138631	CHEBI_138631	2	2	coral metabolite; plant metabolite
+Compound::CHEBI_138057	CHEBI_138057	2	0	
+Compound::CHEBI_35146	CHEBI_35146	2	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_133795	CHEBI_133795	2	0	
+Compound::CHEBI_142680	CHEBI_142680	2	0	
+Compound::CHEBI_28113	CHEBI_28113	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_84969	CHEBI_84969	2	1	mouse metabolite
+Compound::CHEBI_35973	CHEBI_35973	2	0	
+Compound::CHEBI_16120	CHEBI_16120	2	0	
+Compound::CHEBI_74495	CHEBI_74495	2	0	
+Compound::CHEBI_27836	CHEBI_27836	2	1	plant metabolite
+Compound::CHEBI_73976	CHEBI_73976	2	0	
+Compound::CHEBI_136972	CHEBI_136972	2	4	biomarker; estrogen; genotoxin; human metabolite
+Compound::CHEBI_75017	CHEBI_75017	2	0	
+Compound::CHEBI_76555	CHEBI_76555	2	0	
+Compound::CHEBI_137459	CHEBI_137459	2	0	
+Compound::CHEBI_76377	CHEBI_76377	2	0	
+Compound::CHEBI_78785	CHEBI_78785	2	0	
+Compound::CHEBI_140304	CHEBI_140304	2	0	
+Compound::CHEBI_58681	CHEBI_58681	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_82983	CHEBI_82983	2	0	
+Compound::CHEBI_75443	CHEBI_75443	2	0	
+Compound::CHEBI_133933	CHEBI_133933	2	0	
+Compound::CHEBI_75868	CHEBI_75868	2	0	
+Compound::CHEBI_15036	CHEBI_15036	2	0	
+Compound::CHEBI_28477	CHEBI_28477	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_132026	CHEBI_132026	2	0	
+Compound::CHEBI_30864	CHEBI_30864	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_37257	CHEBI_37257	2	1	human metabolite
+Compound::CHEBI_58928	CHEBI_58928	2	0	
+Compound::CHEBI_57534	CHEBI_57534	2	1	human metabolite
+Compound::CHEBI_78475	CHEBI_78475	2	0	
+Compound::CHEBI_78456	CHEBI_78456	2	0	
+Compound::CHEBI_83411	CHEBI_83411	2	0	
+Compound::CHEBI_78656	CHEBI_78656	2	0	
+Compound::CHEBI_50477	CHEBI_50477	2	0	
+Compound::CHEBI_90675	CHEBI_90675	2	0	
+Compound::CHEBI_139509	CHEBI_139509	2	0	
+Compound::CHEBI_17750	CHEBI_17750	2	1	fundamental metabolite
+Compound::CHEBI_78207	CHEBI_78207	2	0	
+Compound::CHEBI_87584	CHEBI_87584	2	0	
+Compound::CHEBI_64076	CHEBI_64076	2	0	
+Compound::CHEBI_63001	CHEBI_63001	2	0	
+Compound::CHEBI_143979	CHEBI_143979	2	0	
+Compound::CHEBI_84824	CHEBI_84824	2	0	
+Compound::CHEBI_74083	CHEBI_74083	2	0	
+Compound::CHEBI_155837	CHEBI_155837	2	0	
+Compound::CHEBI_133938	CHEBI_133938	2	0	
+Compound::CHEBI_28717	CHEBI_28717	2	1	human metabolite
+Compound::CHEBI_132516	CHEBI_132516	2	0	
+Compound::CHEBI_74415	CHEBI_74415	2	0	
+Compound::CHEBI_138195	CHEBI_138195	2	1	detergent
+Compound::CHEBI_136441	CHEBI_136441	2	0	
+Compound::CHEBI_77129	CHEBI_77129	2	2	calcium channel agonist; protein kinase C agonist
+Compound::CHEBI_142678	CHEBI_142678	2	0	
+Compound::CHEBI_28818	CHEBI_28818	2	1	human metabolite
+Compound::CHEBI_15383	CHEBI_15383	2	0	
+Compound::CHEBI_85241	CHEBI_85241	2	0	
+Compound::CHEBI_136974	CHEBI_136974	2	0	
+Compound::CHEBI_132246	CHEBI_132246	2	3	human xenobiotic metabolite; marine xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_87080	CHEBI_87080	2	0	
+Compound::CHEBI_84341	CHEBI_84341	2	1	mouse metabolite
+Compound::CHEBI_138261	CHEBI_138261	2	0	
+Compound::CHEBI_64718	CHEBI_64718	2	0	
+Compound::CHEBI_17140	CHEBI_17140	2	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_57334	CHEBI_57334	2	1	human metabolite
+Compound::CHEBI_75230	CHEBI_75230	2	0	
+Compound::CHEBI_73682	CHEBI_73682	2	0	
+Compound::CHEBI_74583	CHEBI_74583	2	0	
+Compound::CHEBI_152566	CHEBI_152566	2	0	
+Compound::CHEBI_34112	CHEBI_34112	2	0	
+Compound::CHEBI_65286	CHEBI_65286	2	0	
+Compound::CHEBI_73977	CHEBI_73977	2	0	
+Compound::CHEBI_140573	CHEBI_140573	2	0	
+Compound::CHEBI_142684	CHEBI_142684	2	0	
+Compound::CHEBI_133105	CHEBI_133105	2	0	
+Compound::CHEBI_32955	CHEBI_32955	2	0	
+Compound::CHEBI_78453	CHEBI_78453	2	0	
+Compound::CHEBI_166823	CHEBI_166823	2	0	
+Compound::CHEBI_10782	CHEBI_10782	2	0	
+Compound::CHEBI_77093	CHEBI_77093	2	0	
+Compound::CHEBI_136369	CHEBI_136369	2	0	
+Compound::CHEBI_87047	CHEBI_87047	2	1	human metabolite
+Compound::CHEBI_76931	CHEBI_76931	2	0	
+Compound::CHEBI_57776	CHEBI_57776	2	0	
+Compound::CHEBI_90818	CHEBI_90818	2	2	anti-inflammatory agent; mouse metabolite
+Compound::CHEBI_57307	CHEBI_57307	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78517	CHEBI_78517	2	0	
+Compound::CHEBI_2495	CHEBI_2495	2	4	EC 1.1.1.146 (11beta-hydroxysteroid dehydrogenase) inhibitor; androgen; human urinary metabolite; marine metabolite
+Compound::CHEBI_15388	CHEBI_15388	2	0	
+Compound::CHEBI_133899	CHEBI_133899	2	0	
+Compound::CHEBI_78457	CHEBI_78457	2	0	
+Compound::CHEBI_134624	CHEBI_134624	2	0	
+Compound::CHEBI_137981	CHEBI_137981	2	0	
+Compound::CHEBI_132073	CHEBI_132073	2	0	
+Compound::CHEBI_137031	CHEBI_137031	2	1	human urinary metabolite
+Compound::CHEBI_1189	CHEBI_1189	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_84650	CHEBI_84650	2	0	
+Compound::CHEBI_90793	CHEBI_90793	2	1	human xenobiotic metabolite
+Compound::CHEBI_76312	CHEBI_76312	2	0	
+Compound::CHEBI_85236	CHEBI_85236	2	0	
+Compound::CHEBI_2571	CHEBI_2571	2	0	
+Compound::CHEBI_77127	CHEBI_77127	2	1	mouse metabolite
+Compound::CHEBI_90516	CHEBI_90516	2	0	
+Compound::CHEBI_31011	CHEBI_31011	2	1	plant metabolite
+Compound::CHEBI_77187	CHEBI_77187	2	0	
+Compound::CHEBI_78460	CHEBI_78460	2	0	
+Compound::CHEBI_75471	CHEBI_75471	2	0	
+Compound::CHEBI_52371	CHEBI_52371	2	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_30839	CHEBI_30839	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_47787	CHEBI_47787	2	0	
+Compound::CHEBI_70760	CHEBI_70760	2	0	
+Compound::CHEBI_30825	CHEBI_30825	2	0	
+Compound::CHEBI_87571	CHEBI_87571	2	0	
+Compound::CHEBI_78515	CHEBI_78515	2	0	
+Compound::CHEBI_90420	CHEBI_90420	2	0	
+Compound::CHEBI_138278	CHEBI_138278	2	0	
+Compound::CHEBI_17388	CHEBI_17388	2	0	
+Compound::CHEBI_77369	CHEBI_77369	2	0	
+Compound::CHEBI_74892	CHEBI_74892	2	0	
+Compound::CHEBI_133769	CHEBI_133769	2	0	
+Compound::CHEBI_71489	CHEBI_71489	2	0	
+Compound::CHEBI_58326	CHEBI_58326	2	0	
+Compound::CHEBI_62571	CHEBI_62571	2	1	mouse metabolite
+Compound::CHEBI_15035	CHEBI_15035	2	1	human metabolite
+Compound::CHEBI_83580	CHEBI_83580	2	0	
+Compound::CHEBI_144378	CHEBI_144378	2	0	
+Compound::CHEBI_138197	CHEBI_138197	2	0	
+Compound::CHEBI_85351	CHEBI_85351	2	0	
+Compound::CHEBI_60000	CHEBI_60000	2	0	
+Compound::CHEBI_84027	CHEBI_84027	2	0	
+Compound::CHEBI_86019	CHEBI_86019	2	0	
+Compound::CHEBI_57335	CHEBI_57335	2	1	human metabolite
+Compound::CHEBI_15894	CHEBI_15894	2	0	
+Compound::CHEBI_90336	CHEBI_90336	2	0	
+Compound::CHEBI_75463	CHEBI_75463	2	0	
+Compound::CHEBI_65250	CHEBI_65250	2	0	
+Compound::CHEBI_57934	CHEBI_57934	2	1	human metabolite
+Compound::CHEBI_76373	CHEBI_76373	2	0	
+Compound::CHEBI_137540	CHEBI_137540	2	0	
+Compound::CHEBI_75449	CHEBI_75449	2	1	mouse metabolite
+Compound::CHEBI_67031	CHEBI_67031	2	0	
+Compound::CHEBI_75623	CHEBI_75623	2	1	epitope
+Compound::CHEBI_74086	CHEBI_74086	2	0	
+Compound::CHEBI_82696	CHEBI_82696	2	0	
+Compound::CHEBI_82959	CHEBI_82959	2	0	
+Compound::CHEBI_64183	CHEBI_64183	2	2	biomarker; metabolite
+Compound::CHEBI_149714	CHEBI_149714	2	0	
+Compound::CHEBI_75448	CHEBI_75448	2	0	
+Compound::CHEBI_28497	CHEBI_28497	2	1	epitope
+Compound::CHEBI_75235	CHEBI_75235	2	0	
+Compound::CHEBI_82334	CHEBI_82334	2	2	flavouring agent; plant metabolite
+Compound::CHEBI_58529	CHEBI_58529	2	0	
+Compound::CHEBI_133375	CHEBI_133375	2	0	
+Compound::CHEBI_79333	CHEBI_79333	2	0	
+Compound::CHEBI_59918	CHEBI_59918	2	0	
+Compound::CHEBI_152565	CHEBI_152565	2	0	
+Compound::CHEBI_85352	CHEBI_85352	2	1	human metabolite
+Compound::CHEBI_74117	CHEBI_74117	2	0	
+Compound::CHEBI_137010	CHEBI_137010	2	0	
+Compound::CHEBI_74890	CHEBI_74890	2	0	
+Compound::CHEBI_58828	CHEBI_58828	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_18259	CHEBI_18259	2	3	antigen; human metabolite; mouse metabolite
+Compound::CHEBI_75536	CHEBI_75536	2	0	
+Compound::CHEBI_134661	CHEBI_134661	2	0	
+Compound::CHEBI_57964	CHEBI_57964	2	1	human metabolite
+Compound::CHEBI_17615	CHEBI_17615	2	1	mouse metabolite
+Compound::CHEBI_75062	CHEBI_75062	2	1	mouse metabolite
+Compound::CHEBI_58950	CHEBI_58950	2	0	
+Compound::CHEBI_85299	CHEBI_85299	2	0	
+Compound::CHEBI_18034	CHEBI_18034	2	2	human metabolite; metabolite
+Compound::CHEBI_132511	CHEBI_132511	2	0	
+Compound::CHEBI_47812	CHEBI_47812	2	1	human metabolite
+Compound::CHEBI_63715	CHEBI_63715	2	0	
+Compound::CHEBI_72826	CHEBI_72826	2	0	
+Compound::CHEBI_143812	CHEBI_143812	2	0	
+Compound::CHEBI_57265	CHEBI_57265	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136905	CHEBI_136905	2	0	
+Compound::CHEBI_90723	CHEBI_90723	2	0	
+Compound::CHEBI_62507	CHEBI_62507	2	1	antigen
+Compound::CHEBI_17495	CHEBI_17495	2	0	
+Compound::CHEBI_58672	CHEBI_58672	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_77251	CHEBI_77251	2	0	
+Compound::CHEBI_77889	CHEBI_77889	2	0	
+Compound::CHEBI_58001	CHEBI_58001	2	0	
+Compound::CHEBI_138267	CHEBI_138267	2	0	
+Compound::CHEBI_75279	CHEBI_75279	2	0	
+Compound::CHEBI_50516	CHEBI_50516	2	2	mouse metabolite; nuclear receptor modulator
+Compound::CHEBI_75624	CHEBI_75624	2	0	
+Compound::CHEBI_78277	CHEBI_78277	2	5	anti-inflammatory agent; antioxidant; bone density conservation agent; human metabolite; neuroprotective agent
+Compound::CHEBI_16450	CHEBI_16450	2	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_62617	CHEBI_62617	2	0	
+Compound::CHEBI_85099	CHEBI_85099	2	0	
+Compound::CHEBI_90676	CHEBI_90676	2	0	
+Compound::CHEBI_83724	CHEBI_83724	2	0	
+Compound::CHEBI_74556	CHEBI_74556	2	0	
+Compound::CHEBI_76941	CHEBI_76941	2	0	
+Compound::CHEBI_78276	CHEBI_78276	2	0	
+Compound::CHEBI_76645	CHEBI_76645	2	0	
+Compound::CHEBI_132083	CHEBI_132083	2	0	
+Compound::CHEBI_58243	CHEBI_58243	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57767	CHEBI_57767	2	1	human metabolite
+Compound::CHEBI_28940	CHEBI_28940	2	1	human metabolite
+Compound::CHEBI_138113	CHEBI_138113	2	0	
+Compound::CHEBI_85355	CHEBI_85355	2	0	
+Compound::CHEBI_59807	CHEBI_59807	2	0	
+Compound::CHEBI_87215	CHEBI_87215	2	0	
+Compound::CHEBI_137125	CHEBI_137125	2	1	human metabolite
+Compound::CHEBI_90850	CHEBI_90850	2	0	
+Compound::CHEBI_15343	CHEBI_15343	2	10	EC 3.5.1.4 (amidase) inhibitor; Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; carcinogenic agent; electron acceptor; human metabolite; mouse metabolite; mutagen; oxidising agent; teratogenic agent
+Compound::CHEBI_85238	CHEBI_85238	2	0	
+Compound::CHEBI_78482	CHEBI_78482	2	0	
+Compound::CHEBI_61968	CHEBI_61968	2	0	
+Compound::CHEBI_133050	CHEBI_133050	2	0	
+Compound::CHEBI_142681	CHEBI_142681	2	0	
+Compound::CHEBI_85354	CHEBI_85354	2	0	
+Compound::CHEBI_58324	CHEBI_58324	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_17404	CHEBI_17404	2	0	
+Compound::CHEBI_16062	CHEBI_16062	2	1	mouse metabolite
+Compound::CHEBI_77396	CHEBI_77396	2	0	
+Compound::CHEBI_75913	CHEBI_75913	2	0	
+Compound::CHEBI_167616	CHEBI_167616	2	0	
+Compound::CHEBI_133385	CHEBI_133385	2	0	
+Compound::CHEBI_75625	CHEBI_75625	2	0	
+Compound::CHEBI_64074	CHEBI_64074	2	0	
+Compound::CHEBI_90163	CHEBI_90163	2	0	
+Compound::CHEBI_143978	CHEBI_143978	2	0	
+Compound::CHEBI_90800	CHEBI_90800	2	0	
+Compound::CHEBI_28034	CHEBI_28034	2	0	
+Compound::CHEBI_77094	CHEBI_77094	2	0	
+Compound::CHEBI_65060	CHEBI_65060	2	0	
+Compound::CHEBI_133931	CHEBI_133931	2	0	
+Compound::CHEBI_75582	CHEBI_75582	2	1	Mycoplasma genitalium metabolite
+Compound::CHEBI_57688	CHEBI_57688	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57497	CHEBI_57497	2	0	
+Compound::CHEBI_78532	CHEBI_78532	2	0	
+Compound::CHEBI_73332	CHEBI_73332	2	0	
+Compound::CHEBI_74480	CHEBI_74480	2	0	
+Compound::CHEBI_87055	CHEBI_87055	2	1	human metabolite
+Compound::CHEBI_136522	CHEBI_136522	2	0	
+Compound::CHEBI_75609	CHEBI_75609	2	0	
+Compound::CHEBI_11805	CHEBI_11805	2	1	human metabolite
+Compound::CHEBI_58723	CHEBI_58723	2	1	human metabolite
+Compound::CHEBI_142789	CHEBI_142789	2	0	
+Compound::CHEBI_74478	CHEBI_74478	2	0	
+Compound::CHEBI_144622	CHEBI_144622	2	0	
+Compound::CHEBI_60107	CHEBI_60107	2	0	
+Compound::CHEBI_137582	CHEBI_137582	2	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_533015	CHEBI_533015	2	1	human metabolite
+Compound::CHEBI_91000	CHEBI_91000	2	2	anti-inflammatory agent; human xenobiotic metabolite
+Compound::CHEBI_15710	CHEBI_15710	2	5	Aspergillus metabolite; Escherichia coli metabolite; human metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_132219	CHEBI_132219	2	0	
+Compound::CHEBI_58380	CHEBI_58380	2	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_74265	CHEBI_74265	2	0	
+Compound::CHEBI_90153	CHEBI_90153	2	0	
+Compound::CHEBI_77549	CHEBI_77549	2	0	
+Compound::CHEBI_140369	CHEBI_140369	2	0	
+Compound::CHEBI_17325	CHEBI_17325	2	2	human metabolite; plant metabolite
+Compound::CHEBI_133510	CHEBI_133510	2	0	
+Compound::CHEBI_58548	CHEBI_58548	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_146022	CHEBI_146022	2	0	
+Compound::CHEBI_72833	CHEBI_72833	2	0	
+Compound::CHEBI_546807	CHEBI_546807	2	1	epitope
+Compound::CHEBI_133768	CHEBI_133768	2	0	
+Compound::CHEBI_75989	CHEBI_75989	2	0	
+Compound::CHEBI_84026	CHEBI_84026	2	0	
+Compound::CHEBI_79005	CHEBI_79005	2	0	
+Compound::CHEBI_58855	CHEBI_58855	2	0	
+Compound::CHEBI_75018	CHEBI_75018	2	0	
+Compound::CHEBI_58245	CHEBI_58245	2	2	fundamental metabolite; human metabolite
+Compound::CHEBI_72860	CHEBI_72860	2	0	
+Compound::CHEBI_77927	CHEBI_77927	2	1	plant metabolite
+Compound::CHEBI_78446	CHEBI_78446	2	0	
+Compound::CHEBI_11892	CHEBI_11892	2	1	human metabolite
+Compound::CHEBI_75631	CHEBI_75631	2	0	
+Compound::CHEBI_28061	CHEBI_28061	2	1	mouse metabolite
+Compound::CHEBI_85493	CHEBI_85493	2	0	
+Compound::CHEBI_64741	CHEBI_64741	2	0	
+Compound::CHEBI_156082	CHEBI_156082	2	0	
+Compound::CHEBI_78424	CHEBI_78424	2	0	
+Compound::CHEBI_36464	CHEBI_36464	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_133371	CHEBI_133371	2	0	
+Compound::CHEBI_83241	CHEBI_83241	2	0	
+Compound::CHEBI_76592	CHEBI_76592	2	0	
+Compound::CHEBI_138651	CHEBI_138651	2	0	
+Compound::CHEBI_29805	CHEBI_29805	2	2	algal metabolite; human metabolite
+Compound::CHEBI_78994	CHEBI_78994	2	0	
+Compound::CHEBI_132061	CHEBI_132061	2	0	
+Compound::CHEBI_75465	CHEBI_75465	2	1	mouse metabolite
+Compound::CHEBI_90065	CHEBI_90065	2	1	human metabolite
+Compound::CHEBI_73550	CHEBI_73550	2	0	
+Compound::CHEBI_75626	CHEBI_75626	2	0	
+Compound::CHEBI_75456	CHEBI_75456	2	0	
+Compound::CHEBI_15389	CHEBI_15389	2	1	human metabolite
+Compound::CHEBI_17105	CHEBI_17105	2	1	human metabolite
+Compound::CHEBI_136899	CHEBI_136899	2	0	
+Compound::CHEBI_133382	CHEBI_133382	2	0	
+Compound::CHEBI_136398	CHEBI_136398	2	0	
+Compound::CHEBI_77033	CHEBI_77033	2	0	
+Compound::CHEBI_57673	CHEBI_57673	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58507	CHEBI_58507	2	1	human metabolite
+Compound::CHEBI_138093	CHEBI_138093	2	0	
+Compound::CHEBI_83143	CHEBI_83143	2	0	
+Compound::CHEBI_86319	CHEBI_86319	2	3	bone density conservation agent; human xenobiotic metabolite; nutraceutical
+Compound::CHEBI_84167	CHEBI_84167	2	0	
+Compound::CHEBI_85228	CHEBI_85228	2	0	
+Compound::CHEBI_137584	CHEBI_137584	2	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_57977	CHEBI_57977	2	1	human metabolite
+Compound::CHEBI_64925	CHEBI_64925	2	0	
+Compound::CHEBI_90719	CHEBI_90719	2	0	
+Compound::CHEBI_136443	CHEBI_136443	2	0	
+Compound::CHEBI_90832	CHEBI_90832	2	0	
+Compound::CHEBI_78551	CHEBI_78551	2	0	
+Compound::CHEBI_85349	CHEBI_85349	2	1	human metabolite
+Compound::CHEBI_83624	CHEBI_83624	2	0	
+Compound::CHEBI_72587	CHEBI_72587	2	1	human metabolite
+Compound::CHEBI_138061	CHEBI_138061	2	0	
+Compound::CHEBI_20794	CHEBI_20794	2	1	metabolite
+Compound::CHEBI_28037	CHEBI_28037	2	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_13790	CHEBI_13790	2	0	
+Compound::CHEBI_58173	CHEBI_58173	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_167617	CHEBI_167617	2	0	
+Compound::CHEBI_61748	CHEBI_61748	2	2	antifungal agent; volatile oil component
+Compound::CHEBI_57509	CHEBI_57509	2	1	human metabolite
+Compound::CHEBI_90390	CHEBI_90390	2	0	
+Compound::CHEBI_58535	CHEBI_58535	2	1	human metabolite
+Compound::CHEBI_133384	CHEBI_133384	2	0	
+Compound::CHEBI_78542	CHEBI_78542	2	0	
+Compound::CHEBI_87079	CHEBI_87079	2	0	
+Compound::CHEBI_74141	CHEBI_74141	2	0	
+Compound::CHEBI_58665	CHEBI_58665	2	0	
+Compound::CHEBI_16875	CHEBI_16875	2	1	human metabolite
+Compound::CHEBI_59082	CHEBI_59082	2	1	mouse metabolite
+Compound::CHEBI_133372	CHEBI_133372	2	0	
+Compound::CHEBI_132074	CHEBI_132074	2	0	
+Compound::CHEBI_131992	CHEBI_131992	2	0	
+Compound::CHEBI_83419	CHEBI_83419	2	0	
+Compound::CHEBI_75063	CHEBI_75063	2	0	
+Compound::CHEBI_86131	CHEBI_86131	2	0	
+Compound::CHEBI_136564	CHEBI_136564	2	0	
+Compound::CHEBI_15441	CHEBI_15441	2	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_52595	CHEBI_52595	2	1	human metabolite
+Compound::CHEBI_149697	CHEBI_149697	2	0	
+Compound::CHEBI_72835	CHEBI_72835	2	0	
+Compound::CHEBI_15355	CHEBI_15355	2	6	hormone; human metabolite; mouse metabolite; muscarinic agonist; neurotransmitter; vasodilator agent
+Compound::CHEBI_35759	CHEBI_35759	2	0	
+Compound::CHEBI_85262	CHEBI_85262	2	0	
+Compound::CHEBI_60110	CHEBI_60110	2	0	
+Compound::CHEBI_57589	CHEBI_57589	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_76628	CHEBI_76628	2	0	
+Compound::CHEBI_138372	CHEBI_138372	2	0	
+Compound::CHEBI_57524	CHEBI_57524	2	3	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_143974	CHEBI_143974	2	0	
+Compound::CHEBI_57472	CHEBI_57472	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136884	CHEBI_136884	2	0	
+Compound::CHEBI_77634	CHEBI_77634	2	0	
+Compound::CHEBI_16750	CHEBI_16750	2	1	fundamental metabolite
+Compound::CHEBI_57403	CHEBI_57403	2	1	human metabolite
+Compound::CHEBI_78462	CHEBI_78462	2	0	
+Compound::CHEBI_75914	CHEBI_75914	2	0	
+Compound::CHEBI_15440	CHEBI_15440	2	4	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_74118	CHEBI_74118	2	0	
+Compound::CHEBI_133772	CHEBI_133772	2	0	
+Compound::CHEBI_62065	CHEBI_62065	2	0	
+Compound::CHEBI_132065	CHEBI_132065	2	0	
+Compound::CHEBI_16724	CHEBI_16724	2	2	anaesthesia adjuvant; intravenous anaesthetic
+Compound::CHEBI_57457	CHEBI_57457	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16659	CHEBI_16659	2	1	algal metabolite
+Compound::CHEBI_132523	CHEBI_132523	2	0	
+Compound::CHEBI_32875	CHEBI_32875	2	1	mouse metabolite
+Compound::CHEBI_76311	CHEBI_76311	2	0	
+Compound::CHEBI_144621	CHEBI_144621	2	0	
+Compound::CHEBI_85232	CHEBI_85232	2	1	human metabolite
+Compound::CHEBI_78654	CHEBI_78654	2	0	
+Compound::CHEBI_57337	CHEBI_57337	2	1	human metabolite
+Compound::CHEBI_77186	CHEBI_77186	2	0	
+Compound::CHEBI_83683	CHEBI_83683	2	0	
+Compound::CHEBI_132063	CHEBI_132063	2	0	
+Compound::CHEBI_136883	CHEBI_136883	2	0	
+Compound::CHEBI_78469	CHEBI_78469	2	0	
+Compound::CHEBI_85171	CHEBI_85171	2	0	
+Compound::CHEBI_76378	CHEBI_76378	2	0	
+Compound::CHEBI_75450	CHEBI_75450	2	1	mouse metabolite
+Compound::CHEBI_18391	CHEBI_18391	2	2	human metabolite; metabolite
+Compound::CHEBI_57731	CHEBI_57731	2	0	
+Compound::CHEBI_75579	CHEBI_75579	2	0	
+Compound::CHEBI_132519	CHEBI_132519	2	0	
+Compound::CHEBI_82643	CHEBI_82643	2	0	
+Compound::CHEBI_85292	CHEBI_85292	2	0	
+Compound::CHEBI_28345	CHEBI_28345	2	0	
+Compound::CHEBI_78260	CHEBI_78260	2	0	
+Compound::CHEBI_82928	CHEBI_82928	2	0	
+Compound::CHEBI_66982	CHEBI_66982	2	0	
+Compound::CHEBI_57845	CHEBI_57845	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_86500	CHEBI_86500	2	0	
+Compound::CHEBI_60721	CHEBI_60721	2	0	
+Compound::CHEBI_17256	CHEBI_17256	2	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_57742	CHEBI_57742	2	0	
+Compound::CHEBI_64739	CHEBI_64739	2	0	
+Compound::CHEBI_132515	CHEBI_132515	2	0	
+Compound::CHEBI_74243	CHEBI_74243	2	0	
+Compound::CHEBI_10983	CHEBI_10983	2	1	human metabolite
+Compound::CHEBI_137407	CHEBI_137407	2	0	
+Compound::CHEBI_136903	CHEBI_136903	2	0	
+Compound::CHEBI_58014	CHEBI_58014	2	1	human metabolite
+Compound::CHEBI_76591	CHEBI_76591	2	4	apoptosis inducer; human metabolite; mouse metabolite; neuroprotective agent
+Compound::CHEBI_139346	CHEBI_139346	2	1	marine metabolite
+Compound::CHEBI_58391	CHEBI_58391	2	0	
+Compound::CHEBI_75470	CHEBI_75470	2	0	
+Compound::CHEBI_15825	CHEBI_15825	2	1	metabolite
+Compound::CHEBI_58462	CHEBI_58462	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_83027	CHEBI_83027	2	2	Daphnia magna metabolite; androgen
+Compound::CHEBI_31457	CHEBI_31457	2	3	antifungal agent; fragrance; plant metabolite
+Compound::CHEBI_78340	CHEBI_78340	2	0	
+Compound::CHEBI_58225	CHEBI_58225	2	1	fundamental metabolite
+Compound::CHEBI_138881	CHEBI_138881	2	0	
+Compound::CHEBI_76375	CHEBI_76375	2	0	
+Compound::CHEBI_77085	CHEBI_77085	2	0	
+Compound::CHEBI_75614	CHEBI_75614	2	0	
+Compound::CHEBI_78536	CHEBI_78536	2	0	
+Compound::CHEBI_73980	CHEBI_73980	2	0	
+Compound::CHEBI_58784	CHEBI_58784	2	0	
+Compound::CHEBI_84029	CHEBI_84029	2	0	
+Compound::CHEBI_86320	CHEBI_86320	2	3	bone density conservation agent; human xenobiotic metabolite; nutraceutical
+Compound::CHEBI_16244	CHEBI_16244	2	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_83417	CHEBI_83417	2	0	
+Compound::CHEBI_132088	CHEBI_132088	2	0	
+Compound::CHEBI_85959	CHEBI_85959	2	0	
+Compound::CHEBI_90418	CHEBI_90418	2	0	
+Compound::CHEBI_16019	CHEBI_16019	2	0	
+Compound::CHEBI_137469	CHEBI_137469	2	0	
+Compound::CHEBI_138059	CHEBI_138059	2	0	
+Compound::CHEBI_62041	CHEBI_62041	2	0	
+Compound::CHEBI_18274	CHEBI_18274	2	0	
+Compound::CHEBI_84790	CHEBI_84790	2	0	
+Compound::CHEBI_52386	CHEBI_52386	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_88166	CHEBI_88166	2	0	
+Compound::CHEBI_85216	CHEBI_85216	2	0	
+Compound::CHEBI_85334	CHEBI_85334	2	0	
+Compound::CHEBI_85230	CHEBI_85230	2	0	
+Compound::CHEBI_63590	CHEBI_63590	2	0	
+Compound::CHEBI_77559	CHEBI_77559	2	0	
+Compound::CHEBI_62500	CHEBI_62500	2	0	
+Compound::CHEBI_82811	CHEBI_82811	2	0	
+Compound::CHEBI_45240	CHEBI_45240	2	2	antigen; mouse metabolite
+Compound::CHEBI_72744	CHEBI_72744	2	0	
+Compound::CHEBI_75122	CHEBI_75122	2	0	
+Compound::CHEBI_41633	CHEBI_41633	2	1	liver X receptor agonist
+Compound::CHEBI_16769	CHEBI_16769	2	1	human metabolite
+Compound::CHEBI_138216	CHEBI_138216	2	0	
+Compound::CHEBI_28999	CHEBI_28999	2	0	
+Compound::CHEBI_133940	CHEBI_133940	2	0	
+Compound::CHEBI_73005	CHEBI_73005	2	0	
+Compound::CHEBI_58450	CHEBI_58450	2	0	
+Compound::CHEBI_58057	CHEBI_58057	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_85353	CHEBI_85353	2	1	human metabolite
+Compound::CHEBI_147286	CHEBI_147286	2	0	
+Compound::CHEBI_133932	CHEBI_133932	2	0	
+Compound::CHEBI_74584	CHEBI_74584	2	0	
+Compound::CHEBI_88154	CHEBI_88154	2	0	
+Compound::CHEBI_87791	CHEBI_87791	2	0	
+Compound::CHEBI_27771	CHEBI_27771	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_145938	CHEBI_145938	2	0	
+Compound::CHEBI_16223	CHEBI_16223	2	0	
+Compound::CHEBI_77185	CHEBI_77185	2	0	
+Compound::CHEBI_85958	CHEBI_85958	2	0	
+Compound::CHEBI_48944	CHEBI_48944	2	2	human metabolite; plant metabolite
+Compound::CHEBI_70988	CHEBI_70988	2	0	
+Compound::CHEBI_76292	CHEBI_76292	2	0	
+Compound::CHEBI_78278	CHEBI_78278	2	1	human metabolite
+Compound::CHEBI_16709	CHEBI_16709	2	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; cofactor; human metabolite; mouse metabolite
+Compound::CHEBI_28743	CHEBI_28743	2	1	mouse metabolite
+Compound::CHEBI_75462	CHEBI_75462	2	0	
+Compound::CHEBI_27584	CHEBI_27584	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_60073	CHEBI_60073	2	0	
+Compound::CHEBI_137460	CHEBI_137460	2	0	
+Compound::CHEBI_90379	CHEBI_90379	2	0	
+Compound::CHEBI_58126	CHEBI_58126	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_133452	CHEBI_133452	2	0	
+Compound::CHEBI_75611	CHEBI_75611	2	0	
+Compound::CHEBI_136582	CHEBI_136582	2	0	
+Compound::CHEBI_132521	CHEBI_132521	2	0	
+Compound::CHEBI_137583	CHEBI_137583	2	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_140574	CHEBI_140574	2	0	
+Compound::CHEBI_61963	CHEBI_61963	2	0	
+Compound::CHEBI_60470	CHEBI_60470	2	1	cofactor
+Compound::CHEBI_87056	CHEBI_87056	2	0	
+Compound::CHEBI_132517	CHEBI_132517	2	0	
+Compound::CHEBI_91119	CHEBI_91119	2	0	
+Compound::CHEBI_73870	CHEBI_73870	2	0	
+Compound::CHEBI_85445	CHEBI_85445	2	0	
+Compound::CHEBI_74000	CHEBI_74000	2	1	mouse metabolite
+Compound::CHEBI_70977	CHEBI_70977	2	0	
+Compound::CHEBI_57761	CHEBI_57761	2	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; plant metabolite
+Compound::CHEBI_78033	CHEBI_78033	2	1	human blood serum metabolite
+Compound::CHEBI_75688	CHEBI_75688	2	0	
+Compound::CHEBI_67023	CHEBI_67023	2	0	
+Compound::CHEBI_18407	CHEBI_18407	2	3	Escherichia coli metabolite; human metabolite; poison
+Compound::CHEBI_78809	CHEBI_78809	2	0	
+Compound::CHEBI_57326	CHEBI_57326	2	1	human metabolite
+Compound::CHEBI_78494	CHEBI_78494	2	0	
+Compound::CHEBI_78535	CHEBI_78535	2	0	
+Compound::CHEBI_45213	CHEBI_45213	2	2	antilipemic drug; vasodilator agent
+Compound::CHEBI_36559	CHEBI_36559	2	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_136960	CHEBI_136960	2	0	
+Compound::CHEBI_133936	CHEBI_133936	2	0	
+Compound::CHEBI_85229	CHEBI_85229	2	0	
+Compound::CHEBI_58472	CHEBI_58472	2	0	
+Compound::CHEBI_77290	CHEBI_77290	2	0	
+Compound::CHEBI_64731	CHEBI_64731	2	0	
+Compound::CHEBI_58146	CHEBI_58146	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_139510	CHEBI_139510	2	0	
+Compound::CHEBI_46245	CHEBI_46245	2	3	antioxidant; ferroptosis inhibitor; human metabolite
+Compound::CHEBI_72963	CHEBI_72963	2	0	
+Compound::CHEBI_145937	CHEBI_145937	2	0	
+Compound::CHEBI_75629	CHEBI_75629	2	0	
+Compound::CHEBI_35247	CHEBI_35247	2	0	
+Compound::CHEBI_77303	CHEBI_77303	2	0	
+Compound::CHEBI_58427	CHEBI_58427	2	0	
+Compound::CHEBI_57376	CHEBI_57376	2	1	human metabolite
+Compound::CHEBI_139277	CHEBI_139277	2	0	
+Compound::CHEBI_15792	CHEBI_15792	2	2	human metabolite; mitochondrial respiratory-chain inhibitor
+Compound::CHEBI_58040	CHEBI_58040	2	0	
+Compound::CHEBI_147287	CHEBI_147287	2	0	
+Compound::CHEBI_90517	CHEBI_90517	2	0	
+Compound::CHEBI_78527	CHEBI_78527	2	0	
+Compound::CHEBI_78647	CHEBI_78647	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_136639	CHEBI_136639	2	0	
+Compound::CHEBI_152567	CHEBI_152567	2	0	
+Compound::CHEBI_16217	CHEBI_16217	2	2	animal metabolite; mouse metabolite
+Compound::CHEBI_140764	CHEBI_140764	2	0	
+Compound::CHEBI_57678	CHEBI_57678	2	1	human metabolite
+Compound::CHEBI_152568	CHEBI_152568	2	0	
+Compound::CHEBI_57367	CHEBI_57367	2	1	human metabolite
+Compound::CHEBI_133345	CHEBI_133345	2	0	
+Compound::CHEBI_133934	CHEBI_133934	2	0	
+Compound::CHEBI_77696	CHEBI_77696	2	0	
+Compound::CHEBI_57557	CHEBI_57557	2	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_142625	CHEBI_142625	2	2	flavouring agent; fragrance
+Compound::CHEBI_137467	CHEBI_137467	2	0	
+Compound::CHEBI_77893	CHEBI_77893	2	0	
+Compound::CHEBI_58593	CHEBI_58593	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75220	CHEBI_75220	2	0	
+Compound::CHEBI_15382	CHEBI_15382	2	1	plant metabolite
+Compound::CHEBI_74115	CHEBI_74115	2	0	
+Compound::CHEBI_133369	CHEBI_133369	2	0	
+Compound::CHEBI_16496	CHEBI_16496	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_136673	CHEBI_136673	2	0	
+Compound::CHEBI_78537	CHEBI_78537	2	0	
+Compound::CHEBI_132520	CHEBI_132520	2	0	
+Compound::CHEBI_74896	CHEBI_74896	2	0	
+Compound::CHEBI_138371	CHEBI_138371	2	0	
+Compound::CHEBI_17998	CHEBI_17998	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_77253	CHEBI_77253	2	0	
+Compound::CHEBI_74968	CHEBI_74968	2	0	
+Compound::CHEBI_57308	CHEBI_57308	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_136975	CHEBI_136975	2	3	estrogen; human metabolite; rat metabolite
+Compound::CHEBI_90262	CHEBI_90262	2	0	
+Compound::CHEBI_17865	CHEBI_17865	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75867	CHEBI_75867	2	0	
+Compound::CHEBI_153064	CHEBI_153064	2	0	
+Compound::CHEBI_140594	CHEBI_140594	2	0	
+Compound::CHEBI_58280	CHEBI_58280	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57997	CHEBI_57997	2	0	
+Compound::CHEBI_73857	CHEBI_73857	2	0	
+Compound::CHEBI_132075	CHEBI_132075	2	0	
+Compound::CHEBI_140624	CHEBI_140624	2	0	
+Compound::CHEBI_63527	CHEBI_63527	2	0	
+Compound::CHEBI_75622	CHEBI_75622	2	0	
+Compound::CHEBI_86570	CHEBI_86570	2	0	
+Compound::CHEBI_40356	CHEBI_40356	2	1	epitope
+Compound::CHEBI_77250	CHEBI_77250	2	0	
+Compound::CHEBI_87829	CHEBI_87829	2	0	
+Compound::CHEBI_63714	CHEBI_63714	2	0	
+Compound::CHEBI_50347	CHEBI_50347	2	0	
+Compound::CHEBI_81481	CHEBI_81481	2	3	bacterial xenobiotic metabolite; human xenobiotic metabolite; marine metabolite
+Compound::CHEBI_58251	CHEBI_58251	2	0	
+Compound::CHEBI_142512	CHEBI_142512	2	0	
+Compound::CHEBI_90707	CHEBI_90707	2	0	
+Compound::CHEBI_27693	CHEBI_27693	2	5	anticholesteremic drug; antioxidant; mouse metabolite; plant metabolite; sterol methyltransferase inhibitor
+Compound::CHEBI_137016	CHEBI_137016	2	0	
+Compound::CHEBI_31998	CHEBI_31998	2	1	mouse metabolite
+Compound::CHEBI_58303	CHEBI_58303	2	0	
+Compound::CHEBI_75069	CHEBI_75069	2	0	
+Compound::CHEBI_77226	CHEBI_77226	2	0	
+Compound::CHEBI_16016	CHEBI_16016	2	6	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; antifungal agent; human metabolite; metabolite; mouse metabolite
+Compound::CHEBI_67034	CHEBI_67034	2	0	
+Compound::CHEBI_77084	CHEBI_77084	2	0	
+Compound::CHEBI_57462	CHEBI_57462	2	1	human metabolite
+Compound::CHEBI_32544	CHEBI_32544	2	2	Saccharomyces cerevisiae metabolite; metabolite
+Compound::CHEBI_142448	CHEBI_142448	2	0	
+Compound::CHEBI_58123	CHEBI_58123	2	0	
+Compound::CHEBI_47805	CHEBI_47805	2	0	
+Compound::CHEBI_57269	CHEBI_57269	2	0	
+Compound::CHEBI_136416	CHEBI_136416	2	0	
+Compound::CHEBI_78528	CHEBI_78528	2	0	
+Compound::CHEBI_82657	CHEBI_82657	2	0	
+Compound::CHEBI_78516	CHEBI_78516	2	0	
+Compound::CHEBI_58687	CHEBI_58687	2	0	
+Compound::CHEBI_53210	CHEBI_53210	2	1	peripheral nervous system drug
+Compound::CHEBI_78466	CHEBI_78466	2	0	
+Compound::CHEBI_15826	CHEBI_15826	2	0	
+Compound::CHEBI_16169	CHEBI_16169	2	2	human metabolite; plant metabolite
+Compound::CHEBI_47622	CHEBI_47622	2	0	
+Compound::CHEBI_47799	CHEBI_47799	2	1	human metabolite
+Compound::CHEBI_139258	CHEBI_139258	2	0	
+Compound::CHEBI_36498	CHEBI_36498	2	0	
+Compound::CHEBI_75956	CHEBI_75956	2	0	
+Compound::CHEBI_57537	CHEBI_57537	2	0	
+Compound::CHEBI_17151	CHEBI_17151	2	7	Saccharomyces cerevisiae metabolite; algal metabolite; allergen; hapten; human metabolite; mouse metabolite; sweetening agent
+Compound::CHEBI_90164	CHEBI_90164	2	0	
+Compound::CHEBI_58471	CHEBI_58471	2	1	human metabolite
+Compound::CHEBI_85356	CHEBI_85356	2	0	
+Compound::CHEBI_64294	CHEBI_64294	2	1	neuroprotective agent
+Compound::CHEBI_76647	CHEBI_76647	2	0	
+Compound::CHEBI_143622	CHEBI_143622	2	0	
+Compound::CHEBI_17579	CHEBI_17579	2	8	antioxidant; biological pigment; cofactor; ferroptosis inhibitor; human metabolite; mouse metabolite; plant metabolite; provitamin A
+Compound::CHEBI_16091	CHEBI_16091	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_61970	CHEBI_61970	2	0	
+Compound::CHEBI_78473	CHEBI_78473	2	0	
+Compound::CHEBI_4208	CHEBI_4208	2	1	metabolite
+Compound::CHEBI_139347	CHEBI_139347	2	1	mouse metabolite
+Compound::CHEBI_156384	CHEBI_156384	2	0	
+Compound::CHEBI_33566	CHEBI_33566	2	0	
+Compound::CHEBI_90189	CHEBI_90189	2	0	
+Compound::CHEBI_82765	CHEBI_82765	2	0	
+Compound::CHEBI_85189	CHEBI_85189	2	0	
+Compound::CHEBI_350546	CHEBI_350546	2	1	human metabolite
+Compound::CHEBI_17925	CHEBI_17925	2	1	mouse metabolite
+Compound::CHEBI_82810	CHEBI_82810	2	0	
+Compound::CHEBI_30154	CHEBI_30154	2	2	human metabolite; mouse metabolite
+Compound::CHEBI_75844	CHEBI_75844	2	1	mouse metabolite
+Compound::CHEBI_145015	CHEBI_145015	2	0	
+Compound::CHEBI_149768	CHEBI_149768	2	0	
+Compound::CHEBI_78646	CHEBI_78646	2	1	mouse metabolite
+Compound::CHEBI_17712	CHEBI_17712	2	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_57666	CHEBI_57666	2	0	
+Compound::CHEBI_50471	CHEBI_50471	2	0	
+Compound::CHEBI_58101	CHEBI_58101	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_90811	CHEBI_90811	2	0	
+Compound::CHEBI_136709	CHEBI_136709	2	0	
+Compound::CHEBI_84847	CHEBI_84847	2	0	
+Compound::CHEBI_77812	CHEBI_77812	2	1	EC 6.4.1.2 (acetyl-CoA carboxylase) inhibitor
+Compound::CHEBI_132028	CHEBI_132028	2	0	
+Compound::CHEBI_63813	CHEBI_63813	2	0	
+Compound::CHEBI_84728	CHEBI_84728	2	0	
+Compound::CHEBI_133935	CHEBI_133935	2	0	
+Compound::CHEBI_72837	CHEBI_72837	2	0	
+Compound::CHEBI_132104	CHEBI_132104	2	0	
+Compound::CHEBI_57660	CHEBI_57660	2	1	human metabolite
+Compound::CHEBI_1949	CHEBI_1949	2	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_18110	CHEBI_18110	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_87701	CHEBI_87701	2	0	
+Compound::CHEBI_62418	CHEBI_62418	2	0	
+Compound::CHEBI_77256	CHEBI_77256	2	0	
+Compound::CHEBI_62263	CHEBI_62263	2	1	epitope
+Compound::CHEBI_85101	CHEBI_85101	2	0	
+Compound::CHEBI_78464	CHEBI_78464	2	0	
+Compound::CHEBI_57882	CHEBI_57882	2	0	
+Compound::CHEBI_134251	CHEBI_134251	2	0	
+Compound::CHEBI_132030	CHEBI_132030	2	0	
+Compound::CHEBI_78472	CHEBI_78472	2	0	
+Compound::CHEBI_72839	CHEBI_72839	2	0	
+Compound::CHEBI_58906	CHEBI_58906	2	0	
+Compound::CHEBI_78478	CHEBI_78478	2	0	
+Compound::CHEBI_58527	CHEBI_58527	2	1	human metabolite
+Compound::CHEBI_49252	CHEBI_49252	2	0	
+Compound::CHEBI_76610	CHEBI_76610	2	0	
+Compound::CHEBI_75550	CHEBI_75550	2	1	plant metabolite
+Compound::CHEBI_17771	CHEBI_17771	2	1	human metabolite
+Compound::CHEBI_82930	CHEBI_82930	2	0	
+Compound::CHEBI_91294	CHEBI_91294	2	0	
+Compound::CHEBI_59458	CHEBI_59458	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_13115	CHEBI_13115	2	2	human metabolite; mammalian metabolite
+Compound::CHEBI_90358	CHEBI_90358	2	0	
+Compound::CHEBI_35341	CHEBI_35341	2	0	
+Compound::CHEBI_144029	CHEBI_144029	2	0	
+Compound::CHEBI_63740	CHEBI_63740	2	0	
+Compound::CHEBI_84422	CHEBI_84422	2	0	
+Compound::CHEBI_133457	CHEBI_133457	2	2	EC 2.5.1.18 (glutathione transferase) inhibitor; fumigant
+Compound::CHEBI_87832	CHEBI_87832	2	0	
+Compound::CHEBI_75032	CHEBI_75032	2	0	
+Compound::CHEBI_78483	CHEBI_78483	2	0	
+Compound::CHEBI_137474	CHEBI_137474	2	0	
+Compound::CHEBI_90782	CHEBI_90782	2	0	
+Compound::CHEBI_82626	CHEBI_82626	2	0	
+Compound::CHEBI_67045	CHEBI_67045	2	0	
+Compound::CHEBI_15901	CHEBI_15901	2	4	Escherichia coli metabolite; human metabolite; metabolite; mouse metabolite
+Compound::CHEBI_28729	CHEBI_28729	2	1	epitope
+Compound::CHEBI_133937	CHEBI_133937	2	0	
+Compound::CHEBI_71007	CHEBI_71007	2	0	
+Compound::CHEBI_85108	CHEBI_85108	2	0	
+Compound::CHEBI_133378	CHEBI_133378	2	0	
+Compound::CHEBI_77259	CHEBI_77259	2	0	
+Compound::CHEBI_78765	CHEBI_78765	2	0	
+Compound::CHEBI_78226	CHEBI_78226	2	0	
+Compound::CHEBI_85640	CHEBI_85640	2	0	
+Compound::CHEBI_49189	CHEBI_49189	2	1	human metabolite
+Compound::CHEBI_58443	CHEBI_58443	2	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_34133	CHEBI_34133	2	3	androgen; human metabolite; marine xenobiotic metabolite
+Compound::CHEBI_83420	CHEBI_83420	2	0	
+Compound::CHEBI_17585	CHEBI_17585	2	0	
+Compound::CHEBI_77695	CHEBI_77695	2	0	
+Compound::CHEBI_83581	CHEBI_83581	2	0	
+Compound::CHEBI_74882	CHEBI_74882	2	0	
+Compound::CHEBI_78650	CHEBI_78650	2	0	
+Compound::CHEBI_57319	CHEBI_57319	2	0	
+Compound::CHEBI_138027	CHEBI_138027	2	0	
+Compound::CHEBI_32426	CHEBI_32426	2	2	human metabolite; plant metabolite
+Compound::CHEBI_143975	CHEBI_143975	2	0	
+Compound::CHEBI_133377	CHEBI_133377	2	0	
+Compound::CHEBI_149527	CHEBI_149527	2	0	
+Compound::CHEBI_44597	CHEBI_44597	2	1	antineoplastic agent
+Compound::CHEBI_58090	CHEBI_58090	2	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_133383	CHEBI_133383	2	0	
+Compound::CHEBI_84962	CHEBI_84962	1	1	human metabolite
+Compound::CHEBI_42989	CHEBI_42989	1	0	
+Compound::CHEBI_82925	CHEBI_82925	1	0	
+Compound::CHEBI_142749	CHEBI_142749	1	0	
+Compound::CHEBI_78208	CHEBI_78208	1	0	
+Compound::CHEBI_134601	CHEBI_134601	1	1	Papio hamadryas metabolite
+Compound::CHEBI_90737	CHEBI_90737	1	0	
+Compound::CHEBI_141492	CHEBI_141492	1	0	
+Compound::CHEBI_64982	CHEBI_64982	1	0	
+Compound::CHEBI_58234	CHEBI_58234	1	0	
+Compound::CHEBI_139181	CHEBI_139181	1	0	
+Compound::CHEBI_21949	CHEBI_21949	1	1	metabolite
+Compound::CHEBI_57719	CHEBI_57719	1	0	
+Compound::CHEBI_2150	CHEBI_2150	1	4	androgen; human metabolite; mouse metabolite; vasodilator agent
+Compound::CHEBI_75558	CHEBI_75558	1	0	
+Compound::CHEBI_85150	CHEBI_85150	1	0	
+Compound::CHEBI_17821	CHEBI_17821	1	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_18378	CHEBI_18378	1	0	
+Compound::CHEBI_89828	CHEBI_89828	1	4	biomarker; fungal metabolite; human metabolite; rat metabolite
+Compound::CHEBI_132081	CHEBI_132081	1	0	
+Compound::CHEBI_84793	CHEBI_84793	1	0	
+Compound::CHEBI_136414	CHEBI_136414	1	0	
+Compound::CHEBI_137419	CHEBI_137419	1	0	
+Compound::CHEBI_132285	CHEBI_132285	1	0	
+Compound::CHEBI_74166	CHEBI_74166	1	0	
+Compound::CHEBI_64837	CHEBI_64837	1	0	
+Compound::CHEBI_77619	CHEBI_77619	1	0	
+Compound::CHEBI_78480	CHEBI_78480	1	0	
+Compound::CHEBI_136885	CHEBI_136885	1	0	
+Compound::CHEBI_73359	CHEBI_73359	1	0	
+Compound::CHEBI_74513	CHEBI_74513	1	0	
+Compound::CHEBI_138067	CHEBI_138067	1	0	
+Compound::CHEBI_138100	CHEBI_138100	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_48939	CHEBI_48939	1	0	
+Compound::CHEBI_84963	CHEBI_84963	1	0	
+Compound::CHEBI_147363	CHEBI_147363	1	1	human metabolite
+Compound::CHEBI_84461	CHEBI_84461	1	0	
+Compound::CHEBI_137063	CHEBI_137063	1	1	human metabolite
+Compound::CHEBI_88140	CHEBI_88140	1	0	
+Compound::CHEBI_58041	CHEBI_58041	1	0	
+Compound::CHEBI_138300	CHEBI_138300	1	0	
+Compound::CHEBI_16175	CHEBI_16175	1	2	human metabolite; plant metabolite
+Compound::CHEBI_138724	CHEBI_138724	1	0	
+Compound::CHEBI_58141	CHEBI_58141	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_78605	CHEBI_78605	1	0	
+Compound::CHEBI_77787	CHEBI_77787	1	0	
+Compound::CHEBI_133812	CHEBI_133812	1	0	
+Compound::CHEBI_156439	CHEBI_156439	1	0	
+Compound::CHEBI_78450	CHEBI_78450	1	0	
+Compound::CHEBI_142600	CHEBI_142600	1	0	
+Compound::CHEBI_133404	CHEBI_133404	1	0	
+Compound::CHEBI_57452	CHEBI_57452	1	0	
+Compound::CHEBI_145853	CHEBI_145853	1	0	
+Compound::CHEBI_18268	CHEBI_18268	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_85027	CHEBI_85027	1	0	
+Compound::CHEBI_147383	CHEBI_147383	1	1	human metabolite
+Compound::CHEBI_86460	CHEBI_86460	1	1	mammalian metabolite
+Compound::CHEBI_27957	CHEBI_27957	1	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_76724	CHEBI_76724	1	1	human metabolite
+Compound::CHEBI_141581	CHEBI_141581	1	0	
+Compound::CHEBI_74228	CHEBI_74228	1	0	
+Compound::CHEBI_85250	CHEBI_85250	1	0	
+Compound::CHEBI_35986	CHEBI_35986	1	2	plant metabolite; volatile oil component
+Compound::CHEBI_137387	CHEBI_137387	1	0	
+Compound::CHEBI_137987	CHEBI_137987	1	0	
+Compound::CHEBI_27856	CHEBI_27856	1	0	
+Compound::CHEBI_90824	CHEBI_90824	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_132049	CHEBI_132049	1	0	
+Compound::CHEBI_132016	CHEBI_132016	1	0	
+Compound::CHEBI_140357	CHEBI_140357	1	0	
+Compound::CHEBI_78329	CHEBI_78329	1	1	human metabolite
+Compound::CHEBI_58673	CHEBI_58673	1	1	human metabolite
+Compound::CHEBI_90825	CHEBI_90825	1	1	human xenobiotic metabolite
+Compound::CHEBI_145347	CHEBI_145347	1	0	
+Compound::CHEBI_57310	CHEBI_57310	1	1	human metabolite
+Compound::CHEBI_85816	CHEBI_85816	1	0	
+Compound::CHEBI_133799	CHEBI_133799	1	0	
+Compound::CHEBI_87487	CHEBI_87487	1	0	
+Compound::CHEBI_74260	CHEBI_74260	1	0	
+Compound::CHEBI_84166	CHEBI_84166	1	0	
+Compound::CHEBI_90598	CHEBI_90598	1	0	
+Compound::CHEBI_137547	CHEBI_137547	1	0	
+Compound::CHEBI_77240	CHEBI_77240	1	0	
+Compound::CHEBI_90985	CHEBI_90985	1	1	human metabolite
+Compound::CHEBI_144024	CHEBI_144024	1	0	
+Compound::CHEBI_142603	CHEBI_142603	1	4	cosmetic; flavouring agent; pheromone; plant metabolite
+Compound::CHEBI_138630	CHEBI_138630	1	0	
+Compound::CHEBI_16615	CHEBI_16615	1	1	human metabolite
+Compound::CHEBI_799	CHEBI_799	1	1	human metabolite
+Compound::CHEBI_58810	CHEBI_58810	1	1	human metabolite
+Compound::CHEBI_90797	CHEBI_90797	1	1	human xenobiotic metabolite
+Compound::CHEBI_28645	CHEBI_28645	1	1	mouse metabolite
+Compound::CHEBI_143088	CHEBI_143088	1	0	
+Compound::CHEBI_74291	CHEBI_74291	1	0	
+Compound::CHEBI_144051	CHEBI_144051	1	0	
+Compound::CHEBI_91306	CHEBI_91306	1	2	human metabolite; rat metabolite
+Compound::CHEBI_83721	CHEBI_83721	1	0	
+Compound::CHEBI_16980	CHEBI_16980	1	2	plant metabolite; volatile oil component
+Compound::CHEBI_139157	CHEBI_139157	1	0	
+Compound::CHEBI_152049	CHEBI_152049	1	0	
+Compound::CHEBI_58506	CHEBI_58506	1	1	human metabolite
+Compound::CHEBI_142611	CHEBI_142611	1	0	
+Compound::CHEBI_82606	CHEBI_82606	1	0	
+Compound::CHEBI_85173	CHEBI_85173	1	1	human metabolite
+Compound::CHEBI_61401	CHEBI_61401	1	0	
+Compound::CHEBI_48946	CHEBI_48946	1	0	
+Compound::CHEBI_74493	CHEBI_74493	1	0	
+Compound::CHEBI_83276	CHEBI_83276	1	0	
+Compound::CHEBI_140089	CHEBI_140089	1	2	human xenobiotic metabolite; rat metabolite
+Compound::CHEBI_58375	CHEBI_58375	1	0	
+Compound::CHEBI_73779	CHEBI_73779	1	0	
+Compound::CHEBI_74128	CHEBI_74128	1	0	
+Compound::CHEBI_57948	CHEBI_57948	1	0	
+Compound::CHEBI_86116	CHEBI_86116	1	1	human xenobiotic metabolite
+Compound::CHEBI_140599	CHEBI_140599	1	0	
+Compound::CHEBI_145032	CHEBI_145032	1	0	
+Compound::CHEBI_144643	CHEBI_144643	1	0	
+Compound::CHEBI_136654	CHEBI_136654	1	0	
+Compound::CHEBI_85091	CHEBI_85091	1	0	
+Compound::CHEBI_147352	CHEBI_147352	1	0	
+Compound::CHEBI_74970	CHEBI_74970	1	0	
+Compound::CHEBI_36264	CHEBI_36264	1	1	Escherichia coli metabolite
+Compound::CHEBI_77293	CHEBI_77293	1	0	
+Compound::CHEBI_83723	CHEBI_83723	1	0	
+Compound::CHEBI_86377	CHEBI_86377	1	1	human xenobiotic metabolite
+Compound::CHEBI_30322	CHEBI_30322	1	0	
+Compound::CHEBI_77283	CHEBI_77283	1	0	
+Compound::CHEBI_86087	CHEBI_86087	1	1	human xenobiotic metabolite
+Compound::CHEBI_157660	CHEBI_157660	1	0	
+Compound::CHEBI_75855	CHEBI_75855	1	0	
+Compound::CHEBI_142697	CHEBI_142697	1	0	
+Compound::CHEBI_77223	CHEBI_77223	1	1	human metabolite
+Compound::CHEBI_138664	CHEBI_138664	1	0	
+Compound::CHEBI_83062	CHEBI_83062	1	0	
+Compound::CHEBI_87598	CHEBI_87598	1	1	human xenobiotic metabolite
+Compound::CHEBI_57570	CHEBI_57570	1	0	
+Compound::CHEBI_84990	CHEBI_84990	1	0	
+Compound::CHEBI_78489	CHEBI_78489	1	0	
+Compound::CHEBI_90711	CHEBI_90711	1	0	
+Compound::CHEBI_146191	CHEBI_146191	1	0	
+Compound::CHEBI_78343	CHEBI_78343	1	0	
+Compound::CHEBI_78223	CHEBI_78223	1	0	
+Compound::CHEBI_141495	CHEBI_141495	1	0	
+Compound::CHEBI_74069	CHEBI_74069	1	0	
+Compound::CHEBI_146254	CHEBI_146254	1	0	
+Compound::CHEBI_76061	CHEBI_76061	1	0	
+Compound::CHEBI_166821	CHEBI_166821	1	0	
+Compound::CHEBI_77545	CHEBI_77545	1	0	
+Compound::CHEBI_76273	CHEBI_76273	1	1	human metabolite
+Compound::CHEBI_15724	CHEBI_15724	1	3	Escherichia coli metabolite; metabolite; osmolyte
+Compound::CHEBI_50593	CHEBI_50593	1	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_143087	CHEBI_143087	1	0	
+Compound::CHEBI_82685	CHEBI_82685	1	0	
+Compound::CHEBI_76412	CHEBI_76412	1	0	
+Compound::CHEBI_82943	CHEBI_82943	1	0	
+Compound::CHEBI_17684	CHEBI_17684	1	0	
+Compound::CHEBI_142696	CHEBI_142696	1	0	
+Compound::CHEBI_82945	CHEBI_82945	1	0	
+Compound::CHEBI_74319	CHEBI_74319	1	0	
+Compound::CHEBI_157618	CHEBI_157618	1	0	
+Compound::CHEBI_133406	CHEBI_133406	1	0	
+Compound::CHEBI_146165	CHEBI_146165	1	0	
+Compound::CHEBI_73418	CHEBI_73418	1	0	
+Compound::CHEBI_78419	CHEBI_78419	1	0	
+Compound::CHEBI_4712	CHEBI_4712	1	3	bone density conservation agent; prohormone; provitamin
+Compound::CHEBI_85207	CHEBI_85207	1	0	
+Compound::CHEBI_138296	CHEBI_138296	1	0	
+Compound::CHEBI_138101	CHEBI_138101	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_149733	CHEBI_149733	1	0	
+Compound::CHEBI_83144	CHEBI_83144	1	0	
+Compound::CHEBI_138284	CHEBI_138284	1	0	
+Compound::CHEBI_74161	CHEBI_74161	1	0	
+Compound::CHEBI_91118	CHEBI_91118	1	0	
+Compound::CHEBI_77831	CHEBI_77831	1	0	
+Compound::CHEBI_141843	CHEBI_141843	1	0	
+Compound::CHEBI_144022	CHEBI_144022	1	0	
+Compound::CHEBI_138062	CHEBI_138062	1	0	
+Compound::CHEBI_90722	CHEBI_90722	1	0	
+Compound::CHEBI_131894	CHEBI_131894	1	0	
+Compound::CHEBI_36726	CHEBI_36726	1	0	
+Compound::CHEBI_17607	CHEBI_17607	1	0	
+Compound::CHEBI_74294	CHEBI_74294	1	0	
+Compound::CHEBI_90511	CHEBI_90511	1	0	
+Compound::CHEBI_138276	CHEBI_138276	1	0	
+Compound::CHEBI_76062	CHEBI_76062	1	0	
+Compound::CHEBI_131738	CHEBI_131738	1	2	human metabolite; plant metabolite
+Compound::CHEBI_146141	CHEBI_146141	1	0	
+Compound::CHEBI_75290	CHEBI_75290	1	0	
+Compound::CHEBI_75327	CHEBI_75327	1	0	
+Compound::CHEBI_17034	CHEBI_17034	1	0	
+Compound::CHEBI_132079	CHEBI_132079	1	1	anti-inflammatory agent
+Compound::CHEBI_82750	CHEBI_82750	1	1	mouse metabolite
+Compound::CHEBI_32362	CHEBI_32362	1	1	plant metabolite
+Compound::CHEBI_71201	CHEBI_71201	1	1	animal metabolite
+Compound::CHEBI_76722	CHEBI_76722	1	0	
+Compound::CHEBI_143253	CHEBI_143253	1	0	
+Compound::CHEBI_16271	CHEBI_16271	1	0	
+Compound::CHEBI_76415	CHEBI_76415	1	0	
+Compound::CHEBI_137732	CHEBI_137732	1	0	
+Compound::CHEBI_27967	CHEBI_27967	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_76282	CHEBI_76282	1	0	
+Compound::CHEBI_57978	CHEBI_57978	1	0	
+Compound::CHEBI_140085	CHEBI_140085	1	0	
+Compound::CHEBI_85165	CHEBI_85165	1	1	human metabolite
+Compound::CHEBI_85378	CHEBI_85378	1	0	
+Compound::CHEBI_140082	CHEBI_140082	1	0	
+Compound::CHEBI_87476	CHEBI_87476	1	1	human metabolite
+Compound::CHEBI_133400	CHEBI_133400	1	0	
+Compound::CHEBI_167178	CHEBI_167178	1	0	
+Compound::CHEBI_57261	CHEBI_57261	1	0	
+Compound::CHEBI_62727	CHEBI_62727	1	0	
+Compound::CHEBI_82842	CHEBI_82842	1	0	
+Compound::CHEBI_143526	CHEBI_143526	1	0	
+Compound::CHEBI_137207	CHEBI_137207	1	0	
+Compound::CHEBI_145344	CHEBI_145344	1	0	
+Compound::CHEBI_83148	CHEBI_83148	1	0	
+Compound::CHEBI_137542	CHEBI_137542	1	0	
+Compound::CHEBI_85284	CHEBI_85284	1	0	
+Compound::CHEBI_77827	CHEBI_77827	1	0	
+Compound::CHEBI_142747	CHEBI_142747	1	0	
+Compound::CHEBI_139183	CHEBI_139183	1	0	
+Compound::CHEBI_85137	CHEBI_85137	1	0	
+Compound::CHEBI_140083	CHEBI_140083	1	0	
+Compound::CHEBI_133133	CHEBI_133133	1	0	
+Compound::CHEBI_145926	CHEBI_145926	1	0	
+Compound::CHEBI_74254	CHEBI_74254	1	0	
+Compound::CHEBI_157643	CHEBI_157643	1	0	
+Compound::CHEBI_75137	CHEBI_75137	1	0	
+Compound::CHEBI_139164	CHEBI_139164	1	0	
+Compound::CHEBI_133379	CHEBI_133379	1	0	
+Compound::CHEBI_78368	CHEBI_78368	1	0	
+Compound::CHEBI_78487	CHEBI_78487	1	0	
+Compound::CHEBI_83957	CHEBI_83957	1	0	
+Compound::CHEBI_149659	CHEBI_149659	1	0	
+Compound::CHEBI_85090	CHEBI_85090	1	0	
+Compound::CHEBI_145420	CHEBI_145420	1	0	
+Compound::CHEBI_78261	CHEBI_78261	1	0	
+Compound::CHEBI_131943	CHEBI_131943	1	0	
+Compound::CHEBI_87362	CHEBI_87362	1	1	metabolite
+Compound::CHEBI_83422	CHEBI_83422	1	0	
+Compound::CHEBI_143658	CHEBI_143658	1	1	antineoplastic agent
+Compound::CHEBI_90820	CHEBI_90820	1	3	algal metabolite; anti-inflammatory agent; human xenobiotic metabolite
+Compound::CHEBI_90769	CHEBI_90769	1	0	
+Compound::CHEBI_75123	CHEBI_75123	1	0	
+Compound::CHEBI_152050	CHEBI_152050	1	0	
+Compound::CHEBI_78263	CHEBI_78263	1	0	
+Compound::CHEBI_74071	CHEBI_74071	1	0	
+Compound::CHEBI_89484	CHEBI_89484	1	4	biomarker; human urinary metabolite; human xenobiotic metabolite; rat metabolite
+Compound::CHEBI_11047	CHEBI_11047	1	0	
+Compound::CHEBI_58293	CHEBI_58293	1	0	
+Compound::CHEBI_74068	CHEBI_74068	1	0	
+Compound::CHEBI_78109	CHEBI_78109	1	0	
+Compound::CHEBI_133361	CHEBI_133361	1	0	
+Compound::CHEBI_138003	CHEBI_138003	1	0	
+Compound::CHEBI_61973	CHEBI_61973	1	0	
+Compound::CHEBI_134035	CHEBI_134035	1	0	
+Compound::CHEBI_26432	CHEBI_26432	1	0	
+Compound::CHEBI_17126	CHEBI_17126	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_138212	CHEBI_138212	1	0	
+Compound::CHEBI_85204	CHEBI_85204	1	0	
+Compound::CHEBI_50518	CHEBI_50518	1	0	
+Compound::CHEBI_62614	CHEBI_62614	1	0	
+Compound::CHEBI_139271	CHEBI_139271	1	3	human metabolite; mammalian metabolite; probe
+Compound::CHEBI_78022	CHEBI_78022	1	0	
+Compound::CHEBI_78470	CHEBI_78470	1	0	
+Compound::CHEBI_90156	CHEBI_90156	1	0	
+Compound::CHEBI_85286	CHEBI_85286	1	0	
+Compound::CHEBI_90619	CHEBI_90619	1	0	
+Compound::CHEBI_16692	CHEBI_16692	1	0	
+Compound::CHEBI_57917	CHEBI_57917	1	1	human xenobiotic metabolite
+Compound::CHEBI_133402	CHEBI_133402	1	0	
+Compound::CHEBI_84183	CHEBI_84183	1	0	
+Compound::CHEBI_85375	CHEBI_85375	1	0	
+Compound::CHEBI_17437	CHEBI_17437	1	5	EC 3.5.1.4 (amidase) inhibitor; Escherichia coli metabolite; algal metabolite; bacterial xenobiotic metabolite; marine metabolite
+Compound::CHEBI_90118	CHEBI_90118	1	0	
+Compound::CHEBI_75990	CHEBI_75990	1	0	
+Compound::CHEBI_58698	CHEBI_58698	1	0	
+Compound::CHEBI_75849	CHEBI_75849	1	0	
+Compound::CHEBI_141571	CHEBI_141571	1	0	
+Compound::CHEBI_78209	CHEBI_78209	1	1	mammalian metabolite
+Compound::CHEBI_138148	CHEBI_138148	1	0	
+Compound::CHEBI_167179	CHEBI_167179	1	0	
+Compound::CHEBI_83244	CHEBI_83244	1	0	
+Compound::CHEBI_138079	CHEBI_138079	1	0	
+Compound::CHEBI_137041	CHEBI_137041	1	2	antimalarial; muscle relaxant
+Compound::CHEBI_88139	CHEBI_88139	1	0	
+Compound::CHEBI_73873	CHEBI_73873	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_18093	CHEBI_18093	1	0	
+Compound::CHEBI_17606	CHEBI_17606	1	1	nutrient
+Compound::CHEBI_17184	CHEBI_17184	1	0	
+Compound::CHEBI_90790	CHEBI_90790	1	1	human xenobiotic metabolite
+Compound::CHEBI_142795	CHEBI_142795	1	0	
+Compound::CHEBI_150011	CHEBI_150011	1	0	
+Compound::CHEBI_90814	CHEBI_90814	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_85072	CHEBI_85072	1	0	
+Compound::CHEBI_90822	CHEBI_90822	1	1	human xenobiotic metabolite
+Compound::CHEBI_85787	CHEBI_85787	1	0	
+Compound::CHEBI_134031	CHEBI_134031	1	0	
+Compound::CHEBI_74670	CHEBI_74670	1	1	mouse metabolite
+Compound::CHEBI_137731	CHEBI_137731	1	0	
+Compound::CHEBI_75529	CHEBI_75529	1	0	
+Compound::CHEBI_85779	CHEBI_85779	1	1	human xenobiotic metabolite
+Compound::CHEBI_137411	CHEBI_137411	1	0	
+Compound::CHEBI_78099	CHEBI_78099	1	0	
+Compound::CHEBI_133346	CHEBI_133346	1	0	
+Compound::CHEBI_83436	CHEBI_83436	1	0	
+Compound::CHEBI_17274	CHEBI_17274	1	0	
+Compound::CHEBI_44120	CHEBI_44120	1	0	
+Compound::CHEBI_60015	CHEBI_60015	1	0	
+Compound::CHEBI_136439	CHEBI_136439	1	0	
+Compound::CHEBI_90515	CHEBI_90515	1	0	
+Compound::CHEBI_57694	CHEBI_57694	1	0	
+Compound::CHEBI_133900	CHEBI_133900	1	0	
+Compound::CHEBI_65211	CHEBI_65211	1	1	LRH-1 agonist
+Compound::CHEBI_35746	CHEBI_35746	1	0	
+Compound::CHEBI_77888	CHEBI_77888	1	0	
+Compound::CHEBI_34584	CHEBI_34584	1	0	
+Compound::CHEBI_85198	CHEBI_85198	1	0	
+Compound::CHEBI_42027	CHEBI_42027	1	0	
+Compound::CHEBI_83343	CHEBI_83343	1	0	
+Compound::CHEBI_58287	CHEBI_58287	1	0	
+Compound::CHEBI_139150	CHEBI_139150	1	0	
+Compound::CHEBI_60056	CHEBI_60056	1	1	human metabolite
+Compound::CHEBI_83583	CHEBI_83583	1	0	
+Compound::CHEBI_138256	CHEBI_138256	1	0	
+Compound::CHEBI_137001	CHEBI_137001	1	0	
+Compound::CHEBI_71465	CHEBI_71465	1	1	anti-inflammatory agent
+Compound::CHEBI_57647	CHEBI_57647	1	0	
+Compound::CHEBI_133360	CHEBI_133360	1	0	
+Compound::CHEBI_90342	CHEBI_90342	1	0	
+Compound::CHEBI_139161	CHEBI_139161	1	0	
+Compound::CHEBI_80651	CHEBI_80651	1	0	
+Compound::CHEBI_90697	CHEBI_90697	1	0	
+Compound::CHEBI_157648	CHEBI_157648	1	0	
+Compound::CHEBI_43903	CHEBI_43903	1	0	
+Compound::CHEBI_75447	CHEBI_75447	1	0	
+Compound::CHEBI_34726	CHEBI_34726	1	1	metabolite
+Compound::CHEBI_90335	CHEBI_90335	1	0	
+Compound::CHEBI_75173	CHEBI_75173	1	0	
+Compound::CHEBI_145034	CHEBI_145034	1	0	
+Compound::CHEBI_28047	CHEBI_28047	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_77302	CHEBI_77302	1	0	
+Compound::CHEBI_146286	CHEBI_146286	1	0	
+Compound::CHEBI_35489	CHEBI_35489	1	0	
+Compound::CHEBI_137934	CHEBI_137934	1	0	
+Compound::CHEBI_58311	CHEBI_58311	1	0	
+Compound::CHEBI_58538	CHEBI_58538	1	0	
+Compound::CHEBI_61555	CHEBI_61555	1	0	
+Compound::CHEBI_75627	CHEBI_75627	1	0	
+Compound::CHEBI_58528	CHEBI_58528	1	1	human metabolite
+Compound::CHEBI_90384	CHEBI_90384	1	0	
+Compound::CHEBI_90774	CHEBI_90774	1	0	
+Compound::CHEBI_136636	CHEBI_136636	1	0	
+Compound::CHEBI_145783	CHEBI_145783	1	0	
+Compound::CHEBI_136973	CHEBI_136973	1	0	
+Compound::CHEBI_138217	CHEBI_138217	1	0	
+Compound::CHEBI_28965	CHEBI_28965	1	0	
+Compound::CHEBI_149699	CHEBI_149699	1	0	
+Compound::CHEBI_137412	CHEBI_137412	1	0	
+Compound::CHEBI_52570	CHEBI_52570	1	0	
+Compound::CHEBI_83795	CHEBI_83795	1	0	
+Compound::CHEBI_140494	CHEBI_140494	1	0	
+Compound::CHEBI_72019	CHEBI_72019	1	0	
+Compound::CHEBI_62243	CHEBI_62243	1	0	
+Compound::CHEBI_137983	CHEBI_137983	1	0	
+Compound::CHEBI_34172	CHEBI_34172	1	1	androgen
+Compound::CHEBI_58497	CHEBI_58497	1	0	
+Compound::CHEBI_72840	CHEBI_72840	1	0	
+Compound::CHEBI_18202	CHEBI_18202	1	2	fungal metabolite; human metabolite
+Compound::CHEBI_75065	CHEBI_75065	1	0	
+Compound::CHEBI_90821	CHEBI_90821	1	1	human xenobiotic metabolite
+Compound::CHEBI_146283	CHEBI_146283	1	0	
+Compound::CHEBI_145815	CHEBI_145815	1	0	
+Compound::CHEBI_17594	CHEBI_17594	1	7	Escherichia coli metabolite; antioxidant; carcinogenic agent; cofactor; human xenobiotic metabolite; mouse metabolite; skin lightening agent
+Compound::CHEBI_72834	CHEBI_72834	1	0	
+Compound::CHEBI_133386	CHEBI_133386	1	0	
+Compound::CHEBI_146282	CHEBI_146282	1	0	
+Compound::CHEBI_90383	CHEBI_90383	1	0	
+Compound::CHEBI_74286	CHEBI_74286	1	0	
+Compound::CHEBI_86389	CHEBI_86389	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_77301	CHEBI_77301	1	0	
+Compound::CHEBI_147350	CHEBI_147350	1	1	human metabolite
+Compound::CHEBI_86381	CHEBI_86381	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_84822	CHEBI_84822	1	1	mouse metabolite
+Compound::CHEBI_70974	CHEBI_70974	1	0	
+Compound::CHEBI_75993	CHEBI_75993	1	0	
+Compound::CHEBI_17522	CHEBI_17522	1	0	
+Compound::CHEBI_131709	CHEBI_131709	1	0	
+Compound::CHEBI_90810	CHEBI_90810	1	1	human xenobiotic metabolite
+Compound::CHEBI_88768	CHEBI_88768	1	0	
+Compound::CHEBI_86121	CHEBI_86121	1	0	
+Compound::CHEBI_78034	CHEBI_78034	1	0	
+Compound::CHEBI_85899	CHEBI_85899	1	0	
+Compound::CHEBI_143594	CHEBI_143594	1	0	
+Compound::CHEBI_74977	CHEBI_74977	1	0	
+Compound::CHEBI_133356	CHEBI_133356	1	0	
+Compound::CHEBI_28838	CHEBI_28838	1	2	food colouring; plant metabolite
+Compound::CHEBI_137037	CHEBI_137037	1	1	human urinary metabolite
+Compound::CHEBI_90813	CHEBI_90813	1	2	human xenobiotic metabolite; rat metabolite
+Compound::CHEBI_28889	CHEBI_28889	1	2	Escherichia coli metabolite; cofactor
+Compound::CHEBI_133367	CHEBI_133367	1	0	
+Compound::CHEBI_157662	CHEBI_157662	1	0	
+Compound::CHEBI_25835	CHEBI_25835	1	0	
+Compound::CHEBI_47818	CHEBI_47818	1	0	
+Compound::CHEBI_87050	CHEBI_87050	1	1	human metabolite
+Compound::CHEBI_58264	CHEBI_58264	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_146196	CHEBI_146196	1	0	
+Compound::CHEBI_138718	CHEBI_138718	1	1	human xenobiotic metabolite
+Compound::CHEBI_145873	CHEBI_145873	1	0	
+Compound::CHEBI_84323	CHEBI_84323	1	1	mouse metabolite
+Compound::CHEBI_156530	CHEBI_156530	1	0	
+Compound::CHEBI_149700	CHEBI_149700	1	0	
+Compound::CHEBI_57447	CHEBI_57447	1	0	
+Compound::CHEBI_77724	CHEBI_77724	1	0	
+Compound::CHEBI_146168	CHEBI_146168	1	0	
+Compound::CHEBI_78529	CHEBI_78529	1	0	
+Compound::CHEBI_58896	CHEBI_58896	1	0	
+Compound::CHEBI_90340	CHEBI_90340	1	0	
+Compound::CHEBI_132127	CHEBI_132127	1	0	
+Compound::CHEBI_78108	CHEBI_78108	1	0	
+Compound::CHEBI_57314	CHEBI_57314	1	0	
+Compound::CHEBI_28257	CHEBI_28257	1	0	
+Compound::CHEBI_145544	CHEBI_145544	1	0	
+Compound::CHEBI_75927	CHEBI_75927	1	0	
+Compound::CHEBI_137461	CHEBI_137461	1	0	
+Compound::CHEBI_2290	CHEBI_2290	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_141569	CHEBI_141569	1	0	
+Compound::CHEBI_156324	CHEBI_156324	1	0	
+Compound::CHEBI_85621	CHEBI_85621	1	0	
+Compound::CHEBI_78595	CHEBI_78595	1	0	
+Compound::CHEBI_61194	CHEBI_61194	1	1	human metabolite
+Compound::CHEBI_76596	CHEBI_76596	1	0	
+Compound::CHEBI_136419	CHEBI_136419	1	0	
+Compound::CHEBI_47777	CHEBI_47777	1	0	
+Compound::CHEBI_44337	CHEBI_44337	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_87172	CHEBI_87172	1	0	
+Compound::CHEBI_86113	CHEBI_86113	1	1	human xenobiotic metabolite
+Compound::CHEBI_84465	CHEBI_84465	1	0	
+Compound::CHEBI_1294	CHEBI_1294	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_305790	CHEBI_305790	1	0	
+Compound::CHEBI_142679	CHEBI_142679	1	0	
+Compound::CHEBI_147296	CHEBI_147296	1	0	
+Compound::CHEBI_17697	CHEBI_17697	1	4	antioxidant; human metabolite; mouse metabolite; tropomyosin-related kinase B receptor agonist
+Compound::CHEBI_156131	CHEBI_156131	1	0	
+Compound::CHEBI_131725	CHEBI_131725	1	0	
+Compound::CHEBI_138098	CHEBI_138098	1	0	
+Compound::CHEBI_84417	CHEBI_84417	1	1	mouse metabolite
+Compound::CHEBI_24996	CHEBI_24996	1	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_146197	CHEBI_146197	1	0	
+Compound::CHEBI_141578	CHEBI_141578	1	0	
+Compound::CHEBI_78341	CHEBI_78341	1	0	
+Compound::CHEBI_137000	CHEBI_137000	1	0	
+Compound::CHEBI_142796	CHEBI_142796	1	0	
+Compound::CHEBI_58914	CHEBI_58914	1	0	
+Compound::CHEBI_145399	CHEBI_145399	1	0	
+Compound::CHEBI_32370	CHEBI_32370	1	1	plant metabolite
+Compound::CHEBI_29990	CHEBI_29990	1	2	fundamental metabolite; human metabolite
+Compound::CHEBI_138112	CHEBI_138112	1	0	
+Compound::CHEBI_58467	CHEBI_58467	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_85652	CHEBI_85652	1	0	
+Compound::CHEBI_137062	CHEBI_137062	1	1	human metabolite
+Compound::CHEBI_137049	CHEBI_137049	1	0	
+Compound::CHEBI_147421	CHEBI_147421	1	1	human metabolite
+Compound::CHEBI_78264	CHEBI_78264	1	0	
+Compound::CHEBI_77000	CHEBI_77000	1	0	
+Compound::CHEBI_84067	CHEBI_84067	1	2	bacterial metabolite; plant metabolite
+Compound::CHEBI_133455	CHEBI_133455	1	3	alarm pheromone; mutagen; nematicide
+Compound::CHEBI_11893	CHEBI_11893	1	0	
+Compound::CHEBI_145427	CHEBI_145427	1	0	
+Compound::CHEBI_77897	CHEBI_77897	1	0	
+Compound::CHEBI_142686	CHEBI_142686	1	0	
+Compound::CHEBI_140675	CHEBI_140675	1	0	
+Compound::CHEBI_77220	CHEBI_77220	1	0	
+Compound::CHEBI_75852	CHEBI_75852	1	0	
+Compound::CHEBI_59338	CHEBI_59338	1	1	human metabolite
+Compound::CHEBI_85674	CHEBI_85674	1	0	
+Compound::CHEBI_82950	CHEBI_82950	1	0	
+Compound::CHEBI_83360	CHEBI_83360	1	1	mouse metabolite
+Compound::CHEBI_87710	CHEBI_87710	1	0	
+Compound::CHEBI_156266	CHEBI_156266	1	0	
+Compound::CHEBI_17240	CHEBI_17240	1	3	Saccharomyces cerevisiae metabolite; fungal metabolite; human metabolite
+Compound::CHEBI_133618	CHEBI_133618	1	0	
+Compound::CHEBI_16070	CHEBI_16070	1	1	human metabolite
+Compound::CHEBI_64743	CHEBI_64743	1	0	
+Compound::CHEBI_74272	CHEBI_74272	1	0	
+Compound::CHEBI_52996	CHEBI_52996	1	0	
+Compound::CHEBI_141579	CHEBI_141579	1	0	
+Compound::CHEBI_84834	CHEBI_84834	1	1	human metabolite
+Compound::CHEBI_86055	CHEBI_86055	1	1	metabolite
+Compound::CHEBI_136566	CHEBI_136566	1	0	
+Compound::CHEBI_77755	CHEBI_77755	1	0	
+Compound::CHEBI_76086	CHEBI_76086	1	0	
+Compound::CHEBI_75238	CHEBI_75238	1	0	
+Compound::CHEBI_87698	CHEBI_87698	1	0	
+Compound::CHEBI_90463	CHEBI_90463	1	0	
+Compound::CHEBI_74420	CHEBI_74420	1	0	
+Compound::CHEBI_142797	CHEBI_142797	1	0	
+Compound::CHEBI_145423	CHEBI_145423	1	0	
+Compound::CHEBI_17924	CHEBI_17924	1	9	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; cathartic; food humectant; human metabolite; laxative; metabolite; mouse metabolite; sweetening agent
+Compound::CHEBI_156325	CHEBI_156325	1	0	
+Compound::CHEBI_57628	CHEBI_57628	1	0	
+Compound::CHEBI_90984	CHEBI_90984	1	1	human metabolite
+Compound::CHEBI_149731	CHEBI_149731	1	0	
+Compound::CHEBI_62555	CHEBI_62555	1	0	
+Compound::CHEBI_136758	CHEBI_136758	1	0	
+Compound::CHEBI_136649	CHEBI_136649	1	0	
+Compound::CHEBI_132012	CHEBI_132012	1	0	
+Compound::CHEBI_145345	CHEBI_145345	1	0	
+Compound::CHEBI_70819	CHEBI_70819	1	1	bone density conservation agent
+Compound::CHEBI_138099	CHEBI_138099	1	0	
+Compound::CHEBI_138292	CHEBI_138292	1	0	
+Compound::CHEBI_81467	CHEBI_81467	1	4	dopaminergic agent; marine metabolite; nootropic agent; rat metabolite
+Compound::CHEBI_138060	CHEBI_138060	1	0	
+Compound::CHEBI_28934	CHEBI_28934	1	4	bone density conservation agent; nutraceutical; plant metabolite; rodenticide
+Compound::CHEBI_42589	CHEBI_42589	1	0	
+Compound::CHEBI_90453	CHEBI_90453	1	0	
+Compound::CHEBI_147311	CHEBI_147311	1	0	
+Compound::CHEBI_157658	CHEBI_157658	1	0	
+Compound::CHEBI_136969	CHEBI_136969	1	0	
+Compound::CHEBI_157661	CHEBI_157661	1	0	
+Compound::CHEBI_29006	CHEBI_29006	1	0	
+Compound::CHEBI_59648	CHEBI_59648	1	0	
+Compound::CHEBI_75302	CHEBI_75302	1	0	
+Compound::CHEBI_57868	CHEBI_57868	1	0	
+Compound::CHEBI_78367	CHEBI_78367	1	0	
+Compound::CHEBI_75207	CHEBI_75207	1	0	
+Compound::CHEBI_88089	CHEBI_88089	1	0	
+Compound::CHEBI_27404	CHEBI_27404	1	1	mouse metabolite
+Compound::CHEBI_141572	CHEBI_141572	1	0	
+Compound::CHEBI_138636	CHEBI_138636	1	0	
+Compound::CHEBI_71261	CHEBI_71261	1	0	
+Compound::CHEBI_72836	CHEBI_72836	1	0	
+Compound::CHEBI_83344	CHEBI_83344	1	0	
+Compound::CHEBI_75304	CHEBI_75304	1	0	
+Compound::CHEBI_157656	CHEBI_157656	1	0	
+Compound::CHEBI_78607	CHEBI_78607	1	0	
+Compound::CHEBI_74229	CHEBI_74229	1	0	
+Compound::CHEBI_90874	CHEBI_90874	1	0	
+Compound::CHEBI_74312	CHEBI_74312	1	0	
+Compound::CHEBI_75996	CHEBI_75996	1	0	
+Compound::CHEBI_28279	CHEBI_28279	1	0	
+Compound::CHEBI_149734	CHEBI_149734	1	0	
+Compound::CHEBI_138317	CHEBI_138317	1	0	
+Compound::CHEBI_13172	CHEBI_13172	1	0	
+Compound::CHEBI_139573	CHEBI_139573	1	0	
+Compound::CHEBI_16367	CHEBI_16367	1	0	
+Compound::CHEBI_90360	CHEBI_90360	1	0	
+Compound::CHEBI_138004	CHEBI_138004	1	0	
+Compound::CHEBI_137830	CHEBI_137830	1	0	
+Compound::CHEBI_17179	CHEBI_17179	1	1	human metabolite
+Compound::CHEBI_78262	CHEBI_78262	1	0	
+Compound::CHEBI_78325	CHEBI_78325	1	1	human metabolite
+Compound::CHEBI_58922	CHEBI_58922	1	0	
+Compound::CHEBI_156068	CHEBI_156068	1	0	
+Compound::CHEBI_132537	CHEBI_132537	1	0	
+Compound::CHEBI_138632	CHEBI_138632	1	0	
+Compound::CHEBI_16982	CHEBI_16982	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_138194	CHEBI_138194	1	1	surfactant
+Compound::CHEBI_60342	CHEBI_60342	1	1	cofactor
+Compound::CHEBI_76942	CHEBI_76942	1	0	
+Compound::CHEBI_62612	CHEBI_62612	1	0	
+Compound::CHEBI_134022	CHEBI_134022	1	0	
+Compound::CHEBI_77657	CHEBI_77657	1	0	
+Compound::CHEBI_53082	CHEBI_53082	1	0	
+Compound::CHEBI_137498	CHEBI_137498	1	0	
+Compound::CHEBI_16290	CHEBI_16290	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_90310	CHEBI_90310	1	0	
+Compound::CHEBI_76291	CHEBI_76291	1	0	
+Compound::CHEBI_141847	CHEBI_141847	1	0	
+Compound::CHEBI_167609	CHEBI_167609	1	0	
+Compound::CHEBI_18185	CHEBI_18185	1	3	algal metabolite; food antioxidant; plant metabolite
+Compound::CHEBI_146285	CHEBI_146285	1	0	
+Compound::CHEBI_132091	CHEBI_132091	1	0	
+Compound::CHEBI_142557	CHEBI_142557	1	0	
+Compound::CHEBI_132286	CHEBI_132286	1	0	
+Compound::CHEBI_48940	CHEBI_48940	1	0	
+Compound::CHEBI_144785	CHEBI_144785	1	0	
+Compound::CHEBI_140691	CHEBI_140691	1	0	
+Compound::CHEBI_77623	CHEBI_77623	1	0	
+Compound::CHEBI_16485	CHEBI_16485	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_77547	CHEBI_77547	1	0	
+Compound::CHEBI_137954	CHEBI_137954	1	0	
+Compound::CHEBI_167175	CHEBI_167175	1	0	
+Compound::CHEBI_90501	CHEBI_90501	1	0	
+Compound::CHEBI_138200	CHEBI_138200	1	0	
+Compound::CHEBI_17173	CHEBI_17173	1	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_86094	CHEBI_86094	1	0	
+Compound::CHEBI_9555	CHEBI_9555	1	3	anticoronaviral agent; antimetabolite; antineoplastic agent
+Compound::CHEBI_78040	CHEBI_78040	1	0	
+Compound::CHEBI_77294	CHEBI_77294	1	0	
+Compound::CHEBI_140184	CHEBI_140184	1	2	drug metabolite; marine xenobiotic metabolite
+Compound::CHEBI_76315	CHEBI_76315	1	0	
+Compound::CHEBI_83582	CHEBI_83582	1	0	
+Compound::CHEBI_82984	CHEBI_82984	1	1	human metabolite
+Compound::CHEBI_16897	CHEBI_16897	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74697	CHEBI_74697	1	0	
+Compound::CHEBI_76545	CHEBI_76545	1	0	
+Compound::CHEBI_76317	CHEBI_76317	1	0	
+Compound::CHEBI_137172	CHEBI_137172	1	1	human metabolite
+Compound::CHEBI_75160	CHEBI_75160	1	0	
+Compound::CHEBI_57938	CHEBI_57938	1	0	
+Compound::CHEBI_16985	CHEBI_16985	1	1	mouse metabolite
+Compound::CHEBI_58374	CHEBI_58374	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_78311	CHEBI_78311	1	0	
+Compound::CHEBI_139152	CHEBI_139152	1	0	
+Compound::CHEBI_156457	CHEBI_156457	1	0	
+Compound::CHEBI_81471	CHEBI_81471	1	5	anti-inflammatory agent; antioxidant; estrogen; human xenobiotic metabolite; rat metabolite
+Compound::CHEBI_86982	CHEBI_86982	1	0	
+Compound::CHEBI_24757	CHEBI_24757	1	3	EC 2.5.1.18 (glutathione transferase) inhibitor; EC 3.1.1.7 (acetylcholinesterase) inhibitor; human metabolite
+Compound::CHEBI_90400	CHEBI_90400	1	0	
+Compound::CHEBI_78573	CHEBI_78573	1	0	
+Compound::CHEBI_145183	CHEBI_145183	1	0	
+Compound::CHEBI_58517	CHEBI_58517	1	0	
+Compound::CHEBI_141603	CHEBI_141603	1	0	
+Compound::CHEBI_16583	CHEBI_16583	1	2	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite
+Compound::CHEBI_90292	CHEBI_90292	1	0	
+Compound::CHEBI_145781	CHEBI_145781	1	0	
+Compound::CHEBI_63838	CHEBI_63838	1	0	
+Compound::CHEBI_31186	CHEBI_31186	1	1	bone density conservation agent
+Compound::CHEBI_157657	CHEBI_157657	1	0	
+Compound::CHEBI_78552	CHEBI_78552	1	0	
+Compound::CHEBI_78265	CHEBI_78265	1	0	
+Compound::CHEBI_137328	CHEBI_137328	1	0	
+Compound::CHEBI_90359	CHEBI_90359	1	0	
+Compound::CHEBI_82953	CHEBI_82953	1	0	
+Compound::CHEBI_88137	CHEBI_88137	1	0	
+Compound::CHEBI_50681	CHEBI_50681	1	0	
+Compound::CHEBI_136588	CHEBI_136588	1	0	
+Compound::CHEBI_34862	CHEBI_34862	1	0	
+Compound::CHEBI_144582	CHEBI_144582	1	0	
+Compound::CHEBI_39785	CHEBI_39785	1	0	
+Compound::CHEBI_142610	CHEBI_142610	1	0	
+Compound::CHEBI_134185	CHEBI_134185	1	0	
+Compound::CHEBI_5672	CHEBI_5672	1	2	mouse metabolite; pheromone
+Compound::CHEBI_90265	CHEBI_90265	1	0	
+Compound::CHEBI_76087	CHEBI_76087	1	0	
+Compound::CHEBI_86983	CHEBI_86983	1	0	
+Compound::CHEBI_131990	CHEBI_131990	1	0	
+Compound::CHEBI_147416	CHEBI_147416	1	1	human metabolite
+Compound::CHEBI_64075	CHEBI_64075	1	0	
+Compound::CHEBI_145835	CHEBI_145835	1	0	
+Compound::CHEBI_136413	CHEBI_136413	1	0	
+Compound::CHEBI_17439	CHEBI_17439	1	0	
+Compound::CHEBI_78387	CHEBI_78387	1	0	
+Compound::CHEBI_74289	CHEBI_74289	1	0	
+Compound::CHEBI_90119	CHEBI_90119	1	0	
+Compound::CHEBI_136572	CHEBI_136572	1	0	
+Compound::CHEBI_88088	CHEBI_88088	1	0	
+Compound::CHEBI_74305	CHEBI_74305	1	0	
+Compound::CHEBI_146287	CHEBI_146287	1	0	
+Compound::CHEBI_74535	CHEBI_74535	1	1	mouse metabolite
+Compound::CHEBI_74315	CHEBI_74315	1	0	
+Compound::CHEBI_86013	CHEBI_86013	1	0	
+Compound::CHEBI_17536	CHEBI_17536	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57313	CHEBI_57313	1	0	
+Compound::CHEBI_2288	CHEBI_2288	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_87435	CHEBI_87435	1	0	
+Compound::CHEBI_33722	CHEBI_33722	1	0	
+Compound::CHEBI_16291	CHEBI_16291	1	1	human metabolite
+Compound::CHEBI_138628	CHEBI_138628	1	0	
+Compound::CHEBI_88095	CHEBI_88095	1	0	
+Compound::CHEBI_149769	CHEBI_149769	1	0	
+Compound::CHEBI_138213	CHEBI_138213	1	0	
+Compound::CHEBI_82883	CHEBI_82883	1	0	
+Compound::CHEBI_140087	CHEBI_140087	1	0	
+Compound::CHEBI_147396	CHEBI_147396	1	0	
+Compound::CHEBI_142750	CHEBI_142750	1	0	
+Compound::CHEBI_71491	CHEBI_71491	1	0	
+Compound::CHEBI_133362	CHEBI_133362	1	0	
+Compound::CHEBI_75140	CHEBI_75140	1	0	
+Compound::CHEBI_84649	CHEBI_84649	1	1	human metabolite
+Compound::CHEBI_50348	CHEBI_50348	1	0	
+Compound::CHEBI_85252	CHEBI_85252	1	0	
+Compound::CHEBI_136707	CHEBI_136707	1	0	
+Compound::CHEBI_57735	CHEBI_57735	1	0	
+Compound::CHEBI_147395	CHEBI_147395	1	0	
+Compound::CHEBI_84466	CHEBI_84466	1	0	
+Compound::CHEBI_17434	CHEBI_17434	1	1	animal metabolite
+Compound::CHEBI_87618	CHEBI_87618	1	2	fungal xenobiotic metabolite; human xenobiotic metabolite
+Compound::CHEBI_85197	CHEBI_85197	1	0	
+Compound::CHEBI_76559	CHEBI_76559	1	0	
+Compound::CHEBI_142592	CHEBI_142592	1	1	plant metabolite
+Compound::CHEBI_57296	CHEBI_57296	1	0	
+Compound::CHEBI_58600	CHEBI_58600	1	1	human metabolite
+Compound::CHEBI_84921	CHEBI_84921	1	0	
+Compound::CHEBI_64717	CHEBI_64717	1	0	
+Compound::CHEBI_133819	CHEBI_133819	1	0	
+Compound::CHEBI_77063	CHEBI_77063	1	0	
+Compound::CHEBI_78666	CHEBI_78666	1	0	
+Compound::CHEBI_132020	CHEBI_132020	1	0	
+Compound::CHEBI_78630	CHEBI_78630	1	4	antineoplastic agent; keratolytic drug; metabolite; retinoid X receptor agonist
+Compound::CHEBI_156553	CHEBI_156553	1	0	
+Compound::CHEBI_134042	CHEBI_134042	1	0	
+Compound::CHEBI_58392	CHEBI_58392	1	2	Escherichia coli metabolite; human metabolite
+Compound::CHEBI_157646	CHEBI_157646	1	0	
+Compound::CHEBI_64721	CHEBI_64721	1	0	
+Compound::CHEBI_80946	CHEBI_80946	1	6	antifeedant; biomarker; fungal metabolite; human urinary metabolite; insect attractant; plant metabolite
+Compound::CHEBI_86115	CHEBI_86115	1	1	human xenobiotic metabolite
+Compound::CHEBI_145186	CHEBI_145186	1	0	
+Compound::CHEBI_74901	CHEBI_74901	1	0	
+Compound::CHEBI_133380	CHEBI_133380	1	0	
+Compound::CHEBI_141467	CHEBI_141467	1	0	
+Compound::CHEBI_77552	CHEBI_77552	1	0	
+Compound::CHEBI_90307	CHEBI_90307	1	0	
+Compound::CHEBI_71501	CHEBI_71501	1	0	
+Compound::CHEBI_139274	CHEBI_139274	1	0	
+Compound::CHEBI_75201	CHEBI_75201	1	0	
+Compound::CHEBI_156407	CHEBI_156407	1	0	
+Compound::CHEBI_136757	CHEBI_136757	1	0	
+Compound::CHEBI_77304	CHEBI_77304	1	0	
+Compound::CHEBI_74414	CHEBI_74414	1	0	
+Compound::CHEBI_139269	CHEBI_139269	1	2	human metabolite; probe
+Compound::CHEBI_146198	CHEBI_146198	1	0	
+Compound::CHEBI_145181	CHEBI_145181	1	0	
+Compound::CHEBI_90866	CHEBI_90866	1	1	human xenobiotic metabolite
+Compound::CHEBI_77726	CHEBI_77726	1	0	
+Compound::CHEBI_149742	CHEBI_149742	1	0	
+Compound::CHEBI_141570	CHEBI_141570	1	0	
+Compound::CHEBI_67043	CHEBI_67043	1	0	
+Compound::CHEBI_16796	CHEBI_16796	1	8	anticonvulsant; central nervous system depressant; geroprotector; hormone; human metabolite; immunological adjuvant; mouse metabolite; radical scavenger
+Compound::CHEBI_146234	CHEBI_146234	1	0	
+Compound::CHEBI_57312	CHEBI_57312	1	1	human metabolite
+Compound::CHEBI_90337	CHEBI_90337	1	0	
+Compound::CHEBI_64874	CHEBI_64874	1	0	
+Compound::CHEBI_60051	CHEBI_60051	1	0	
+Compound::CHEBI_85296	CHEBI_85296	1	0	
+Compound::CHEBI_57649	CHEBI_57649	1	1	human metabolite
+Compound::CHEBI_138721	CHEBI_138721	1	1	algal metabolite
+Compound::CHEBI_85141	CHEBI_85141	1	0	
+Compound::CHEBI_132278	CHEBI_132278	1	0	
+Compound::CHEBI_90596	CHEBI_90596	1	0	
+Compound::CHEBI_85680	CHEBI_85680	1	1	human metabolite
+Compound::CHEBI_78426	CHEBI_78426	1	0	
+Compound::CHEBI_132064	CHEBI_132064	1	0	
+Compound::CHEBI_58796	CHEBI_58796	1	0	
+Compound::CHEBI_138633	CHEBI_138633	1	0	
+Compound::CHEBI_132129	CHEBI_132129	1	0	
+Compound::CHEBI_78603	CHEBI_78603	1	0	
+Compound::CHEBI_58384	CHEBI_58384	1	1	plant metabolite
+Compound::CHEBI_145400	CHEBI_145400	1	0	
+Compound::CHEBI_83727	CHEBI_83727	1	0	
+Compound::CHEBI_144067	CHEBI_144067	1	0	
+Compound::CHEBI_32361	CHEBI_32361	1	1	plant metabolite
+Compound::CHEBI_143089	CHEBI_143089	1	0	
+Compound::CHEBI_74317	CHEBI_74317	1	0	
+Compound::CHEBI_142516	CHEBI_142516	1	0	
+Compound::CHEBI_78571	CHEBI_78571	1	0	
+Compound::CHEBI_137543	CHEBI_137543	1	0	
+Compound::CHEBI_62265	CHEBI_62265	1	2	antigen; epitope
+Compound::CHEBI_145276	CHEBI_145276	1	2	flavouring agent; plant metabolite
+Compound::CHEBI_55458	CHEBI_55458	1	0	
+Compound::CHEBI_140088	CHEBI_140088	1	0	
+Compound::CHEBI_75076	CHEBI_75076	1	0	
+Compound::CHEBI_12834	CHEBI_12834	1	0	
+Compound::CHEBI_74288	CHEBI_74288	1	0	
+Compound::CHEBI_11909	CHEBI_11909	1	0	
+Compound::CHEBI_152564	CHEBI_152564	1	0	
+Compound::CHEBI_57268	CHEBI_57268	1	0	
+Compound::CHEBI_87488	CHEBI_87488	1	0	
+Compound::CHEBI_78047	CHEBI_78047	1	0	
+Compound::CHEBI_142597	CHEBI_142597	1	0	
+Compound::CHEBI_74282	CHEBI_74282	1	0	
+Compound::CHEBI_147308	CHEBI_147308	1	0	
+Compound::CHEBI_71586	CHEBI_71586	1	0	
+Compound::CHEBI_83726	CHEBI_83726	1	0	
+Compound::CHEBI_85301	CHEBI_85301	1	0	
+Compound::CHEBI_136916	CHEBI_136916	1	0	
+Compound::CHEBI_167545	CHEBI_167545	1	0	
+Compound::CHEBI_75066	CHEBI_75066	1	0	
+Compound::CHEBI_75853	CHEBI_75853	1	0	
+Compound::CHEBI_139228	CHEBI_139228	1	0	
+Compound::CHEBI_57456	CHEBI_57456	1	1	human metabolite
+Compound::CHEBI_57484	CHEBI_57484	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_15947	CHEBI_15947	1	0	
+Compound::CHEBI_157659	CHEBI_157659	1	0	
+Compound::CHEBI_76065	CHEBI_76065	1	0	
+Compound::CHEBI_75245	CHEBI_75245	1	0	
+Compound::CHEBI_139504	CHEBI_139504	1	0	
+Compound::CHEBI_141573	CHEBI_141573	1	0	
+Compound::CHEBI_74320	CHEBI_74320	1	0	
+Compound::CHEBI_149494	CHEBI_149494	1	0	
+Compound::CHEBI_145398	CHEBI_145398	1	0	
+Compound::CHEBI_64396	CHEBI_64396	1	0	
+Compound::CHEBI_58680	CHEBI_58680	1	1	human metabolite
+Compound::CHEBI_50004	CHEBI_50004	1	0	
+Compound::CHEBI_134233	CHEBI_134233	1	0	
+Compound::CHEBI_16567	CHEBI_16567	1	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_60777	CHEBI_60777	1	0	
+Compound::CHEBI_61185	CHEBI_61185	1	0	
+Compound::CHEBI_58668	CHEBI_58668	1	1	human metabolite
+Compound::CHEBI_141554	CHEBI_141554	1	0	
+Compound::CHEBI_85298	CHEBI_85298	1	0	
+Compound::CHEBI_142655	CHEBI_142655	1	0	
+Compound::CHEBI_75294	CHEBI_75294	1	0	
+Compound::CHEBI_78046	CHEBI_78046	1	0	
+Compound::CHEBI_140309	CHEBI_140309	1	0	
+Compound::CHEBI_132023	CHEBI_132023	1	0	
+Compound::CHEBI_78485	CHEBI_78485	1	0	
+Compound::CHEBI_136107	CHEBI_136107	1	0	
+Compound::CHEBI_138130	CHEBI_138130	1	0	
+Compound::CHEBI_74306	CHEBI_74306	1	0	
+Compound::CHEBI_78266	CHEBI_78266	1	0	
+Compound::CHEBI_86102	CHEBI_86102	1	0	
+Compound::CHEBI_142920	CHEBI_142920	1	0	
+Compound::CHEBI_88096	CHEBI_88096	1	0	
+Compound::CHEBI_138654	CHEBI_138654	1	0	
+Compound::CHEBI_685	CHEBI_685	1	0	
+Compound::CHEBI_58080	CHEBI_58080	1	0	
+Compound::CHEBI_77624	CHEBI_77624	1	0	
+Compound::CHEBI_58263	CHEBI_58263	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_77429	CHEBI_77429	1	0	
+Compound::CHEBI_84719	CHEBI_84719	1	1	mouse metabolite
+Compound::CHEBI_75967	CHEBI_75967	1	0	
+Compound::CHEBI_85231	CHEBI_85231	1	0	
+Compound::CHEBI_74130	CHEBI_74130	1	1	mouse metabolite
+Compound::CHEBI_138662	CHEBI_138662	1	0	
+Compound::CHEBI_142751	CHEBI_142751	1	0	
+Compound::CHEBI_140785	CHEBI_140785	1	0	
+Compound::CHEBI_74900	CHEBI_74900	1	0	
+Compound::CHEBI_84645	CHEBI_84645	1	1	human metabolite
+Compound::CHEBI_157653	CHEBI_157653	1	0	
+Compound::CHEBI_138658	CHEBI_138658	1	0	
+Compound::CHEBI_76063	CHEBI_76063	1	0	
+Compound::CHEBI_57539	CHEBI_57539	1	1	human metabolite
+Compound::CHEBI_85679	CHEBI_85679	1	1	human metabolite
+Compound::CHEBI_62230	CHEBI_62230	1	0	
+Compound::CHEBI_85650	CHEBI_85650	1	0	
+Compound::CHEBI_16815	CHEBI_16815	1	0	
+Compound::CHEBI_77001	CHEBI_77001	1	0	
+Compound::CHEBI_58387	CHEBI_58387	1	0	
+Compound::CHEBI_57506	CHEBI_57506	1	1	human metabolite
+Compound::CHEBI_77674	CHEBI_77674	1	0	
+Compound::CHEBI_76074	CHEBI_76074	1	0	
+Compound::CHEBI_82982	CHEBI_82982	1	1	human metabolite
+Compound::CHEBI_17703	CHEBI_17703	1	2	EC 3.1.1.1 (carboxylesterase) inhibitor; human metabolite
+Compound::CHEBI_155850	CHEBI_155850	1	0	
+Compound::CHEBI_75995	CHEBI_75995	1	0	
+Compound::CHEBI_74070	CHEBI_74070	1	0	
+Compound::CHEBI_78486	CHEBI_78486	1	0	
+Compound::CHEBI_90778	CHEBI_90778	1	0	
+Compound::CHEBI_73672	CHEBI_73672	1	0	
+Compound::CHEBI_76077	CHEBI_76077	1	0	
+Compound::CHEBI_87414	CHEBI_87414	1	0	
+Compound::CHEBI_138002	CHEBI_138002	1	0	
+Compound::CHEBI_138111	CHEBI_138111	1	0	
+Compound::CHEBI_145342	CHEBI_145342	1	0	
+Compound::CHEBI_84470	CHEBI_84470	1	0	
+Compound::CHEBI_30156	CHEBI_30156	1	0	
+Compound::CHEBI_138290	CHEBI_138290	1	0	
+Compound::CHEBI_60488	CHEBI_60488	1	1	cofactor
+Compound::CHEBI_78930	CHEBI_78930	1	0	
+Compound::CHEBI_57278	CHEBI_57278	1	0	
+Compound::CHEBI_145346	CHEBI_145346	1	0	
+Compound::CHEBI_90867	CHEBI_90867	1	1	human xenobiotic metabolite
+Compound::CHEBI_90514	CHEBI_90514	1	0	
+Compound::CHEBI_17302	CHEBI_17302	1	3	antimicrobial agent; plant metabolite; volatile oil component
+Compound::CHEBI_76316	CHEBI_76316	1	0	
+Compound::CHEBI_17169	CHEBI_17169	1	6	EC 3.1.1.3 (triacylglycerol lipase) inhibitor; EC 3.5.5.1 (nitrilase) inhibitor; flavouring agent; fragrance; odorant receptor agonist; plant metabolite
+Compound::CHEBI_75209	CHEBI_75209	1	0	
+Compound::CHEBI_167543	CHEBI_167543	1	0	
+Compound::CHEBI_141499	CHEBI_141499	1	0	
+Compound::CHEBI_145925	CHEBI_145925	1	0	
+Compound::CHEBI_84651	CHEBI_84651	1	2	glycine transporter 2 inhibitor; human metabolite
+Compound::CHEBI_78572	CHEBI_78572	1	0	
+Compound::CHEBI_91175	CHEBI_91175	1	0	
+Compound::CHEBI_78428	CHEBI_78428	1	0	
+Compound::CHEBI_167478	CHEBI_167478	1	0	
+Compound::CHEBI_77079	CHEBI_77079	1	0	
+Compound::CHEBI_32325	CHEBI_32325	1	2	antioxidant; fragrance
+Compound::CHEBI_91295	CHEBI_91295	1	0	
+Compound::CHEBI_147310	CHEBI_147310	1	0	
+Compound::CHEBI_90872	CHEBI_90872	1	0	
+Compound::CHEBI_21137	CHEBI_21137	1	0	
+Compound::CHEBI_132031	CHEBI_132031	1	0	
+Compound::CHEBI_145780	CHEBI_145780	1	0	
+Compound::CHEBI_145802	CHEBI_145802	1	0	
+Compound::CHEBI_61429	CHEBI_61429	1	0	
+Compound::CHEBI_17742	CHEBI_17742	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74279	CHEBI_74279	1	0	
+Compound::CHEBI_139612	CHEBI_139612	1	0	
+Compound::CHEBI_78604	CHEBI_78604	1	1	human metabolite
+Compound::CHEBI_144068	CHEBI_144068	1	0	
+Compound::CHEBI_16236	CHEBI_16236	1	12	Escherichia coli metabolite; NMDA receptor antagonist; Saccharomyces cerevisiae metabolite; antiseptic drug; central nervous system depressant; disinfectant; human metabolite; mouse metabolite; neurotoxin; polar solvent; protein kinase C agonist; teratogenic agent
+Compound::CHEBI_133309	CHEBI_133309	1	0	
+Compound::CHEBI_144581	CHEBI_144581	1	0	
+Compound::CHEBI_144774	CHEBI_144774	1	0	
+Compound::CHEBI_131962	CHEBI_131962	1	0	
+Compound::CHEBI_86165	CHEBI_86165	1	1	human xenobiotic metabolite
+Compound::CHEBI_136980	CHEBI_136980	1	0	
+Compound::CHEBI_133974	CHEBI_133974	1	0	
+Compound::CHEBI_58369	CHEBI_58369	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_75841	CHEBI_75841	1	0	
+Compound::CHEBI_61481	CHEBI_61481	1	0	
+Compound::CHEBI_76327	CHEBI_76327	1	0	
+Compound::CHEBI_140452	CHEBI_140452	1	0	
+Compound::CHEBI_75608	CHEBI_75608	1	0	
+Compound::CHEBI_53153	CHEBI_53153	1	0	
+Compound::CHEBI_79007	CHEBI_79007	1	0	
+Compound::CHEBI_18212	CHEBI_18212	1	0	
+Compound::CHEBI_147422	CHEBI_147422	1	1	human metabolite
+Compound::CHEBI_74285	CHEBI_74285	1	0	
+Compound::CHEBI_76044	CHEBI_76044	1	0	
+Compound::CHEBI_18385	CHEBI_18385	1	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_145837	CHEBI_145837	1	0	
+Compound::CHEBI_138121	CHEBI_138121	1	0	
+Compound::CHEBI_133358	CHEBI_133358	1	0	
+Compound::CHEBI_78907	CHEBI_78907	1	0	
+Compound::CHEBI_137546	CHEBI_137546	1	0	
+Compound::CHEBI_75620	CHEBI_75620	1	0	
+Compound::CHEBI_157663	CHEBI_157663	1	0	
+Compound::CHEBI_42090	CHEBI_42090	1	1	algal metabolite
+Compound::CHEBI_132068	CHEBI_132068	1	0	
+Compound::CHEBI_90392	CHEBI_90392	1	0	
+Compound::CHEBI_16782	CHEBI_16782	1	0	
+Compound::CHEBI_33190	CHEBI_33190	1	1	human metabolite
+Compound::CHEBI_83248	CHEBI_83248	1	0	
+Compound::CHEBI_75628	CHEBI_75628	1	0	
+Compound::CHEBI_145182	CHEBI_145182	1	0	
+Compound::CHEBI_74318	CHEBI_74318	1	0	
+Compound::CHEBI_85302	CHEBI_85302	1	0	
+Compound::CHEBI_82841	CHEBI_82841	1	0	
+Compound::CHEBI_35287	CHEBI_35287	1	0	
+Compound::CHEBI_75870	CHEBI_75870	1	0	
+Compound::CHEBI_88764	CHEBI_88764	1	1	plant metabolite
+Compound::CHEBI_606565	CHEBI_606565	1	1	human metabolite
+Compound::CHEBI_83071	CHEBI_83071	1	0	
+Compound::CHEBI_156458	CHEBI_156458	1	0	
+Compound::CHEBI_75854	CHEBI_75854	1	0	
+Compound::CHEBI_90732	CHEBI_90732	1	0	
+Compound::CHEBI_78294	CHEBI_78294	1	0	
+Compound::CHEBI_57340	CHEBI_57340	1	1	human metabolite
+Compound::CHEBI_57398	CHEBI_57398	1	1	human metabolite
+Compound::CHEBI_84346	CHEBI_84346	1	1	mouse metabolite
+Compound::CHEBI_140371	CHEBI_140371	1	0	
+Compound::CHEBI_78078	CHEBI_78078	1	1	platelet aggregation inhibitor
+Compound::CHEBI_84789	CHEBI_84789	1	1	mouse metabolite
+Compound::CHEBI_61610	CHEBI_61610	1	1	mouse metabolite
+Compound::CHEBI_143254	CHEBI_143254	1	0	
+Compound::CHEBI_87538	CHEBI_87538	1	0	
+Compound::CHEBI_137077	CHEBI_137077	1	2	human metabolite; rat metabolite
+Compound::CHEBI_137984	CHEBI_137984	1	0	
+Compound::CHEBI_27913	CHEBI_27913	1	1	human metabolite
+Compound::CHEBI_76386	CHEBI_76386	1	0	
+Compound::CHEBI_15867	CHEBI_15867	1	0	
+Compound::CHEBI_90826	CHEBI_90826	1	1	human xenobiotic metabolite
+Compound::CHEBI_132017	CHEBI_132017	1	0	
+Compound::CHEBI_137581	CHEBI_137581	1	0	
+Compound::CHEBI_16004	CHEBI_16004	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_73544	CHEBI_73544	1	0	
+Compound::CHEBI_140308	CHEBI_140308	1	0	
+Compound::CHEBI_156344	CHEBI_156344	1	0	
+Compound::CHEBI_76080	CHEBI_76080	1	0	
+Compound::CHEBI_76723	CHEBI_76723	1	0	
+Compound::CHEBI_57382	CHEBI_57382	1	0	
+Compound::CHEBI_91004	CHEBI_91004	1	0	
+Compound::CHEBI_86074	CHEBI_86074	1	1	human metabolite
+Compound::CHEBI_84443	CHEBI_84443	1	0	
+Compound::CHEBI_136933	CHEBI_136933	1	0	
+Compound::CHEBI_138075	CHEBI_138075	1	0	
+Compound::CHEBI_17427	CHEBI_17427	1	0	
+Compound::CHEBI_167544	CHEBI_167544	1	0	
+Compound::CHEBI_138029	CHEBI_138029	1	0	
+Compound::CHEBI_134033	CHEBI_134033	1	0	
+Compound::CHEBI_28869	CHEBI_28869	1	5	EC 3.4.22.69 (SARS coronavirus main proteinase) inhibitor; angiogenesis inhibitor; antineoplastic agent; human urinary metabolite; nutraceutical
+Compound::CHEBI_137032	CHEBI_137032	1	1	human urinary metabolite
+Compound::CHEBI_134408	CHEBI_134408	1	0	
+Compound::CHEBI_76410	CHEBI_76410	1	0	
+Compound::CHEBI_89268	CHEBI_89268	1	1	human urinary metabolite
+Compound::CHEBI_58357	CHEBI_58357	1	1	human metabolite
+Compound::CHEBI_77296	CHEBI_77296	1	0	
+Compound::CHEBI_78931	CHEBI_78931	1	0	
+Compound::CHEBI_50667	CHEBI_50667	1	3	anticoronaviral agent; antimetabolite; antineoplastic agent
+Compound::CHEBI_58022	CHEBI_58022	1	0	
+Compound::CHEBI_57477	CHEBI_57477	1	1	human metabolite
+Compound::CHEBI_142511	CHEBI_142511	1	0	
+Compound::CHEBI_138147	CHEBI_138147	1	0	
+Compound::CHEBI_147393	CHEBI_147393	1	0	
+Compound::CHEBI_136523	CHEBI_136523	1	0	
+Compound::CHEBI_763	CHEBI_763	1	1	progestin
+Compound::CHEBI_87678	CHEBI_87678	1	1	human xenobiotic metabolite
+Compound::CHEBI_16551	CHEBI_16551	1	4	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_136966	CHEBI_136966	1	0	
+Compound::CHEBI_76411	CHEBI_76411	1	0	
+Compound::CHEBI_136389	CHEBI_136389	1	0	
+Compound::CHEBI_90477	CHEBI_90477	1	0	
+Compound::CHEBI_62847	CHEBI_62847	1	0	
+Compound::CHEBI_133401	CHEBI_133401	1	0	
+Compound::CHEBI_49190	CHEBI_49190	1	0	
+Compound::CHEBI_132080	CHEBI_132080	1	0	
+Compound::CHEBI_145782	CHEBI_145782	1	0	
+Compound::CHEBI_58972	CHEBI_58972	1	1	human metabolite
+Compound::CHEBI_16472	CHEBI_16472	1	1	plant metabolite
+Compound::CHEBI_53081	CHEBI_53081	1	0	
+Compound::CHEBI_144023	CHEBI_144023	1	0	
+Compound::CHEBI_64720	CHEBI_64720	1	0	
+Compound::CHEBI_16793	CHEBI_16793	1	1	Escherichia coli metabolite
+Compound::CHEBI_147418	CHEBI_147418	1	0	
+Compound::CHEBI_157652	CHEBI_157652	1	0	
+Compound::CHEBI_156326	CHEBI_156326	1	0	
+Compound::CHEBI_138661	CHEBI_138661	1	0	
+Compound::CHEBI_90803	CHEBI_90803	1	0	
+Compound::CHEBI_76935	CHEBI_76935	1	0	
+Compound::CHEBI_138298	CHEBI_138298	1	0	
+Compound::CHEBI_138214	CHEBI_138214	1	0	
+Compound::CHEBI_61967	CHEBI_61967	1	0	
+Compound::CHEBI_77828	CHEBI_77828	1	0	
+Compound::CHEBI_145036	CHEBI_145036	1	0	
+Compound::CHEBI_75124	CHEBI_75124	1	0	
+Compound::CHEBI_86162	CHEBI_86162	1	0	
+Compound::CHEBI_156330	CHEBI_156330	1	0	
+Compound::CHEBI_138269	CHEBI_138269	1	0	
+Compound::CHEBI_141575	CHEBI_141575	1	0	
+Compound::CHEBI_75280	CHEBI_75280	1	0	
+Compound::CHEBI_131766	CHEBI_131766	1	0	
+Compound::CHEBI_63910	CHEBI_63910	1	1	metabolite
+Compound::CHEBI_77919	CHEBI_77919	1	0	
+Compound::CHEBI_139182	CHEBI_139182	1	0	
+Compound::CHEBI_58782	CHEBI_58782	1	0	
+Compound::CHEBI_137187	CHEBI_137187	1	0	
+Compound::CHEBI_149664	CHEBI_149664	1	0	
+Compound::CHEBI_91308	CHEBI_91308	1	2	human metabolite; rat metabolite
+Compound::CHEBI_145419	CHEBI_145419	1	0	
+Compound::CHEBI_138722	CHEBI_138722	1	0	
+Compound::CHEBI_76055	CHEBI_76055	1	0	
+Compound::CHEBI_138005	CHEBI_138005	1	0	
+Compound::CHEBI_90871	CHEBI_90871	1	0	
+Compound::CHEBI_90696	CHEBI_90696	1	0	
+Compound::CHEBI_74259	CHEBI_74259	1	0	
+Compound::CHEBI_82831	CHEBI_82831	1	0	
+Compound::CHEBI_141580	CHEBI_141580	1	0	
+Compound::CHEBI_62649	CHEBI_62649	1	1	mouse metabolite
+Compound::CHEBI_76073	CHEBI_76073	1	0	
+Compound::CHEBI_17640	CHEBI_17640	1	2	Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_137076	CHEBI_137076	1	0	
+Compound::CHEBI_157644	CHEBI_157644	1	0	
+Compound::CHEBI_136971	CHEBI_136971	1	0	
+Compound::CHEBI_85175	CHEBI_85175	1	0	
+Compound::CHEBI_86096	CHEBI_86096	1	0	
+Compound::CHEBI_75266	CHEBI_75266	1	0	
+Compound::CHEBI_133003	CHEBI_133003	1	0	
+Compound::CHEBI_47813	CHEBI_47813	1	1	human metabolite
+Compound::CHEBI_84489	CHEBI_84489	1	0	
+Compound::CHEBI_85152	CHEBI_85152	1	0	
+Compound::CHEBI_133387	CHEBI_133387	1	0	
+Compound::CHEBI_90457	CHEBI_90457	1	0	
+Compound::CHEBI_143533	CHEBI_143533	1	0	
+Compound::CHEBI_21291	CHEBI_21291	1	0	
+Compound::CHEBI_63660	CHEBI_63660	1	0	
+Compound::CHEBI_84838	CHEBI_84838	1	1	human metabolite
+Compound::CHEBI_76070	CHEBI_76070	1	0	
+Compound::CHEBI_90873	CHEBI_90873	1	0	
+Compound::CHEBI_137524	CHEBI_137524	1	0	
+Compound::CHEBI_132529	CHEBI_132529	1	0	
+Compound::CHEBI_86137	CHEBI_86137	1	0	
+Compound::CHEBI_83969	CHEBI_83969	1	0	
+Compound::CHEBI_91300	CHEBI_91300	1	0	
+Compound::CHEBI_138634	CHEBI_138634	1	0	
+Compound::CHEBI_17128	CHEBI_17128	1	1	human xenobiotic metabolite
+Compound::CHEBI_58100	CHEBI_58100	1	0	
+Compound::CHEBI_84647	CHEBI_84647	1	0	
+Compound::CHEBI_139581	CHEBI_139581	1	0	
+Compound::CHEBI_132011	CHEBI_132011	1	0	
+Compound::CHEBI_62558	CHEBI_62558	1	0	
+Compound::CHEBI_75546	CHEBI_75546	1	0	
+Compound::CHEBI_75263	CHEBI_75263	1	0	
+Compound::CHEBI_90802	CHEBI_90802	1	0	
+Compound::CHEBI_86119	CHEBI_86119	1	0	
+Compound::CHEBI_86098	CHEBI_86098	1	0	
+Compound::CHEBI_32814	CHEBI_32814	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_131780	CHEBI_131780	1	0	
+Compound::CHEBI_85285	CHEBI_85285	1	0	
+Compound::CHEBI_75116	CHEBI_75116	1	0	
+Compound::CHEBI_133407	CHEBI_133407	1	0	
+Compound::CHEBI_136936	CHEBI_136936	1	0	
+Compound::CHEBI_136708	CHEBI_136708	1	0	
+Compound::CHEBI_74975	CHEBI_74975	1	0	
+Compound::CHEBI_78180	CHEBI_78180	1	0	
+Compound::CHEBI_84462	CHEBI_84462	1	0	
+Compound::CHEBI_85261	CHEBI_85261	1	0	
+Compound::CHEBI_50014	CHEBI_50014	1	0	
+Compound::CHEBI_78995	CHEBI_78995	1	0	
+Compound::CHEBI_57924	CHEBI_57924	1	0	
+Compound::CHEBI_47013	CHEBI_47013	1	0	
+Compound::CHEBI_90715	CHEBI_90715	1	0	
+Compound::CHEBI_90980	CHEBI_90980	1	1	human metabolite
+Compound::CHEBI_3663	CHEBI_3663	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_17587	CHEBI_17587	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_146292	CHEBI_146292	1	0	
+Compound::CHEBI_90823	CHEBI_90823	1	1	human xenobiotic metabolite
+Compound::CHEBI_57538	CHEBI_57538	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_82795	CHEBI_82795	1	0	
+Compound::CHEBI_133414	CHEBI_133414	1	0	
+Compound::CHEBI_16548	CHEBI_16548	1	2	insecticide; persistent organic pollutant
+Compound::CHEBI_57655	CHEBI_57655	1	1	human metabolite
+Compound::CHEBI_78566	CHEBI_78566	1	0	
+Compound::CHEBI_76461	CHEBI_76461	1	0	
+Compound::CHEBI_133045	CHEBI_133045	1	0	
+Compound::CHEBI_136486	CHEBI_136486	1	0	
+Compound::CHEBI_90870	CHEBI_90870	1	0	
+Compound::CHEBI_141490	CHEBI_141490	1	0	
+Compound::CHEBI_84843	CHEBI_84843	1	0	
+Compound::CHEBI_58769	CHEBI_58769	1	0	
+Compound::CHEBI_85809	CHEBI_85809	1	1	mammalian metabolite
+Compound::CHEBI_137046	CHEBI_137046	1	0	
+Compound::CHEBI_149663	CHEBI_149663	1	0	
+Compound::CHEBI_27582	CHEBI_27582	1	1	mouse metabolite
+Compound::CHEBI_78565	CHEBI_78565	1	0	
+Compound::CHEBI_138006	CHEBI_138006	1	0	
+Compound::CHEBI_146163	CHEBI_146163	1	0	
+Compound::CHEBI_75296	CHEBI_75296	1	0	
+Compound::CHEBI_142209	CHEBI_142209	1	0	
+Compound::CHEBI_138723	CHEBI_138723	1	0	
+Compound::CHEBI_140327	CHEBI_140327	1	0	
+Compound::CHEBI_75265	CHEBI_75265	1	0	
+Compound::CHEBI_15686	CHEBI_15686	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_132067	CHEBI_132067	1	0	
+Compound::CHEBI_142693	CHEBI_142693	1	0	
+Compound::CHEBI_58797	CHEBI_58797	1	0	
+Compound::CHEBI_75161	CHEBI_75161	1	0	
+Compound::CHEBI_84791	CHEBI_84791	1	0	
+Compound::CHEBI_155848	CHEBI_155848	1	0	
+Compound::CHEBI_137320	CHEBI_137320	1	0	
+Compound::CHEBI_74246	CHEBI_74246	1	0	
+Compound::CHEBI_149528	CHEBI_149528	1	0	
+Compound::CHEBI_67132	CHEBI_67132	1	0	
+Compound::CHEBI_87333	CHEBI_87333	1	1	human metabolite
+Compound::CHEBI_74340	CHEBI_74340	1	0	
+Compound::CHEBI_145836	CHEBI_145836	1	0	
+Compound::CHEBI_57685	CHEBI_57685	1	1	archaeal metabolite
+Compound::CHEBI_90859	CHEBI_90859	1	0	
+Compound::CHEBI_77551	CHEBI_77551	1	0	
+Compound::CHEBI_137053	CHEBI_137053	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_138375	CHEBI_138375	1	0	
+Compound::CHEBI_16229	CHEBI_16229	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_90381	CHEBI_90381	1	0	
+Compound::CHEBI_60627	CHEBI_60627	1	0	
+Compound::CHEBI_90510	CHEBI_90510	1	0	
+Compound::CHEBI_73315	CHEBI_73315	1	1	human metabolite
+Compound::CHEBI_137476	CHEBI_137476	1	0	
+Compound::CHEBI_90815	CHEBI_90815	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_63212	CHEBI_63212	1	0	
+Compound::CHEBI_136906	CHEBI_136906	1	0	
+Compound::CHEBI_136351	CHEBI_136351	1	0	
+Compound::CHEBI_146164	CHEBI_146164	1	0	
+Compound::CHEBI_87391	CHEBI_87391	1	0	
+Compound::CHEBI_147309	CHEBI_147309	1	0	
+Compound::CHEBI_75850	CHEBI_75850	1	0	
+Compound::CHEBI_84841	CHEBI_84841	1	0	
+Compound::CHEBI_62259	CHEBI_62259	1	1	epitope
+Compound::CHEBI_77099	CHEBI_77099	1	0	
+Compound::CHEBI_138637	CHEBI_138637	1	0	
+Compound::CHEBI_138024	CHEBI_138024	1	0	
+Compound::CHEBI_77753	CHEBI_77753	1	0	
+Compound::CHEBI_36261	CHEBI_36261	1	1	human metabolite
+Compound::CHEBI_78596	CHEBI_78596	1	0	
+Compound::CHEBI_16455	CHEBI_16455	1	0	
+Compound::CHEBI_156132	CHEBI_156132	1	0	
+Compound::CHEBI_49172	CHEBI_49172	1	0	
+Compound::CHEBI_59806	CHEBI_59806	1	1	plant metabolite
+Compound::CHEBI_87792	CHEBI_87792	1	0	
+Compound::CHEBI_140743	CHEBI_140743	1	0	
+Compound::CHEBI_82875	CHEBI_82875	1	0	
+Compound::CHEBI_133519	CHEBI_133519	1	0	
+Compound::CHEBI_72858	CHEBI_72858	1	0	
+Compound::CHEBI_142777	CHEBI_142777	1	0	
+Compound::CHEBI_77803	CHEBI_77803	1	0	
+Compound::CHEBI_73998	CHEBI_73998	1	0	
+Compound::CHEBI_76064	CHEBI_76064	1	0	
+Compound::CHEBI_146186	CHEBI_146186	1	0	
+Compound::CHEBI_136635	CHEBI_136635	1	0	
+Compound::CHEBI_131944	CHEBI_131944	1	0	
+Compound::CHEBI_85295	CHEBI_85295	1	0	
+Compound::CHEBI_85293	CHEBI_85293	1	0	
+Compound::CHEBI_86384	CHEBI_86384	1	1	human xenobiotic metabolite
+Compound::CHEBI_58758	CHEBI_58758	1	1	human metabolite
+Compound::CHEBI_44400	CHEBI_44400	1	0	
+Compound::CHEBI_140528	CHEBI_140528	1	1	human xenobiotic metabolite
+Compound::CHEBI_28396	CHEBI_28396	1	1	mouse metabolite
+Compound::CHEBI_47820	CHEBI_47820	1	0	
+Compound::CHEBI_140495	CHEBI_140495	1	0	
+Compound::CHEBI_72838	CHEBI_72838	1	0	
+Compound::CHEBI_167612	CHEBI_167612	1	0	
+Compound::CHEBI_74663	CHEBI_74663	1	0	
+Compound::CHEBI_133134	CHEBI_133134	1	0	
+Compound::CHEBI_147391	CHEBI_147391	1	0	
+Compound::CHEBI_83336	CHEBI_83336	1	0	
+Compound::CHEBI_87410	CHEBI_87410	1	0	
+Compound::CHEBI_32375	CHEBI_32375	1	0	
+Compound::CHEBI_140080	CHEBI_140080	1	0	
+Compound::CHEBI_87788	CHEBI_87788	1	0	
+Compound::CHEBI_15897	CHEBI_15897	1	0	
+Compound::CHEBI_78269	CHEBI_78269	1	0	
+Compound::CHEBI_57317	CHEBI_57317	1	0	
+Compound::CHEBI_78948	CHEBI_78948	1	0	
+Compound::CHEBI_78070	CHEBI_78070	1	0	
+Compound::CHEBI_137457	CHEBI_137457	1	0	
+Compound::CHEBI_145943	CHEBI_145943	1	0	
+Compound::CHEBI_75234	CHEBI_75234	1	0	
+Compound::CHEBI_90812	CHEBI_90812	1	1	human xenobiotic metabolite
+Compound::CHEBI_75994	CHEBI_75994	1	0	
+Compound::CHEBI_86042	CHEBI_86042	1	0	
+Compound::CHEBI_138198	CHEBI_138198	1	0	
+Compound::CHEBI_90157	CHEBI_90157	1	0	
+Compound::CHEBI_58700	CHEBI_58700	1	0	
+Compound::CHEBI_84672	CHEBI_84672	1	0	
+Compound::CHEBI_58489	CHEBI_58489	1	0	
+Compound::CHEBI_138107	CHEBI_138107	1	0	
+Compound::CHEBI_78594	CHEBI_78594	1	0	
+Compound::CHEBI_155847	CHEBI_155847	1	0	
+Compound::CHEBI_156134	CHEBI_156134	1	0	
+Compound::CHEBI_73534	CHEBI_73534	1	0	
+Compound::CHEBI_28997	CHEBI_28997	1	5	Escherichia coli metabolite; Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_16310	CHEBI_16310	1	3	alarm pheromone; plant metabolite; volatile oil component
+Compound::CHEBI_52075	CHEBI_52075	1	0	
+Compound::CHEBI_77292	CHEBI_77292	1	0	
+Compound::CHEBI_57499	CHEBI_57499	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_85651	CHEBI_85651	1	0	
+Compound::CHEBI_58445	CHEBI_58445	1	1	animal metabolite
+Compound::CHEBI_138058	CHEBI_138058	1	0	
+Compound::CHEBI_16715	CHEBI_16715	1	0	
+Compound::CHEBI_87331	CHEBI_87331	1	1	human xenobiotic metabolite
+Compound::CHEBI_132280	CHEBI_132280	1	0	
+Compound::CHEBI_89719	CHEBI_89719	1	3	human metabolite; insect attractant; plant metabolite
+Compound::CHEBI_157647	CHEBI_157647	1	0	
+Compound::CHEBI_87833	CHEBI_87833	1	0	
+Compound::CHEBI_16188	CHEBI_16188	1	1	plant metabolite
+Compound::CHEBI_133820	CHEBI_133820	1	0	
+Compound::CHEBI_74548	CHEBI_74548	1	0	
+Compound::CHEBI_85655	CHEBI_85655	1	0	
+Compound::CHEBI_78844	CHEBI_78844	1	0	
+Compound::CHEBI_83992	CHEBI_83992	1	0	
+Compound::CHEBI_18020	CHEBI_18020	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_142624	CHEBI_142624	1	1	mouse metabolite
+Compound::CHEBI_85206	CHEBI_85206	1	0	
+Compound::CHEBI_85174	CHEBI_85174	1	0	
+Compound::CHEBI_88167	CHEBI_88167	1	0	
+Compound::CHEBI_138373	CHEBI_138373	1	0	
+Compound::CHEBI_31004	CHEBI_31004	1	0	
+Compound::CHEBI_73927	CHEBI_73927	1	1	metabolite
+Compound::CHEBI_140559	CHEBI_140559	1	1	epitope
+Compound::CHEBI_74216	CHEBI_74216	1	0	
+Compound::CHEBI_149631	CHEBI_149631	1	0	
+Compound::CHEBI_147390	CHEBI_147390	1	1	human metabolite
+Compound::CHEBI_138297	CHEBI_138297	1	0	
+Compound::CHEBI_64573	CHEBI_64573	1	0	
+Compound::CHEBI_78044	CHEBI_78044	1	0	
+Compound::CHEBI_167541	CHEBI_167541	1	0	
+Compound::CHEBI_89891	CHEBI_89891	1	5	bacterial xenobiotic metabolite; human urinary metabolite; human xenobiotic metabolite; insect attractant; plant metabolite
+Compound::CHEBI_136965	CHEBI_136965	1	0	
+Compound::CHEBI_74287	CHEBI_74287	1	0	
+Compound::CHEBI_82869	CHEBI_82869	1	0	
+Compound::CHEBI_142604	CHEBI_142604	1	3	flavouring agent; pheromone; plant metabolite
+Compound::CHEBI_136579	CHEBI_136579	1	0	
+Compound::CHEBI_85134	CHEBI_85134	1	0	
+Compound::CHEBI_74160	CHEBI_74160	1	0	
+Compound::CHEBI_74917	CHEBI_74917	1	0	
+Compound::CHEBI_77558	CHEBI_77558	1	0	
+Compound::CHEBI_83091	CHEBI_83091	1	0	
+Compound::CHEBI_75264	CHEBI_75264	1	0	
+Compound::CHEBI_83334	CHEBI_83334	1	0	
+Compound::CHEBI_74304	CHEBI_74304	1	0	
+Compound::CHEBI_145875	CHEBI_145875	1	0	
+Compound::CHEBI_133405	CHEBI_133405	1	0	
+Compound::CHEBI_88153	CHEBI_88153	1	1	flavouring agent
+Compound::CHEBI_27576	CHEBI_27576	1	1	mouse metabolite
+Compound::CHEBI_58938	CHEBI_58938	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_138691	CHEBI_138691	1	0	
+Compound::CHEBI_141602	CHEBI_141602	1	0	
+Compound::CHEBI_83717	CHEBI_83717	1	1	mouse metabolite
+Compound::CHEBI_64694	CHEBI_64694	1	0	
+Compound::CHEBI_85227	CHEBI_85227	1	0	
+Compound::CHEBI_88138	CHEBI_88138	1	0	
+Compound::CHEBI_77086	CHEBI_77086	1	0	
+Compound::CHEBI_58772	CHEBI_58772	1	0	
+Compound::CHEBI_131708	CHEBI_131708	1	0	
+Compound::CHEBI_145401	CHEBI_145401	1	0	
+Compound::CHEBI_58715	CHEBI_58715	1	0	
+Compound::CHEBI_90819	CHEBI_90819	1	3	anti-inflammatory agent; human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_141574	CHEBI_141574	1	0	
+Compound::CHEBI_15693	CHEBI_15693	1	0	
+Compound::CHEBI_131710	CHEBI_131710	1	0	
+Compound::CHEBI_58503	CHEBI_58503	1	0	
+Compound::CHEBI_147155	CHEBI_147155	1	0	
+Compound::CHEBI_25941	CHEBI_25941	1	1	human metabolite
+Compound::CHEBI_144968	CHEBI_144968	1	0	
+Compound::CHEBI_137955	CHEBI_137955	1	0	
+Compound::CHEBI_57951	CHEBI_57951	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_58389	CHEBI_58389	1	1	human xenobiotic metabolite
+Compound::CHEBI_144784	CHEBI_144784	1	0	
+Compound::CHEBI_74146	CHEBI_74146	1	0	
+Compound::CHEBI_58910	CHEBI_58910	1	0	
+Compound::CHEBI_74290	CHEBI_74290	1	0	
+Compound::CHEBI_74328	CHEBI_74328	1	0	
+Compound::CHEBI_85448	CHEBI_85448	1	0	
+Compound::CHEBI_58756	CHEBI_58756	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_131823	CHEBI_131823	1	0	
+Compound::CHEBI_77832	CHEBI_77832	1	0	
+Compound::CHEBI_142558	CHEBI_142558	1	0	
+Compound::CHEBI_58469	CHEBI_58469	1	1	human metabolite
+Compound::CHEBI_90970	CHEBI_90970	1	1	human metabolite
+Compound::CHEBI_75561	CHEBI_75561	1	0	
+Compound::CHEBI_72857	CHEBI_72857	1	0	
+Compound::CHEBI_78371	CHEBI_78371	1	0	
+Compound::CHEBI_137475	CHEBI_137475	1	0	
+Compound::CHEBI_77450	CHEBI_77450	1	0	
+Compound::CHEBI_41128	CHEBI_41128	1	1	plant metabolite
+Compound::CHEBI_16074	CHEBI_16074	1	1	human metabolite
+Compound::CHEBI_133752	CHEBI_133752	1	0	
+Compound::CHEBI_86146	CHEBI_86146	1	0	
+Compound::CHEBI_34787	CHEBI_34787	1	1	biomarker
+Compound::CHEBI_74275	CHEBI_74275	1	0	
+Compound::CHEBI_149770	CHEBI_149770	1	0	
+Compound::CHEBI_138131	CHEBI_138131	1	0	
+Compound::CHEBI_17802	CHEBI_17802	1	1	fundamental metabolite
+Compound::CHEBI_147415	CHEBI_147415	1	1	human metabolite
+Compound::CHEBI_58274	CHEBI_58274	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_74283	CHEBI_74283	1	0	
+Compound::CHEBI_17879	CHEBI_17879	1	2	Saccharomyces cerevisiae metabolite; plant metabolite
+Compound::CHEBI_132070	CHEBI_132070	1	0	
+Compound::CHEBI_167542	CHEBI_167542	1	0	
+Compound::CHEBI_156526	CHEBI_156526	1	0	
+Compound::CHEBI_134041	CHEBI_134041	1	0	
+Compound::CHEBI_78451	CHEBI_78451	1	0	
+Compound::CHEBI_78461	CHEBI_78461	1	0	
+Compound::CHEBI_74262	CHEBI_74262	1	0	
+Compound::CHEBI_156554	CHEBI_156554	1	0	
+Compound::CHEBI_142776	CHEBI_142776	1	0	
+Compound::CHEBI_137585	CHEBI_137585	1	2	human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_143788	CHEBI_143788	1	0	
+Compound::CHEBI_146284	CHEBI_146284	1	0	
+Compound::CHEBI_58373	CHEBI_58373	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_57474	CHEBI_57474	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_133979	CHEBI_133979	1	1	human xenobiotic metabolite
+Compound::CHEBI_74247	CHEBI_74247	1	0	
+Compound::CHEBI_167614	CHEBI_167614	1	0	
+Compound::CHEBI_29959	CHEBI_29959	1	3	Saccharomyces cerevisiae metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_133741	CHEBI_133741	1	3	anthelminthic drug; antibacterial agent; plant metabolite
+Compound::CHEBI_57730	CHEBI_57730	1	1	human xenobiotic metabolite
+Compound::CHEBI_28903	CHEBI_28903	1	2	metabolite; protic solvent
+Compound::CHEBI_57553	CHEBI_57553	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_137110	CHEBI_137110	1	0	
+Compound::CHEBI_85810	CHEBI_85810	1	0	
+Compound::CHEBI_73603	CHEBI_73603	1	0	
+Compound::CHEBI_167627	CHEBI_167627	1	0	
+Compound::CHEBI_76168	CHEBI_76168	1	0	
+Compound::CHEBI_133939	CHEBI_133939	1	0	
+Compound::CHEBI_141576	CHEBI_141576	1	0	
+Compound::CHEBI_137982	CHEBI_137982	1	0	
+Compound::CHEBI_74263	CHEBI_74263	1	0	
+Compound::CHEBI_136589	CHEBI_136589	1	0	
+Compound::CHEBI_16095	CHEBI_16095	1	0	
+Compound::CHEBI_85297	CHEBI_85297	1	0	
+Compound::CHEBI_43029	CHEBI_43029	1	0	
+Compound::CHEBI_74475	CHEBI_74475	1	1	metabolite
+Compound::CHEBI_75846	CHEBI_75846	1	0	
+Compound::CHEBI_74447	CHEBI_74447	1	0	
+Compound::CHEBI_60059	CHEBI_60059	1	0	
+Compound::CHEBI_85294	CHEBI_85294	1	0	
+Compound::CHEBI_77859	CHEBI_77859	1	1	human metabolite
+Compound::CHEBI_134020	CHEBI_134020	1	0	
+Compound::CHEBI_137061	CHEBI_137061	1	1	human metabolite
+Compound::CHEBI_140084	CHEBI_140084	1	0	
+Compound::CHEBI_16007	CHEBI_16007	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_11152	CHEBI_11152	1	0	
+Compound::CHEBI_74316	CHEBI_74316	1	0	
+Compound::CHEBI_144021	CHEBI_144021	1	0	
+Compound::CHEBI_18022	CHEBI_18022	1	1	human metabolite
+Compound::CHEBI_157650	CHEBI_157650	1	0	
+Compound::CHEBI_83246	CHEBI_83246	1	0	
+Compound::CHEBI_133063	CHEBI_133063	1	0	
+Compound::CHEBI_144584	CHEBI_144584	1	0	
+Compound::CHEBI_136655	CHEBI_136655	1	0	
+Compound::CHEBI_90983	CHEBI_90983	1	1	human metabolite
+Compound::CHEBI_138676	CHEBI_138676	1	0	
+Compound::CHEBI_88756	CHEBI_88756	1	1	human blood serum metabolite
+Compound::CHEBI_78768	CHEBI_78768	1	0	
+Compound::CHEBI_136710	CHEBI_136710	1	0	
+Compound::CHEBI_60530	CHEBI_60530	1	0	
+Compound::CHEBI_78342	CHEBI_78342	1	0	
+Compound::CHEBI_134621	CHEBI_134621	1	0	
+Compound::CHEBI_136568	CHEBI_136568	1	0	
+Compound::CHEBI_16383	CHEBI_16383	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16509	CHEBI_16509	1	3	cofactor; human xenobiotic metabolite; mouse metabolite
+Compound::CHEBI_66954	CHEBI_66954	1	0	
+Compound::CHEBI_132218	CHEBI_132218	1	0	
+Compound::CHEBI_82951	CHEBI_82951	1	0	
+Compound::CHEBI_78495	CHEBI_78495	1	0	
+Compound::CHEBI_35627	CHEBI_35627	1	0	
+Compound::CHEBI_167546	CHEBI_167546	1	0	
+Compound::CHEBI_78783	CHEBI_78783	1	0	
+Compound::CHEBI_82605	CHEBI_82605	1	0	
+Compound::CHEBI_76068	CHEBI_76068	1	0	
+Compound::CHEBI_87393	CHEBI_87393	1	1	plant metabolite
+Compound::CHEBI_47214	CHEBI_47214	1	0	
+Compound::CHEBI_58047	CHEBI_58047	1	0	
+Compound::CHEBI_74230	CHEBI_74230	1	0	
+Compound::CHEBI_42548	CHEBI_42548	1	1	epitope
+Compound::CHEBI_28471	CHEBI_28471	1	0	
+Compound::CHEBI_133069	CHEBI_133069	1	1	bradykinin receptor B2 agonist
+Compound::CHEBI_78396	CHEBI_78396	1	0	
+Compound::CHEBI_132018	CHEBI_132018	1	0	
+Compound::CHEBI_74457	CHEBI_74457	1	0	
+Compound::CHEBI_76054	CHEBI_76054	1	0	
+Compound::CHEBI_146167	CHEBI_146167	1	1	human metabolite
+Compound::CHEBI_141128	CHEBI_141128	1	0	
+Compound::CHEBI_74417	CHEBI_74417	1	0	
+Compound::CHEBI_64572	CHEBI_64572	1	0	
+Compound::CHEBI_16619	CHEBI_16619	1	1	plant metabolite
+Compound::CHEBI_83342	CHEBI_83342	1	0	
+Compound::CHEBI_85304	CHEBI_85304	1	0	
+Compound::CHEBI_87789	CHEBI_87789	1	0	
+Compound::CHEBI_87810	CHEBI_87810	1	1	human metabolite
+Compound::CHEBI_57741	CHEBI_57741	1	1	human metabolite
+Compound::CHEBI_59440	CHEBI_59440	1	2	antigen; epitope
+Compound::CHEBI_53455	CHEBI_53455	1	0	
+Compound::CHEBI_144842	CHEBI_144842	1	0	
+Compound::CHEBI_137525	CHEBI_137525	1	0	
+Compound::CHEBI_78390	CHEBI_78390	1	0	
+Compound::CHEBI_74851	CHEBI_74851	1	0	
+Compound::CHEBI_133975	CHEBI_133975	1	0	
+Compound::CHEBI_74162	CHEBI_74162	1	0	
+Compound::CHEBI_146166	CHEBI_146166	1	0	
+Compound::CHEBI_142692	CHEBI_142692	1	0	
+Compound::CHEBI_85225	CHEBI_85225	1	0	
+Compound::CHEBI_145188	CHEBI_145188	1	0	
+Compound::CHEBI_75729	CHEBI_75729	1	0	
+Compound::CHEBI_142591	CHEBI_142591	1	1	plant metabolite
+Compound::CHEBI_27961	CHEBI_27961	1	1	flavouring agent
+Compound::CHEBI_11305	CHEBI_11305	1	0	
+Compound::CHEBI_58023	CHEBI_58023	1	0	
+Compound::CHEBI_78001	CHEBI_78001	1	0	
+Compound::CHEBI_58145	CHEBI_58145	1	1	human metabolite
+Compound::CHEBI_83064	CHEBI_83064	1	0	
+Compound::CHEBI_142748	CHEBI_142748	1	0	
+Compound::CHEBI_74215	CHEBI_74215	1	0	
+Compound::CHEBI_139156	CHEBI_139156	1	0	
+Compound::CHEBI_90605	CHEBI_90605	1	0	
+Compound::CHEBI_75232	CHEBI_75232	1	0	
+Compound::CHEBI_142660	CHEBI_142660	1	0	
+Compound::CHEBI_147365	CHEBI_147365	1	2	histamine releasing agent; human metabolite
+Compound::CHEBI_131564	CHEBI_131564	1	0	
+Compound::CHEBI_136853	CHEBI_136853	1	0	
+Compound::CHEBI_132013	CHEBI_132013	1	0	
+Compound::CHEBI_136976	CHEBI_136976	1	0	
+Compound::CHEBI_62075	CHEBI_62075	1	0	
+Compound::CHEBI_59908	CHEBI_59908	1	1	human metabolite
+Compound::CHEBI_131871	CHEBI_131871	1	0	
+Compound::CHEBI_83586	CHEBI_83586	1	0	
+Compound::CHEBI_77896	CHEBI_77896	1	0	
+Compound::CHEBI_27398	CHEBI_27398	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_75300	CHEBI_75300	1	0	
+Compound::CHEBI_86145	CHEBI_86145	1	0	
+Compound::CHEBI_57608	CHEBI_57608	1	0	
+Compound::CHEBI_58452	CHEBI_58452	1	1	Saccharomyces cerevisiae metabolite
+Compound::CHEBI_84644	CHEBI_84644	1	1	human metabolite
+Compound::CHEBI_142685	CHEBI_142685	1	0	
+Compound::CHEBI_138704	CHEBI_138704	1	0	
+Compound::CHEBI_16797	CHEBI_16797	1	6	Saccharomyces cerevisiae metabolite; algal metabolite; anti-inflammatory agent; human urinary metabolite; mouse metabolite; plant metabolite
+Compound::CHEBI_73999	CHEBI_73999	1	0	
+Compound::CHEBI_137935	CHEBI_137935	1	0	
+Compound::CHEBI_132510	CHEBI_132510	1	0	
+Compound::CHEBI_166912	CHEBI_166912	1	0	
+Compound::CHEBI_85303	CHEBI_85303	1	0	
+Compound::CHEBI_55376	CHEBI_55376	1	0	
+Compound::CHEBI_145547	CHEBI_145547	1	0	
+Compound::CHEBI_137057	CHEBI_137057	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_57353	CHEBI_57353	1	0	
+Compound::CHEBI_57695	CHEBI_57695	1	0	
+Compound::CHEBI_155849	CHEBI_155849	1	0	
+Compound::CHEBI_91001	CHEBI_91001	1	1	human xenobiotic metabolite
+Compound::CHEBI_85219	CHEBI_85219	1	0	
+Compound::CHEBI_156440	CHEBI_156440	1	0	
+Compound::CHEBI_136983	CHEBI_136983	1	0	
+Compound::CHEBI_27910	CHEBI_27910	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_84268	CHEBI_84268	1	2	human metabolite; plant metabolite
+Compound::CHEBI_85253	CHEBI_85253	1	0	
+Compound::CHEBI_6746	CHEBI_6746	1	0	
+Compound::CHEBI_138315	CHEBI_138315	1	0	
+Compound::CHEBI_138199	CHEBI_138199	1	0	
+Compound::CHEBI_57328	CHEBI_57328	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_167479	CHEBI_167479	1	0	
+Compound::CHEBI_75326	CHEBI_75326	1	0	
+Compound::CHEBI_149730	CHEBI_149730	1	0	
+Compound::CHEBI_64872	CHEBI_64872	1	0	
+Compound::CHEBI_88155	CHEBI_88155	1	0	
+Compound::CHEBI_90862	CHEBI_90862	1	0	
+Compound::CHEBI_132256	CHEBI_132256	1	1	human metabolite
+Compound::CHEBI_732	CHEBI_732	1	0	
+Compound::CHEBI_7466	CHEBI_7466	1	1	human metabolite
+Compound::CHEBI_28750	CHEBI_28750	1	2	human metabolite; mouse metabolite
+Compound::CHEBI_136420	CHEBI_136420	1	0	
+Compound::CHEBI_133798	CHEBI_133798	1	0	
+Compound::CHEBI_133359	CHEBI_133359	1	0	
+Compound::CHEBI_145324	CHEBI_145324	1	0	
+Compound::CHEBI_29986	CHEBI_29986	1	0	
+Compound::CHEBI_156112	CHEBI_156112	1	1	rat metabolite
+Compound::CHEBI_77749	CHEBI_77749	1	0	
+Compound::CHEBI_156345	CHEBI_156345	1	0	
+Compound::CHEBI_142682	CHEBI_142682	1	0	
+Compound::CHEBI_74233	CHEBI_74233	1	0	
+Compound::CHEBI_149526	CHEBI_149526	1	0	
+Compound::CHEBI_76416	CHEBI_76416	1	0	
+Compound::CHEBI_87593	CHEBI_87593	1	2	human xenobiotic metabolite; marine xenobiotic metabolite
+Compound::CHEBI_74249	CHEBI_74249	1	0	
+Compound::CHEBI_57408	CHEBI_57408	1	0	
+Compound::CHEBI_85221	CHEBI_85221	1	0	
+Compound::CHEBI_27667	CHEBI_27667	1	2	epitope; mouse metabolite
+Compound::CHEBI_141553	CHEBI_141553	1	0	
+Compound::CHEBI_149732	CHEBI_149732	1	0	
+Compound::CHEBI_78102	CHEBI_78102	1	0	
+Compound::CHEBI_136415	CHEBI_136415	1	0	
+Compound::CHEBI_132015	CHEBI_132015	1	0	
+Compound::CHEBI_17632	CHEBI_17632	1	0	
+Compound::CHEBI_74898	CHEBI_74898	1	0	
+Compound::CHEBI_143532	CHEBI_143532	1	0	
+Compound::CHEBI_75139	CHEBI_75139	1	0	
+Compound::CHEBI_78104	CHEBI_78104	1	0	
+Compound::CHEBI_73871	CHEBI_73871	1	0	
+Compound::CHEBI_84634	CHEBI_84634	1	1	human metabolite
+Compound::CHEBI_77417	CHEBI_77417	1	0	
+Compound::CHEBI_147362	CHEBI_147362	1	1	human metabolite
+Compound::CHEBI_146184	CHEBI_146184	1	0	
+Compound::CHEBI_72831	CHEBI_72831	1	0	
+Compound::CHEBI_141179	CHEBI_141179	1	0	
+Compound::CHEBI_143530	CHEBI_143530	1	0	
+Compound::CHEBI_77080	CHEBI_77080	1	0	
+Compound::CHEBI_78101	CHEBI_78101	1	0	
+Compound::CHEBI_140347	CHEBI_140347	1	0	
+Compound::CHEBI_17399	CHEBI_17399	1	3	Escherichia coli metabolite; human metabolite; mouse metabolite
+Compound::CHEBI_88752	CHEBI_88752	1	1	human blood serum metabolite
+Compound::CHEBI_76283	CHEBI_76283	1	2	human metabolite; plant metabolite
+Compound::CHEBI_138078	CHEBI_138078	1	0	
+Compound::CHEBI_138299	CHEBI_138299	1	0	
+Compound::CHEBI_134626	CHEBI_134626	1	0	
+Compound::CHEBI_78369	CHEBI_78369	1	0	
+Compound::CHEBI_87695	CHEBI_87695	1	0	
+Compound::CHEBI_83955	CHEBI_83955	1	0	
+Compound::CHEBI_55469	CHEBI_55469	1	0	
+Compound::CHEBI_87373	CHEBI_87373	1	1	fungal metabolite
+Compound::CHEBI_143094	CHEBI_143094	1	0	
+Compound::CHEBI_167174	CHEBI_167174	1	0	
+Compound::CHEBI_78045	CHEBI_78045	1	0	
+Compound::CHEBI_137688	CHEBI_137688	1	0	
+Compound::CHEBI_136992	CHEBI_136992	1	1	human xenobiotic metabolite
+Compound::CHEBI_74261	CHEBI_74261	1	0	
+Compound::CHEBI_57843	CHEBI_57843	1	0	
+Compound::CHEBI_84720	CHEBI_84720	1	1	mouse metabolite
+Compound::CHEBI_141606	CHEBI_141606	1	0	
+Compound::CHEBI_132019	CHEBI_132019	1	0	
+Compound::CHEBI_84760	CHEBI_84760	1	0	
+Compound::CHEBI_84840	CHEBI_84840	1	0	
+Compound::CHEBI_82924	CHEBI_82924	1	0	
+Compound::CHEBI_15688	CHEBI_15688	1	1	metabolite
+Compound::CHEBI_139611	CHEBI_139611	1	0	
+Compound::CHEBI_77694	CHEBI_77694	1	0	
+Compound::CHEBI_137386	CHEBI_137386	1	0	
+Compound::CHEBI_138145	CHEBI_138145	1	0	
+Compound::CHEBI_57320	CHEBI_57320	1	0	
+Compound::CHEBI_58639	CHEBI_58639	1	0	
+Compound::CHEBI_74313	CHEBI_74313	1	0	
+Compound::CHEBI_90380	CHEBI_90380	1	0	
+Compound::CHEBI_83257	CHEBI_83257	1	0	
+Compound::CHEBI_133084	CHEBI_133084	1	1	human metabolite
+Compound::CHEBI_141604	CHEBI_141604	1	0	
+Compound::CHEBI_83939	CHEBI_83939	1	0	
+Compound::CHEBI_142723	CHEBI_142723	1	0	
+Compound::CHEBI_90720	CHEBI_90720	1	0	
+Compound::CHEBI_141555	CHEBI_141555	1	0	
+Compound::CHEBI_84786	CHEBI_84786	1	1	mouse metabolite
+Compound::CHEBI_83940	CHEBI_83940	1	0	
+Compound::CHEBI_90801	CHEBI_90801	1	1	human xenobiotic metabolite
+Compound::CHEBI_147351	CHEBI_147351	1	4	antihypertensive agent; cardioprotective agent; human metabolite; rat metabolite
+Compound::CHEBI_145033	CHEBI_145033	1	0	
+Compound::CHEBI_75301	CHEBI_75301	1	0	
+Compound::CHEBI_27707	CHEBI_27707	1	1	epitope
+Compound::CHEBI_139048	CHEBI_139048	1	0	
+Compound::CHEBI_142198	CHEBI_142198	1	0	
+Compound::CHEBI_75203	CHEBI_75203	1	0	
+Compound::CHEBI_81013	CHEBI_81013	1	1	human metabolite
+Compound::CHEBI_75031	CHEBI_75031	1	0	
+Compound::CHEBI_82927	CHEBI_82927	1	1	mouse metabolite
+Compound::CHEBI_140328	CHEBI_140328	1	0	
+Compound::CHEBI_60242	CHEBI_60242	1	0	
+Compound::CHEBI_75233	CHEBI_75233	1	0	
+Compound::CHEBI_84842	CHEBI_84842	1	0	
+Compound::CHEBI_139278	CHEBI_139278	1	0	
+Compound::CHEBI_155851	CHEBI_155851	1	0	
+Compound::CHEBI_90618	CHEBI_90618	1	0	
+Compound::CHEBI_28944	CHEBI_28944	1	0	
+Compound::CHEBI_142694	CHEBI_142694	1	0	
+Compound::CHEBI_15678	CHEBI_15678	1	1	mouse metabolite
+Compound::CHEBI_74292	CHEBI_74292	1	0	
+Compound::CHEBI_13757	CHEBI_13757	1	0	
+Compound::CHEBI_144583	CHEBI_144583	1	0	
+Compound::CHEBI_65214	CHEBI_65214	1	0	
+Compound::CHEBI_132014	CHEBI_132014	1	0	
+Compound::CHEBI_64862	CHEBI_64862	1	0	
+Compound::CHEBI_83739	CHEBI_83739	1	0	
+Compound::CHEBI_87831	CHEBI_87831	1	0	
+Compound::CHEBI_134019	CHEBI_134019	1	0	
+Compound::CHEBI_77754	CHEBI_77754	1	0	
+Compound::CHEBI_78484	CHEBI_78484	1	0	
+Compound::CHEBI_74506	CHEBI_74506	1	0	
+Compound::CHEBI_145343	CHEBI_145343	1	0	
+Compound::CHEBI_78474	CHEBI_78474	1	0	
+Compound::CHEBI_15852	CHEBI_15852	1	1	human metabolite
+Compound::CHEBI_140532	CHEBI_140532	1	0	
+Compound::CHEBI_137458	CHEBI_137458	1	0	
+Compound::CHEBI_38833	CHEBI_38833	1	0	
+Compound::CHEBI_147381	CHEBI_147381	1	1	human metabolite
+Compound::CHEBI_138318	CHEBI_138318	1	0	
+Compound::CHEBI_62286	CHEBI_62286	1	0	
+Compound::CHEBI_82628	CHEBI_82628	1	0	
+Compound::CHEBI_146277	CHEBI_146277	1	0	
+Compound::CHEBI_87051	CHEBI_87051	1	1	human metabolite
+Compound::CHEBI_68671	CHEBI_68671	1	0	
+Compound::CHEBI_138211	CHEBI_138211	1	0	
+Compound::CHEBI_91301	CHEBI_91301	1	0	
+Compound::CHEBI_83562	CHEBI_83562	1	0	
+Compound::CHEBI_90856	CHEBI_90856	1	0	
+Compound::CHEBI_52640	CHEBI_52640	1	0	
+Compound::CHEBI_74443	CHEBI_74443	1	0	
+Compound::CHEBI_83550	CHEBI_83550	1	0	
+Compound::CHEBI_64757	CHEBI_64757	1	1	metabolite
+Compound::CHEBI_74339	CHEBI_74339	1	0	
+Compound::CHEBI_143623	CHEBI_143623	1	0	
+Compound::CHEBI_139580	CHEBI_139580	1	0	
+Compound::CHEBI_147417	CHEBI_147417	1	0	
+Compound::CHEBI_37568	CHEBI_37568	1	1	human metabolite
+Compound::CHEBI_145187	CHEBI_145187	1	0	
+Compound::CHEBI_84490	CHEBI_84490	1	0	
+Compound::CHEBI_15754	CHEBI_15754	1	1	human metabolite
+Compound::CHEBI_145035	CHEBI_145035	1	0	
+Compound::CHEBI_90772	CHEBI_90772	1	0	
+Compound::CHEBI_157645	CHEBI_157645	1	0	
+Compound::CHEBI_132021	CHEBI_132021	1	0	
+Compound::CHEBI_76202	CHEBI_76202	1	0	
+Compound::CHEBI_75205	CHEBI_75205	1	0	
+Compound::CHEBI_138031	CHEBI_138031	1	0	
+Compound::CHEBI_87438	CHEBI_87438	1	0	
+Compound::CHEBI_16784	CHEBI_16784	1	0	
+Compound::CHEBI_91121	CHEBI_91121	1	0	
+Compound::CHEBI_84492	CHEBI_84492	1	0	
+Compound::CHEBI_145424	CHEBI_145424	1	0	
+Compound::CHEBI_77612	CHEBI_77612	1	1	human metabolite
+Compound::CHEBI_136057	CHEBI_136057	1	0	
+Compound::CHEBI_134225	CHEBI_134225	1	0	
+Compound::CHEBI_77895	CHEBI_77895	1	0	
+Compound::CHEBI_58537	CHEBI_58537	1	0	
+Compound::CHEBI_72832	CHEBI_72832	1	0	
+Compound::CHEBI_157649	CHEBI_157649	1	0	
+Compound::CHEBI_145803	CHEBI_145803	1	0	
+Compound::CHEBI_138008	CHEBI_138008	1	0	
+Compound::CHEBI_136650	CHEBI_136650	1	0	
+Compound::CHEBI_143531	CHEBI_143531	1	0	
+Compound::CHEBI_138919	CHEBI_138919	1	4	anti-inflammatory agent; antioxidant; human xenobiotic metabolite; marine metabolite
+Compound::CHEBI_83358	CHEBI_83358	1	1	mouse metabolite
+Compound::CHEBI_78488	CHEBI_78488	1	0	
+Compound::CHEBI_37448	CHEBI_37448	1	0	
+Compound::CHEBI_87605	CHEBI_87605	1	1	human urinary metabolite
+Compound::CHEBI_82921	CHEBI_82921	1	0	
+Compound::CHEBI_78084	CHEBI_78084	1	0	
+Compound::CHEBI_140182	CHEBI_140182	1	1	drug metabolite
+Compound::CHEBI_73850	CHEBI_73850	1	0	
+Compound::CHEBI_74967	CHEBI_74967	1	0	
+Compound::CHEBI_74311	CHEBI_74311	1	0	
+Compound::CHEBI_87677	CHEBI_87677	1	0	
+Compound::CHEBI_57381	CHEBI_57381	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_16723	CHEBI_16723	1	2	Saccharomyces cerevisiae metabolite; human metabolite
+Compound::CHEBI_90770	CHEBI_90770	1	0	
+Compound::CHEBI_76460	CHEBI_76460	1	0	
+Compound::CHEBI_77830	CHEBI_77830	1	0	
+Compound::CHEBI_58655	CHEBI_58655	1	0	
+Compound::CHEBI_78601	CHEBI_78601	1	0	
+Compound::CHEBI_133398	CHEBI_133398	1	0	
+Compound::CHEBI_78103	CHEBI_78103	1	0	
+Compound::CHEBI_167547	CHEBI_167547	1	0	
+Compound::CHEBI_18145	CHEBI_18145	1	10	EC 2.7.11.13 (protein kinase C) inhibitor; algal metabolite; antiatherogenic agent; anticoagulant; antioxidant; antiviral agent; immunomodulator; micronutrient; nutraceutical; plant metabolite
+Compound::CHEBI_132255	CHEBI_132255	1	7	EC 3.5.1.99 (fatty acid amide hydrolase) inhibitor; anti-inflammatory agent; anticonvulsant; antioxidant; capsaicin receptor antagonist; human metabolite; signalling molecule
+Compound::CHEBI_78100	CHEBI_78100	1	0	
+Compound::CHEBI_146187	CHEBI_146187	1	1	human metabolite
+Compound::CHEBI_74937	CHEBI_74937	1	0	
+Compound::CHEBI_64077	CHEBI_64077	1	0	
+Compound::CHEBI_139051	CHEBI_139051	1	0	
+Compound::CHEBI_142768	CHEBI_142768	1	0	
+Compound::CHEBI_49298	CHEBI_49298	1	0	
+Compound::CHEBI_16802	CHEBI_16802	1	0	
+Compound::CHEBI_69080	CHEBI_69080	1	1	plant metabolite
+Compound::CHEBI_74293	CHEBI_74293	1	0	
+Compound::CHEBI_77833	CHEBI_77833	1	0	
+Compound::CHEBI_75028	CHEBI_75028	1	0	
+Compound::CHEBI_132087	CHEBI_132087	1	0	
+Compound::CHEBI_28537	CHEBI_28537	1	0	
+Compound::CHEBI_74902	CHEBI_74902	1	0	
+Compound::CHEBI_74909	CHEBI_74909	1	0	
+Compound::CHEBI_142612	CHEBI_142612	1	0	
+Compound::CHEBI_77891	CHEBI_77891	1	0	
+Compound::CHEBI_76177	CHEBI_76177	1	0	
+Compound::CHEBI_72830	CHEBI_72830	1	0	
+Compound::CHEBI_137497	CHEBI_137497	1	0	
+Compound::CHEBI_78602	CHEBI_78602	1	0	
+Compound::CHEBI_41847	CHEBI_41847	1	0	
+Compound::CHEBI_75208	CHEBI_75208	1	0	
+Compound::CHEBI_139230	CHEBI_139230	1	0	
+Compound::CHEBI_142798	CHEBI_142798	1	0	
+Compound::CHEBI_74167	CHEBI_74167	1	0	
+Compound::CHEBI_87653	CHEBI_87653	1	1	human xenobiotic metabolite
+Compound::CHEBI_57946	CHEBI_57946	1	2	human metabolite; plant metabolite
+Compound::CHEBI_137687	CHEBI_137687	1	0	
+Compound::CHEBI_87171	CHEBI_87171	1	0	
+Compound::CHEBI_147364	CHEBI_147364	1	2	histamine releasing agent; human metabolite
+Compound::CHEBI_61417	CHEBI_61417	1	0	
+Compound::CHEBI_147394	CHEBI_147394	1	0	
+Compound::CHEBI_75845	CHEBI_75845	1	0	
+Compound::CHEBI_167480	CHEBI_167480	1	0	
+Compound::CHEBI_58252	CHEBI_58252	1	0	
+Compound::CHEBI_149701	CHEBI_149701	1	0	
+Compound::CHEBI_90768	CHEBI_90768	1	0	
+Compound::CHEBI_29242	CHEBI_29242	1	0	
+Compound::CHEBI_133399	CHEBI_133399	1	0	
+Compound::CHEBI_84788	CHEBI_84788	1	0	
+Compound::CHEBI_71304	CHEBI_71304	1	0	
+Compound::CHEBI_156406	CHEBI_156406	1	0	
+Compound::CHEBI_58550	CHEBI_58550	1	1	human metabolite
+Compound::CHEBI_90858	CHEBI_90858	1	0	
+Compound::CHEBI_15850	CHEBI_15850	1	0	
+Compound::CHEBI_75847	CHEBI_75847	1	1	mouse metabolite
+Compound::CHEBI_149549	CHEBI_149549	1	0	
+Compound::CHEBI_15963	CHEBI_15963	1	3	Daphnia magna metabolite; human metabolite; plant metabolite
+Compound::CHEBI_144950	CHEBI_144950	1	0	
+Compound::CHEBI_78429	CHEBI_78429	1	0	
+Compound::CHEBI_133403	CHEBI_133403	1	0	
+Compound::CHEBI_133968	CHEBI_133968	1	0	
+Compound::CHEBI_142691	CHEBI_142691	1	0	
+Compound::CHEBI_77548	CHEBI_77548	1	0	
+Compound::CHEBI_79220	CHEBI_79220	1	0	
+Compound::CHEBI_77786	CHEBI_77786	1	0	
+Compound::CHEBI_76590	CHEBI_76590	1	0	
+Compound::CHEBI_26386	CHEBI_26386	1	0	
+Compound::CHEBI_16254	CHEBI_16254	1	1	human metabolite
+Compound::CHEBI_133509	CHEBI_133509	1	0	
+Compound::CHEBI_85415	CHEBI_85415	1	0	
+Compound::CHEBI_32391	CHEBI_32391	1	1	human metabolite

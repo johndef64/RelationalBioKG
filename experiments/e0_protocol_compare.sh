@@ -23,12 +23,18 @@
 # optimiser step per epoch, so DistMult is run on a small learning-rate grid (CMP_DISTMULT_LRS):
 # with the GNN learning rate (1e-3) it barely trains and would be an unfairly weak baseline.
 #
-# MODES:  pair   -> v1, v2, v1_fixsplit            (minimum: old vs new)
+# MODES:  quick  -> v2 only, plus the baselines    (sanity check of a NEW target relation before
+#                                                   spending a day on the HPO: is the model above
+#                                                   the popularity floor, and where is DistMult?)
+#         pair   -> v1, v2, v1_fixsplit            (minimum: old vs new protocol)
 #         ladder -> all six variants (default)     (attributes the effect of each change)
+#
+# CMP_CONFIG overrides the tuned config used for every variant (default: the v1-tuned one).
 #
 # USAGE:
 #   bash experiments/e0_protocol_compare.sh                    # ladder, both tasks, rgcn+compgcn
 #   bash experiments/e0_protocol_compare.sh pair
+#   TASKS=DTI CMP_CONFIG=PKT-DTI-best-v2 bash experiments/e0_protocol_compare.sh quick
 #   TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 bash experiments/e0_protocol_compare.sh
 #   python experiments/protocol_compare_summary.py             # table (also run at the end)
 #
@@ -70,9 +76,10 @@ flags_of () {
 }
 
 case "$MODE" in
+  quick)  VARIANTS="v2" ;;                      # sanity check on a new target relation: v2 + baselines
   pair)   VARIANTS="v1 v2 v1_fixsplit" ;;
   ladder) VARIANTS="v1 v2 v1_fixsplit s1_selectM s2_negatives s3_fullgraph" ;;
-  *) echo "usage: $0 [pair|ladder]"; exit 1 ;;
+  *) echo "usage: $0 [quick|pair|ladder]"; exit 1 ;;
 esac
 
 tsv_of () { [ "$1" = "$TASK_A" ] && echo "$TSV_A" || echo "$TSV_B"; }
@@ -97,7 +104,9 @@ run_variant () {   # $1 task  $2 model  $3 variant  $4 config  $5.. flags
 
 echo "[E0] mode=$MODE tasks='$TASKS' models='$CMP_MODELS' runs=$CMP_RUNS epochs=$CMP_EPOCHS variants='$VARIANTS'"
 for task in $TASKS; do
-  cfg="$(PROTOCOL=v1 resolve_config "$task")"      # configs tuned under v1 for BOTH sides
+  # protocol comparison uses the v1-tuned configs on both sides (conservative for v2);
+  # CMP_CONFIG overrides it, e.g. when checking a new target relation with the best config available
+  cfg="${CMP_CONFIG:-$(PROTOCOL=v1 resolve_config "$task")}"
 
   if [ "$CMP_BASELINES" = "1" ]; then
     pop_prefix="${CMP_DIR}/e0_${task}_popularity_baseline"

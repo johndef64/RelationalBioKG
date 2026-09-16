@@ -35,7 +35,8 @@ bash experiments/e2_hpo_sweep.sh B
 # src/models_params.json as PKT-DTI-best / PKT-TREATS-best.
 echo "[E2-tandem] extracting best configs from W&B ..."
 if [ "${PKT_HPO_PROTOCOL:-v2}" = "v2" ]; then SUFFIX="${HPO_SUFFIX:--v2}"; else SUFFIX="${HPO_SUFFIX:-}"; fi
-python experiments/get_best_hpo_config.py --task DTI    --suffix "$SUFFIX" --write || echo "  (skip DTI: run get_best_hpo_config.py manually)"
-python experiments/get_best_hpo_config.py --task TREATS --suffix "$SUFFIX" --write || echo "  (skip TREATS: run get_best_hpo_config.py manually)"
+# NB: --suffix=-v2 (with '='): argparse would read a bare '-v2' as an option, not as a value
+python experiments/get_best_hpo_config.py --task DTI    --suffix="$SUFFIX" --write || echo "  (skip DTI: run get_best_hpo_config.py manually)"
+python experiments/get_best_hpo_config.py --task TREATS --suffix="$SUFFIX" --write || echo "  (skip TREATS: run get_best_hpo_config.py manually)"
 echo "[E2-tandem] done. Best configs saved (experiments/hpo_best/) and injected as PKT-<TASK>-best${SUFFIX}."
 echo "[E2-tandem] Final training:  PROTOCOL=v2 bash experiments/e1_main_training.sh   (resolve_config picks PKT-<TASK>-best${SUFFIX})"

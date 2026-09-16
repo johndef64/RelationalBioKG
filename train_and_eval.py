@@ -786,7 +786,8 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       model_state = torch.load(pretrain_path)
 
   for i in range(runs):
-    run_model_save_path = model_save_path.replace(".pt", f"_run{i}.pt")
+    # --dry_run leaves model_save_path unset: nothing is written, so keep the path as None
+    run_model_save_path = model_save_path.replace(".pt", f"_run{i}.pt") if model_save_path else None
     random_seed = BASE_SEED + i
     set_seed(random_seed)
     print(f'[i] Using random seed {random_seed}')
@@ -928,10 +929,11 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
             best_val_loss = val_loss
             last_improvement_epoch = epoch
             best_epoch = epoch
-            # model is saved only if validation improves
-            torch.save(model.state_dict(), run_model_save_path)
-            print("[i] Best model updated.")
-            best_model_found = True
+            # model is saved only if validation improves (and only when not a dry run)
+            if run_model_save_path:
+              torch.save(model.state_dict(), run_model_save_path)
+              print("[i] Best model updated.")
+              best_model_found = True
           elif early_stopping:
             if (epoch - last_improvement_epoch) >= patience:
               print(f"[i] Early stopping triggered at epoch {epoch} (patience={patience} epochs, min_delta={min_delta}).")
@@ -1043,10 +1045,11 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       "average_metrics": avg_metrics,
       "std_metrics": std_metrics
   }
-  json_save_path = model_save_path.replace(".pt", "_metrics.json")
-  with open(json_save_path, "w") as f:
-      json.dump(result_to_save, f, indent=4)
-  # print(f"Saved metrics to {json_save_path}")
+  if model_save_path:      # --dry_run writes nothing to disk
+    json_save_path = model_save_path.replace(".pt", "_metrics.json")
+    with open(json_save_path, "w") as f:
+        json.dump(result_to_save, f, indent=4)
+    # print(f"Saved metrics to {json_save_path}")
 
   return None
 

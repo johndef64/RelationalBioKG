@@ -5,10 +5,16 @@ Reproduces the PathogenKG experimental pipeline on the two PKT subgraphs built b
 relation) change. Run on the **server** (env `gnn`, a real GPU — see the TDR note below).
 
 ## Tasks
-| id | target relation | dataset | `--task` | target node type |
-|---|---|---|---|---|
-| **A** | drug→protein (DTI) | `dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip` | `DTI` | `Protein` |
-| **B** | drug→disease (repurposing) | `dataset/PKT_subgraphs/pkt_taskB_treats.tsv.zip` | `TREATS` | `Disease` |
+| id | target relation | edges | dataset | `--task` | target node type |
+|---|---|---:|---|---|---|
+| **A** | drug→protein, pharmacodynamic target | 10,305 | `dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip` | `DTI` | `Protein` |
+| **B** | drug→disease (repurposing) | 168,157 | `dataset/PKT_subgraphs/pkt_taskB_treats.tsv.zip` | `TREATS` | `Disease` |
+
+Both graphs carry three layers of compound--protein evidence: `DTI` (pharmacodynamic targets,
+injected from DrugBank through UniProt cross-references — the Task A target), `DRUG_ADME`
+(metabolising enzymes, transporters, plasma carriers) and `CPI_BIOCHEM` (PheKnowLator's own
+biochemistry: substrates, cofactors, catalysis). The last two are always context. Why the target had
+to be injected: [`TICKET_01_DTI_drug_scope.md`](../TICKET_01_DTI_drug_scope.md).
 
 ## Mapping PathogenKG README → these experiments
 | PathogenKG (paper/README) | repo script | here |
@@ -50,7 +56,13 @@ v2) and exports `PYTHONHASHSEED=0` (without it identical commands gave different
 ## Run order
 ```bash
 # one-time: build the subgraphs (if not already present)
+python analysis/10_build_dti_drugbank.py    # pharmacological layer (needs dataset/DRUGBANK/ + UniProt)
 python analysis/06_build_subgraphs.py
+python analysis/07_build_ablation_subgraphs.py --task A
+python analysis/07_build_ablation_subgraphs.py --task B
+
+# after ANY dataset change: check that every step still runs (a few minutes, CPU)
+bash experiments/smoke_test.sh
 
 # E0 — protocol comparison v1 vs v2 (+ popularity and DistMult baselines). RUN THIS FIRST.
 TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh pair   # minimum
@@ -79,6 +91,27 @@ python analysis/08_build_node_labels.py
 ```
 All knobs (RUNS, EPOCHS, HP_CONFIG, MODELS, …) live in `experiments/config.sh` and can be
 overridden inline, e.g. `RUNS=3 EPOCHS=100 bash experiments/e1_main_training.sh` for a quick pass.
+
+## Context ablation variants (E3)
+
+Built by `analysis/07_build_ablation_subgraphs.py`; every variant keeps the target relation intact,
+so the models differ only in the biology they can see.
+
+| Task A variant | drops | asks |
+|---|---|---|
+| `core_ppi` | everything but PPI | how far the bare interactome gets |
+| `no_ppi` | protein--protein interactions | does the interactome carry the signal? |
+| `no_go` | the three protein--GO relations | does functional annotation carry it? |
+| `no_pathway` | pathway membership | do pathways carry it? |
+| `no_drugctx` | compound--GO / compound--pathway | how much comes from the drug side? |
+| `no_biochem` | `CPI_BIOCHEM` | does PheKnowLator's biochemistry help predict pharmacological targets? |
+
+| Task B variant | drops | asks |
+|---|---|---|
+| `no_pharma` | `DTI` | what does the injected pharmacological layer add to indication prediction? |
+| `no_biochem` | `CPI_BIOCHEM` | same question for the biochemical layer |
+| `no_disease_ctx` | disease--phenotype, gene--disease | how much comes from the disease side? |
+| `no_ppi` / `no_go` / `no_pathway` | as above | |
 
 ## Evaluation protocol
 Edge-level stratified split, multi-seed, focal loss (α=0.25, γ=3.0) + adversarial negative

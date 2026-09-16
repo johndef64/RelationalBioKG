@@ -1,183 +1,223 @@
-# TODO — prossima sessione sul server
+# TODO — sessione sul server (ripartenza dopo il TICKET 01)
 
-Obiettivo per la tesi: **R-GCN e CompGCN battono una baseline DistMult senza GNN**, allenata con lo
-stesso protocollo, sugli stessi dati e sullo stesso split? Tutto il resto (ablation, repurposing)
-viene dopo e usa gli stessi modelli.
+Obiettivo della sessione: ricostruire i dataset con il livello farmacologico, verificare che tutto
+giri, rifare l'HPO del **Task A** (il bersaglio è cambiato) e arrivare alla tabella di E1 per la tesi.
 
-Tutti i comandi si lanciano dalla root del repo. Gli script `experiments/*.sh` attivano da soli
-l'env `gnn` e fissano `PYTHONHASHSEED=0` (senza, run identici davano risultati diversi).
-Contesto e motivazioni: `docs/piano_consolidamento_v2.md`.
+Tutti i comandi dalla root del repo, con l'env `gnn` attivo. Gli script `experiments/*.sh` fissano
+da soli `PYTHONHASHSEED=0`. La versione precedente di questo file è in
+[`TODO_SERVER_legacy.md`](TODO_SERVER_legacy.md).
 
 ---
 
-## 0. Preparazione (una volta)
+## Cosa è cambiato e perché (in breve)
+
+La relazione bersaglio del Task A ereditata da PheKnowLator era **biochimica, non farmacologica**: i
+composti più connessi erano idrogenione, acqua, ATP e magnesio, e coprivano il 31,4% degli archi.
+Predirla significa predire biochimica nota, non medicina. Dettagli e alternative scartate:
+[`TICKET_01_DTI_drug_scope.md`](TICKET_01_DTI_drug_scope.md).
+
+I grafi ora tengono separati tre livelli di evidenza:
+
+| Relazione | Contenuto | Origine | Ruolo |
+|---|---|---|---|
+| `DTI` | bersaglio farmacodinamico, 10.305 archi | DrugBank via UniProt | **bersaglio Task A**, contesto Task B |
+| `DRUG_ADME` | enzimi, trasportatori, proteine plasmatiche, 9.024 archi | DrugBank via UniProt | contesto |
+| `CPI_BIOCHEM` | substrati, cofattori, catalisi, 25.713 archi | PheKnowLator | contesto |
+
+| Cosa | Stato |
+|---|---|
+| HPO v2 **TREATS** | **valido**, il bersaglio non è cambiato — tenerlo |
+| HPO v2 **DTI** | da rifare: era sul bersaglio biochimico |
+| E0 (confronto protocolli) | valido come studio di protocollo, non va rifatto |
+| E1, E3, E4 | da eseguire sui grafi nuovi |
+
+---
+
+## 0. Pulizia e aggiornamento del codice
+
+**Non cancellare** `dataset/PKT/` (il KG grezzo, ~5 GB) né `dataset/DRUGBANK/`: servono per
+ricostruire. Cancella solo i dataset **generati**.
 
 ```bash
-git pull                                   # dopo il tuo commit su main
-bash create_env.sh                         # crea (o aggiorna) l'env "gnn" e lo verifica
-conda activate gnn
-wandb login                                # serve per l'HPO
-ls dataset/PKT_subgraphs/                  # pkt_taskA_dti.tsv.zip, pkt_taskB_treats.tsv.zip, ablation/
+# 0a. se l'HPO del TREATS sta ancora girando, aspetta che finisca
+ps aux | grep -c "[t]uning_hyperparameter.py"      # deve stampare 0
+
+# 0b. salva ciò che non è in git e non è rigenerabile
+tar czf ~/pkt_backup_$(date +%F).tgz experiments/logs docs setup_wandb.sh src/models_params.json
+
+# 0c. elimina i dataset generati
+rm -rf dataset/PKT_subgraphs/ablation
+rm -f  dataset/PKT_subgraphs/pkt_task*.tsv.zip dataset/PKT_subgraphs/pkt_unified.tsv.zip \
+       dataset/PKT_subgraphs/dti_drugbank_edges.tsv
+
+# 0d. aggiorna il codice
+git pull            # se protesta per modifiche locali: git checkout -- <file> e ripeti
+ls dataset/PKT dataset/DRUGBANK    # devono esserci ancora nodes.zip/edges.zip e drug-bank-5110.zip
 ```
 
-### I risultati vecchi (HPO e ablation v1): NON cancellarli, archiviali
+`dataset/PKT_subgraphs/node_labels.tsv` puoi tenerlo: non cambia. Se lo cancelli, si rigenera con
+`python analysis/08_build_node_labels.py`.
 
-Non servono più per le tabelle nuove, ma non vanno buttati: documentano da dove si è partiti e
-alcune config servono ancora.
+---
 
-| Cosa | Dove | Azione |
+## 1. Ricostruzione dei dataset
+
+```bash
+python analysis/10_build_dti_drugbank.py      # livello farmacologico (scarica da UniProt, ~1 min)
+python analysis/06_build_subgraphs.py         # grafi dei due task (~5 min, rilegge il KG grezzo)
+python analysis/07_build_ablation_subgraphs.py --task A
+python analysis/07_build_ablation_subgraphs.py --task B
+```
+
+**Numeri attesi** (se non tornano, fermati):
+
+| | valore |
+|---|---|
+| archi iniettati | 19.329 → `DTI` 10.305 + `DRUG_ADME` 9.024 |
+| Task A | 1.155.994 archi, 69.233 nodi, bersaglio 10.305 |
+| Task B | 1.873.237 archi, 95.111 nodi, bersaglio 168.157 |
+| origine Task A | PheKnowLator 98,33% · DrugBank/UniProt 1,67% |
+| ablation | 7 varianti per task |
+
+Report: `analysis/out/10_dti_drugbank_report.md` e `analysis/out/06_subgraph_stats.md`.
+
+---
+
+## 2. Verifica che tutto giri (obbligatoria, pochi minuti)
+
+```bash
+SMOKE_GPU=1 bash experiments/smoke_test.sh
+```
+Esegue un run minimo di ogni passo: caricamento dati, training dei tre modelli su entrambi i task,
+grafi di ablation, baseline di popolarità, un modello salvato più `drug_eval`, script di riepilogo.
+**Deve chiudere con `FAIL: 0`.** I log dei passi falliti stanno in `experiments/logs/smoke/`.
+
+---
+
+## 2b. Valutazione rapida del nuovo Task A (prima di investire nell'HPO)
+
+Serve a sapere subito se il bersaglio nuovo è imparabile, **prima** di spendere ore di HPO. Usa la
+config migliore disponibile (quella tunata sotto v2 sul vecchio bersaglio: imperfetta ma ragionevole)
+e confronta R-GCN con il pavimento di popolarità e con DistMult su una piccola griglia di learning
+rate. Circa un'ora.
+
+```bash
+TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 CMP_CONFIG=PKT-DTI-best-v2 \
+  bash experiments/e0_protocol_compare.sh quick
+python experiments/protocol_compare_summary.py     # -> experiments/protocol_compare_summary.md
+```
+
+Come leggere la tabella:
+
+| Esito | Significato | Cosa fare |
 |---|---|---|
-| Log dell'ablation parziale v1 e degli altri run v1 | server: `experiments/logs/*.log` | **spostali** in `experiments/logs/archive_v1/` (i nuovi log v2 finiscono in `experiments/logs/v2/`, ma così il resume dell'ablation non li confonde) |
-| Modelli v1 | server: `models/` | cancellabili se serve spazio (non vengono riusati); altrimenti spostali in `models_archive_v1/` |
-| Sweep W&B v1 | progetti `RelationalPKT-DTI-*`, `RelationalPKT-TREATS-*` | **lasciali**: l'HPO v2 scrive in progetti nuovi `...-v2-...` |
-| Report HPO v1 | `experiments/hpo_best/`, `experiments/hpo_report/`, `docs/report_HPO_*.md` | **lasciali** (i file v2 hanno il suffisso `-v2`, niente sovrascritture) |
-| Config tunate v1 | `src/models_params.json` → `PKT-DTI-best`, `PKT-TREATS-best` | **lasciale**: le usa E0 e fanno da fallback |
+| R-GCN e DistMult **sopra** la popolarità, MRR nell'ordine di 0,2–0,5 | il bersaglio è imparabile | prosegui con l'HPO |
+| entrambi **vicini** alla popolarità | il segnale è quasi solo grado dei nodi | fermati e portami la tabella: forse servono più archi bersaglio (mapping per sinonimi/CAS) |
+| metriche quasi perfette (MRR > 0,9) | sospetta ridondanza fra contesto e bersaglio | fermati: `DRUG_ADME` e `DTI` vengono dalla stessa fonte, va verificato che non ci sia sovrapposizione |
 
-```bash
-mkdir -p experiments/logs/archive_v1 && mv experiments/logs/*.log experiments/logs/archive_v1/ 2>/dev/null
-```
+Riferimenti dal vecchio bersaglio (biochimico), utili solo come ordine di grandezza: popolarità
+M 0,478 · MRR 0,117 — R-GCN v2 M 0,741 · MRR 0,436 — DistMult M 0,795 · MRR 0,598.
 
 ---
 
-## 1. E0 — confronto rapido vecchio vs nuovo protocollo (consigliato, poche ore)
+## 3. HPO del Task A (il bersaglio è nuovo)
 
-Serve a una cosa sola: verificare sui dati veri che il protocollo v2 non peggiori rispetto a v1, e
-avere subito un primo confronto con popolarità e DistMult. Usa le config già tunate.
-
-```bash
-TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh pair
-python experiments/protocol_compare_summary.py          # -> experiments/protocol_compare_summary.md
-```
-
-**Check prima di andare avanti:** in `protocol_compare_summary.md` la riga `v2` non deve avere M
-nettamente peggiore di `+ fixed split`. Se succede, fermati e portami la tabella.
-
-> ✅ **Fatto (2026-09-15), check superato.** R-GCN DTI: M 0.534 → 0.741 (p=0.002), MRR 0.127 → 0.436.
-> DistMult (lr 0.03): M 0.795, MRR 0.598 — sopra R-GCN in MRR, sotto in AUROC/AUPRC (confronto non
-> ancora equo: config R-GCN tunata sotto v1, best epoch 292/300). Da qui il tetto epoche alzato nell'HPO v2.
-
-### E0-ladder — quanto pesa ogni correzione (dopo l'HPO, a GPU libera; < 1 ora)
-
-`pair` applica in un colpo solo le 4 modifiche di v2, quindi non dice quale ha prodotto il salto.
-La scala le aggiunge **una alla volta** (split fisso → selezione su val M → negativi espliciti invece
-dell'oversampling → grafo completo → supervisione disgiunta = v2). Le varianti già fatte (`v1`,
-`v1_fixsplit`, `v2`, baseline) vengono saltate: girano solo `s1_selectM`, `s2_negatives`, `s3_fullgraph`.
+Gli sweep vecchi (`RelationalPKT-DTI-v2-*`) riguardano il bersaglio biochimico: **non vanno
+mescolati**. Si usa quindi un suffisso nuovo, `-v2b`.
 
 ```bash
-TASKS=DTI CMP_MODELS=rgcn bash experiments/e0_protocol_compare.sh ladder
-python experiments/protocol_compare_summary.py          # rigenera experiments/protocol_compare_summary.md
+HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_sweep.sh A
+python experiments/get_best_hpo_config.py --task DTI --suffix=-v2b --write
 ```
-- Leggi la colonna **ΔM vs fixsplit** riga per riga: la differenza tra una riga e la precedente è il
-  contributo di quella correzione; guarda anche **best ep.** (atteso: il salto grande a `+ select on val M`).
-- Non lanciarla in parallelo all'HPO (stessa GPU).
-- Facoltativo, più lungo: `bash experiments/e0_protocol_compare.sh` (scala completa, entrambi i task,
-  R-GCN e CompGCN, circa 72 training).
+- 15 trial per modello invece di 30: i 90 trial precedenti dicono già dove sta l'ottimo (lr al bordo
+  superiore, un solo layer di convoluzione, 10 negativi per positivo);
+- tetto 500 epoche e patience 10 valutazioni sono i default di `e2_hpo_sweep.sh` sotto v2;
+- l'estrazione scrive `PKT-DTI-best-v2b` in `src/models_params.json`.
 
-Serve alla sezione metodi della tesi: "contributo di ogni correzione del protocollo". Portami la tabella.
+**Check:** il comando deve stampare `[RelationalPKT-DTI-v2b-<modello>] ranking by
+'best_val_mixed_metric'` per rgcn, compgcn e distmult. Poi:
+```bash
+python -c "import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if 'best-v2' in k})"
+```
+deve mostrare sia `PKT-DTI-best-v2b` sia `PKT-TREATS-best-v2` con tre modelli ciascuno.
+
+Se lo sweep si interrompe: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/resume_hpo.sh A`
+(completa fino a 15 trial per modello, salta i modelli già finiti), poi ripeti l'estrazione.
 
 ---
 
-## 2. HPO v2 — tuning equo di R-GCN, CompGCN **e DistMult** (il passo più lungo)
+## 4. E1 — la tabella per la tesi
+
+Il Task A usa la config nuova, il Task B quella già tunata.
 
 ```bash
-bash experiments/e2_hpo_tandem.sh
+# Task A (config nuova, suffisso -v2b)
+CFG_A=PKT-DTI-best-v2b PROTOCOL=v2 EPOCHS=1500 TASKS=A bash experiments/e1_main_training.sh
+
+# Task B (config -v2 già presente, risolta da sola)
+PROTOCOL=v2 EPOCHS=1500 TASKS=B bash experiments/e1_main_training.sh
+
+python experiments/e1_summary.py        # -> experiments/logs/v2/e1_summary.md
 ```
-- entrambi i task, 3 modelli, 30 trial ciascuno (`PKT_HPO_RUNS=20` per accorciare);
-- tetto di 500 epoche e patience di 10 valutazioni (= 50 epoche). In E0 R-GCN aveva la best epoch a
-  292/300, quindi con le vecchie 200 epoche le GNN sarebbero state troncate. **Check su W&B:** se molti
-  trial GNN hanno `best_epoch` vicino a 500, rilancia con `PKT_HPO_EPOCHS=800`;
-- progetti W&B: `RelationalPKT-DTI-v2-{rgcn,compgcn,distmult}` e `RelationalPKT-TREATS-v2-...`;
-- alla fine scrive da solo le config migliori in `src/models_params.json` come
-  `PKT-DTI-best-v2` e `PKT-TREATS-best-v2`.
+- 12 seed, tre modelli (R-GCN, CompGCN, DistMult), split fisso;
+- tetto alto apposta: nell'HPO quasi tutti i trial finivano sul tetto delle epoche. Controlla nei log
+  che `best_epoch` non sia di nuovo al tetto; se lo è, rilancia con `EPOCHS=3000`;
+- per una passata rapida: aggiungi `RUNS=5`.
 
-Il tandem fa in sequenza: **Task A = DTI** (rgcn → compgcn → distmult), poi **Task B = TREATS**
-(stessi 3 modelli), poi l'estrazione delle config migliori. Se si interrompe:
-
-1. guarda nel terminale/log a che task era arrivato;
-2. riprendi quel task — completa ogni modello fino a 30 trial *terminati* (conta quelli già fatti su
-   W&B, salta i modelli già completi, avvia da zero quelli mai partiti):
-   ```bash
-   bash experiments/resume_hpo.sh A        # se era fermo durante il DTI ...
-   bash experiments/e2_hpo_sweep.sh B      # ... e poi il TREATS, che non era ancora partito
-   # oppure, se era fermo durante il TREATS (DTI già completo):
-   bash experiments/resume_hpo.sh B
-   ```
-   (con `PKT_HPO_RUNS=20 bash ...` se avevi lanciato il tandem con 20 trial);
-3. rifai a mano l'estrazione, che il tandem avrebbe fatto alla fine. Un comando per task: legge da W&B
-   il trial migliore di ogni modello e con `--write` lo salva in `src/models_params.json` come
-   `PKT-DTI-best-v2` / `PKT-TREATS-best-v2` (è la config che poi usa E1); scrive anche
-   `experiments/hpo_best/<TASK>-v2_<modello>_best.json` e la leaderboard `.csv`:
-   ```bash
-   python experiments/get_best_hpo_config.py --task DTI    --suffix -v2 --write
-   python experiments/get_best_hpo_config.py --task TREATS --suffix -v2 --write
-   ```
-**Check:** `python -c "import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if k.endswith('-v2')})"`
-deve mostrare `rgcn`, `compgcn`, `distmult` per entrambi i task.
-
-Nota memoria: CompGCN su TREATS con grafo completo è il caso più pesante; i trial in OOM vengono
-registrati come saltati e lo sweep continua.
+**È il materiale principale della sezione.** Riportami `e1_summary.md` e `.csv`.
 
 ---
 
-## 3. E1 — la tabella per la tesi: DistMult vs R-GCN vs CompGCN
+## 5. E3 — ablation (dopo E1)
+
+Modello di default R-GCN; se E1 dice che CompGCN è migliore, usa `ABL_MODEL=compgcn`.
 
 ```bash
-PROTOCOL=v2 bash experiments/e1_main_training.sh       # 12 seed, entrambi i task, 3 modelli
-python experiments/e1_summary.py                        # -> experiments/logs/v2/e1_summary.md
-```
-- `e1_summary.md` = una tabella per task: metriche in riga, modelli in colonna, media ± sd,
-  migliore in grassetto, p-value di Welch di ogni GNN contro DistMult, miglior run, MRR "warm"
-  (senza triple cold-start).
-- Se lo script avvisa `config ... was not tuned under v2`, l'HPO v2 non è finito: DistMult viene
-  saltato apposta (con il learning rate delle GNN sarebbe una baseline ingiusta).
-- Per accorciare: `PROTOCOL=v2 RUNS=5 bash experiments/e1_main_training.sh`.
-
-**Questo è il materiale principale della sezione.** Portami `e1_summary.md` (e `.csv`).
-
----
-
-## 4. E3 — ablation v2 (dopo E1)
-
-Modello di default R-GCN; se E1 dice che CompGCN è migliore usa `ABL_MODEL=compgcn`.
-```bash
-PROTOCOL=v2 bash experiments/e3_ablation.sh                         # Task A: componenti + contesto
-PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component    # Task B: componenti
+PROTOCOL=v2 bash experiments/e3_ablation.sh                        # Task A: componenti + contesto
+PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component   # Task B: componenti
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI    --out experiments/logs/v2/e3_DTI
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_TREATS --out experiments/logs/v2/e3_TREATS
 ```
-Componenti: focal off · adversarial off · 1 negativo · archi target di nuovo nel grafo · 50%
-undersampling. Contesto (solo DTI): core_ppi / no_ppi / no_go / no_pathway / no_drugctx. 5 seed,
-test appaiati con correzione di Holm. Portami i due `ablation_summary.md`.
+
+Le due varianti di contesto nuove sono quelle che rispondono a una domanda biologica:
+- Task A `no_biochem`: la biochimica di PheKnowLator aiuta a predire i bersagli farmacologici?
+- Task B `no_pharma`: quanto aggiunge il livello farmacologico alla predizione dell'indicazione?
+  (prima dell'iniezione solo il 4,9% dei farmaci con un `TREATS` aveva un bersaglio molecolare, ora
+  il 34,3%).
 
 ---
 
-## 5. E4 — repurposing e revisione esperta (con il modello migliore di E1)
+## 6. E4 — repurposing e revisione esperta
 
 ```bash
-ls -td models/dti_pkt_taskA_dti*  | head      # cartelle di E1, Task A (una per modello)
+ls -td models/dti_pkt_taskA_dti* | head       # cartelle di E1
 ls -td models/treats_pkt_taskB_treats* | head
-ls models/<cartella>                           # il modello si riconosce dai file: rgcn_run*.pt / compgcn_run*.pt / distmult_run*.pt
-bash experiments/e4_repurposing.sh A models/<cartella_task_A>
-bash experiments/e4_repurposing.sh B models/<cartella_task_B>
+CANDIDATE_POOL=relation bash experiments/e4_repurposing.sh A models/<cartella_task_A>
+CANDIDATE_POOL=relation bash experiments/e4_repurposing.sh B models/<cartella_task_B>
 ```
-`drug_eval.py` ora ricostruisce da solo split, grafo e config del run scelto (prima usava sempre
-la config batterica e la relazione `TARGET`, e sui modelli PKT falliva). Per il foglio per
-l'esperto: `experiments/README.md`, sezione "E4 in practice".
 
-**Controllo obbligatorio sul pool dei candidati.** Di default E4 classifica *tutte* le proteine
-(o malattie) del grafo, ma in training i negativi e la valutazione usano solo i nodi che compaiono
-nella relazione target: gli altri non vengono mai "abbassati" e possono salire in cima al ranking
-senza motivo biologico. Nell'output aggregato guarda `top20_outside_relation_pool`:
-- se è basso → va bene il pool completo;
-- se è alto (gran parte dei top-20 sono nodi mai visti nella relazione) → rilancia con
-  `CANDIDATE_POOL=relation bash experiments/e4_repurposing.sh A models/<cartella>` e usa quel ranking
-  (o riportali entrambi) per la revisione esperta.
+- usa **`CANDIDATE_POOL=relation`**: il pool completo contiene tutte le proteine del grafo, comprese
+  quelle che non compaiono mai in una relazione farmacologica, e finirebbero in cima senza motivo;
+  nell'output aggregato controlla comunque `top20_outside_relation_pool`;
+- i composti da mostrare all'esperto vanno scelti **prima** di vedere le predizioni, dalle coorti
+  richieste ai clinici (`docs/richiesta_candidati_validazione_*.md`): serve conoscenza esterna al
+  grafo, altrimenti la validazione è circolare.
 
 ---
 
 ## Cosa riportare indietro
 
-1. `experiments/protocol_compare_summary.md` (E0)
-2. `experiments/logs/v2/e1_summary.md` + `.csv` (E1) ← priorità
-3. `experiments/logs/v2/e3_*/ablation_summary.md` (E3)
-4. le cartelle `models/.../drug_eval_results/` dei modelli usati in E4
+1. `analysis/out/06_subgraph_stats.md` e `analysis/out/10_dti_drugbank_report.md` (dataset ricostruiti)
+2. `experiments/logs/v2/e1_summary.md` + `.csv` ← **priorità**
+3. `experiments/logs/v2/e3_*/ablation_summary.md`
+4. le cartelle `models/.../drug_eval_results/` usate in E4
+
+## Se qualcosa non torna
+
+| Sintomo | Cosa fare |
+|---|---|
+| lo smoke test fallisce | guarda il log del passo in `experiments/logs/smoke/`, non proseguire |
+| `missing dti_drugbank_edges.tsv` | hai saltato il passo 1: `python analysis/10_build_dti_drugbank.py` |
+| UniProt non risponde | il file `dataset/DRUGBANK/uniprot_human_drugbank.tsv` è la cache: se c'è, lo script non scarica nulla |
+| `config ... was not tuned under v2` in E1 | manca la config: rifai l'estrazione del passo 3 |
+| OOM su CompGCN/TREATS | è il caso più pesante: `RUNS=5`, oppure escludi compgcn con `MODELS="rgcn distmult"` |
