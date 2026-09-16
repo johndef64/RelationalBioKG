@@ -1,7 +1,12 @@
 # TODO — sessione sul server (ripartenza dopo il TICKET 01)
 
 Obiettivo della sessione: ricostruire i dataset con il livello farmacologico, verificare che tutto
-giri, rifare l'HPO del **Task A** (il bersaglio è cambiato) e arrivare alla tabella di E1 per la tesi.
+giri, rifare l'HPO di **entrambi i task** sui dati definitivi e arrivare alla tabella di E1 per la tesi.
+
+Tutto ciò che viene prodotto da qui in avanti porta il suffisso **`-v2b`**: progetti W&B
+`RelationalPKT-<TASK>-v2b-<modello>`, config `PKT-<TASK>-best-v2b`. I progetti `-v2` restano
+intatti ma riguardano dati superati (il DTI aveva il bersaglio biochimico, il TREATS il grafo senza
+livello farmacologico) e **non vanno mescolati** con i nuovi.
 
 Tutti i comandi dalla root del repo, con l'env `gnn` attivo. Gli script `experiments/*.sh` fissano
 da soli `PYTHONHASHSEED=0`. La versione precedente di questo file è in
@@ -26,10 +31,15 @@ I grafi ora tengono separati tre livelli di evidenza:
 
 | Cosa | Stato |
 |---|---|
-| HPO v2 **TREATS** | **valido**, il bersaglio non è cambiato — tenerlo |
-| HPO v2 **DTI** | da rifare: era sul bersaglio biochimico |
+| HPO `-v2` **DTI** (90 trial) | superato: era sul bersaglio biochimico. Resta su W&B come documentazione |
+| HPO `-v2` **TREATS** (22 trial R-GCN, M 0,746) | interrotto a un quarto; resta su W&B come riferimento |
 | E0 (confronto protocolli) | valido come studio di protocollo, non va rifatto |
-| E1, E3, E4 | da eseguire sui grafi nuovi |
+| HPO `-v2b`, E1, E3, E4 | da eseguire sui grafi nuovi |
+
+Perché si rifà anche il TREATS: lo sweep era arrivato a 22 trial su 90 (CompGCN e DistMult non erano
+nemmeno partiti), quindi doveva comunque girare per il grosso del lavoro. Tanto vale che giri sul
+grafo definitivo, così i due task sono tunati sugli stessi dati e non serve dichiarare in nota che il
+Task B è stato ottimizzato su un grafo diverso da quello usato in E1.
 
 ---
 
@@ -39,7 +49,8 @@ I grafi ora tengono separati tre livelli di evidenza:
 ricostruire. Cancella solo i dataset **generati**.
 
 ```bash
-# 0a. se l'HPO del TREATS sta ancora girando, aspetta che finisca
+# 0a. ferma l'HPO del TREATS se sta ancora girando (i trial fatti restano su W&B)
+pkill -f tuning_hyperparameter.py
 ps aux | grep -c "[t]uning_hyperparameter.py"      # deve stampare 0
 
 # 0b. salva ciò che non è in git e non è rigenerabile
@@ -120,43 +131,46 @@ M 0,478 · MRR 0,117 — R-GCN v2 M 0,741 · MRR 0,436 — DistMult M 0,795 · M
 
 ---
 
-## 3. HPO del Task A (il bersaglio è nuovo)
-
-Gli sweep vecchi (`RelationalPKT-DTI-v2-*`) riguardano il bersaglio biochimico: **non vanno
-mescolati**. Si usa quindi un suffisso nuovo, `-v2b`.
+## 3. HPO `-v2b` — entrambi i task sui dati definitivi (il passo più lungo)
 
 ```bash
-HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_sweep.sh A
-python experiments/get_best_hpo_config.py --task DTI --suffix=-v2b --write
+HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/e2_hpo_tandem.sh
 ```
-- 15 trial per modello invece di 30: i 90 trial precedenti dicono già dove sta l'ottimo (lr al bordo
-  superiore, un solo layer di convoluzione, 10 negativi per positivo);
-- tetto 500 epoche e patience 10 valutazioni sono i default di `e2_hpo_sweep.sh` sotto v2;
-- l'estrazione scrive `PKT-DTI-best-v2b` in `src/models_params.json`.
+- Task A poi Task B, tre modelli ciascuno, **15 trial per modello** invece di 30: i 112 trial già
+  fatti dicono dove sta l'ottimo (learning rate al bordo superiore della griglia, un solo layer di
+  convoluzione, 10 negativi per positivo);
+- tetto 500 epoche e patience 10 valutazioni (default v2 di `e2_hpo_sweep.sh`);
+- progetti W&B nuovi: `RelationalPKT-DTI-v2b-*` e `RelationalPKT-TREATS-v2b-*`;
+- alla fine il tandem estrae da solo le config e scrive `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`.
 
-**Check:** il comando deve stampare `[RelationalPKT-DTI-v2b-<modello>] ranking by
+**Se l'estrazione automatica fallisce**, rifalla a mano:
+```bash
+python experiments/get_best_hpo_config.py --task DTI    --suffix=-v2b --write
+python experiments/get_best_hpo_config.py --task TREATS --suffix=-v2b --write
+```
+
+**Check:** i comandi devono stampare `[RelationalPKT-<TASK>-v2b-<modello>] ranking by
 'best_val_mixed_metric'` per rgcn, compgcn e distmult. Poi:
 ```bash
-python -c "import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if 'best-v2' in k})"
+python -c "import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if k.endswith('-v2b')})"
 ```
-deve mostrare sia `PKT-DTI-best-v2b` sia `PKT-TREATS-best-v2` con tre modelli ciascuno.
+deve mostrare `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b`, con tre modelli ciascuno.
 
 Se lo sweep si interrompe: `HPO_SUFFIX=-v2b PKT_HPO_RUNS=15 bash experiments/resume_hpo.sh A`
-(completa fino a 15 trial per modello, salta i modelli già finiti), poi ripeti l'estrazione.
+(oppure `B`) completa fino a 15 trial per modello e salta quelli già finiti; poi ripeti l'estrazione.
+
+Nota memoria: CompGCN su TREATS a grafo pieno è il caso più pesante; i trial in OOM vengono
+registrati come saltati e lo sweep continua.
 
 ---
 
 ## 4. E1 — la tabella per la tesi
 
-Il Task A usa la config nuova, il Task B quella già tunata.
+Entrambi i task usano le config `-v2b` appena estratte (`CFG_A` / `CFG_B` le forzano: `resolve_config`
+da solo cercherebbe il suffisso `-v2`). Per allenare un task alla volta: `TASKS=A` oppure `TASKS=B`.
 
 ```bash
-# Task A (config nuova, suffisso -v2b)
-CFG_A=PKT-DTI-best-v2b PROTOCOL=v2 EPOCHS=1500 TASKS=A bash experiments/e1_main_training.sh
-
-# Task B (config -v2 già presente, risolta da sola)
-PROTOCOL=v2 EPOCHS=1500 TASKS=B bash experiments/e1_main_training.sh
-
+CFG_A=PKT-DTI-best-v2b CFG_B=PKT-TREATS-best-v2b PROTOCOL=v2 EPOCHS=1500 bash experiments/e1_main_training.sh
 python experiments/e1_summary.py        # -> experiments/logs/v2/e1_summary.md
 ```
 - 12 seed, tre modelli (R-GCN, CompGCN, DistMult), split fisso;
@@ -170,11 +184,12 @@ python experiments/e1_summary.py        # -> experiments/logs/v2/e1_summary.md
 
 ## 5. E3 — ablation (dopo E1)
 
-Modello di default R-GCN; se E1 dice che CompGCN è migliore, usa `ABL_MODEL=compgcn`.
+Modello di default R-GCN; se E1 dice che CompGCN è migliore, usa `ABL_MODEL=compgcn`. Anche qui la
+config va forzata con `ABL_CONFIG`, altrimenti lo script risolve il suffisso `-v2`, cioè i dati vecchi.
 
 ```bash
-PROTOCOL=v2 bash experiments/e3_ablation.sh                        # Task A: componenti + contesto
-PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component   # Task B: componenti
+ABL_CONFIG=PKT-DTI-best-v2b PROTOCOL=v2 bash experiments/e3_ablation.sh                      # Task A
+ABL_CONFIG=PKT-TREATS-best-v2b PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component   # Task B
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI    --out experiments/logs/v2/e3_DTI
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_TREATS --out experiments/logs/v2/e3_TREATS
 ```
@@ -219,5 +234,5 @@ CANDIDATE_POOL=relation bash experiments/e4_repurposing.sh B models/<cartella_ta
 | lo smoke test fallisce | guarda il log del passo in `experiments/logs/smoke/`, non proseguire |
 | `missing dti_drugbank_edges.tsv` | hai saltato il passo 1: `python analysis/10_build_dti_drugbank.py` |
 | UniProt non risponde | il file `dataset/DRUGBANK/uniprot_human_drugbank.tsv` è la cache: se c'è, lo script non scarica nulla |
-| `config ... was not tuned under v2` in E1 | manca la config: rifai l'estrazione del passo 3 |
+| `config ... was not tuned under v2` in E1 | manca la config `-v2b`: rifai l'estrazione del passo 3, o controlla di aver passato `CFG_A`/`CFG_B` |
 | OOM su CompGCN/TREATS | è il caso più pesante: `RUNS=5`, oppure escludi compgcn con `MODELS="rgcn distmult"` |

@@ -57,7 +57,9 @@ train () {  # $1=tag  $2=tsv  ... extra flags
   fi
   local log="${ABL_LOG_DIR}/e3_${tag}_$(date +%Y%m%d_%H%M%S).log"
   echo "[E3] $tag -> $log"
-  local cfg; cfg="$(resolve_config "$A_TASK")"   # v2: PKT-<TASK>-best-v2 ; v1: PKT-<TASK>-best
+  # ABL_CONFIG forces a config name (e.g. a differently-suffixed HPO such as PKT-DTI-best-v2b);
+  # otherwise v2 resolves PKT-<TASK>-best-v2 and v1 PKT-<TASK>-best
+  local cfg; cfg="${ABL_CONFIG:-$(resolve_config "$A_TASK")}"
   if [ "$PROTOCOL" = "v2" ]; then
     # shellcheck disable=SC2086
     python train_and_eval.py --tsv "$tsv" --task "$A_TASK" --model "$MODEL" --config "$cfg" \
