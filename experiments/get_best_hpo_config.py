@@ -33,8 +33,15 @@ OUT_DIR = Path(__file__).resolve().parent / "hpo_best"
 PARAMS_JSON = Path(__file__).resolve().parents[1] / "src" / "models_params.json"
 
 
-def ranked_runs(api, entity, project, metric):
-    """Return runs sorted by `metric` desc: list of (value, config, summary, name, state)."""
+def ranked_runs(api, entity, project, metric, losses=None):
+    """Return runs sorted by `metric` desc: list of (value, config, summary, name, state).
+
+    `losses`, when a dict is passed in, is filled with the trials that produced NO result:
+    a CUDA_OOM is caught by tuning_hyperparameter.py and logged with status='skipped', which
+    leaves the run in W&B state 'finished'. Counting states would therefore overstate how much
+    of the search space was really explored, and OOM does not strike at random -- it removes the
+    widest configurations first, so the loss is a systematic hole, not a smaller sample.
+    """
     out = []
     try:
         runs = api.runs(f"{entity}/{project}")
@@ -44,6 +51,10 @@ def ranked_runs(api, entity, project, metric):
     for r in runs:
         v = r.summary.get(metric)
         if v is None:
+            if losses is not None:
+                err = r.summary.get("error") or ("skipped" if r.summary.get("status") == "skipped"
+                                                 else f"no '{metric}'")
+                losses[err] = losses.get(err, 0) + 1
             continue
         try:
             out.append((float(v), dict(r.config), dict(r.summary), r.name, r.state))
@@ -77,20 +88,26 @@ def main():
     for model in args.models:
         project = f"RelationalPKT-{args.task}{args.suffix}-{model}"
         # 'auto': v2 sweeps log best_val_mixed_metric (best checkpoint), v1 only val_mixed_metric
+        losses = {}
         if args.metric == "auto":
             metric = "best_val_mixed_metric"
-            runs = ranked_runs(api, args.entity, project, metric)
+            runs = ranked_runs(api, args.entity, project, metric, losses)
             if not runs:
-                metric = "val_mixed_metric"
-                runs = ranked_runs(api, args.entity, project, metric)
+                metric, losses = "val_mixed_metric", {}
+                runs = ranked_runs(api, args.entity, project, metric, losses)
         else:
             metric = args.metric
-            runs = ranked_runs(api, args.entity, project, metric)
+            runs = ranked_runs(api, args.entity, project, metric, losses)
         print(f"\n[{project}] ranking by '{metric}' ...")
         if not runs:
             print(f"  no runs with metric '{metric}' yet — skipping")
             continue
         print(f"  {len(runs)} trials with metric; best = {runs[0][0]:.4f} ({runs[0][3]}, {runs[0][4]})")
+        real_losses = {k: n for k, n in losses.items() if not k.startswith("no '")}
+        if real_losses:
+            print(f"  !! {sum(real_losses.values())} trial(s) produced no result "
+                  f"({', '.join(f'{n} {k}' for k, n in sorted(real_losses.items()))}): the effective "
+                  f"budget for {model} was {len(runs)}. Quote that number, not the requested one.")
 
         # best config -> JSON (+ collect for models_params.json)
         best_val, best_cfg, _, best_name, _ = runs[0]

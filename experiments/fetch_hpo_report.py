@@ -78,9 +78,21 @@ def dump_project(api, entity, project, sort_metric):
         best_path.write_text(json.dumps(
             {"sort_metric": sort_metric, "value": b["_sort"], "run": b["run"], "params": params}, indent=2))
 
-    done = sum(1 for r in rows if r["state"] == "finished")
+    # A trial that hit CUDA_OOM is caught by tuning_hyperparameter.py, logged with status='skipped'
+    # and left in state 'finished' — so counting W&B states would overstate the real budget. What the
+    # sweep actually explored is the number of trials that produced the ranking metric.
+    errors = {}
+    for r in rows:
+        err = r["_summ"].get("error")
+        if err or r["_summ"].get("status") == "skipped":
+            errors[err or "skipped"] = errors.get(err or "skipped", 0) + 1
     best_str = f"{ranked[0]['_sort']:.4f} ({ranked[0]['run']})" if ranked else "n/a"
-    print(f"[{project}] {len(rows)} trials ({done} finished) | best {sort_metric}={best_str}")
+    print(f"[{project}] {len(rows)} trials launched, {len(ranked)} usable | best {sort_metric}={best_str}")
+    if errors:
+        detail = ", ".join(f"{n} {k}" for k, n in sorted(errors.items()))
+        print(f"           !! {sum(errors.values())} trial(s) produced no result: {detail}")
+        print(f"              the effective search budget was {len(ranked)}, not {len(rows)} — "
+              f"report that number, and check WHICH configs were lost (OOM hits the widest ones).")
     print(f"           -> {csv_path.name}" + (f"  +  {best_path.name}" if best_path else ""))
 
 

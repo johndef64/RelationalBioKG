@@ -73,6 +73,14 @@ export V2_SPLIT_SEED="${V2_SPLIT_SEED:-42}"             # = split used by the HP
 export V2_TRAIN_NEG="${V2_TRAIN_NEG:-auto}"
 export V2_DISJOINT="${V2_DISJOINT:-0.3}"
 
+# CUDA allocator: keep one arena that can grow instead of many fixed blocks. Full-batch training on
+# the big context graph allocates a few large tensors per epoch, which fragments the pool: in the DTI
+# -v2b sweep 5 of CompGCN's 30 trials died of CUDA_OOM on a 24 GB card, one of them with 4.26 GiB
+# reserved-but-unallocated (i.e. free memory the allocator could not hand out in one piece). Those
+# trials were all in the WIDE part of the search space (layer_0 = 200), so the loss was not random:
+# CompGCN was left with 25 usable trials and its largest configurations were never evaluated.
+export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
+
 export FLAGS_V1="--early_stopping --patience ${PATIENCE} --negative_sampling filtered --eval_filtered \
 --oversample_rate 5 --undersample_rate 0.5 --alpha 0.25 --gamma 3.0 --alpha_adv 2.0"
 export FLAGS_V2="--early_stopping --patience ${PATIENCE_V2} --negative_sampling filtered --eval_filtered \

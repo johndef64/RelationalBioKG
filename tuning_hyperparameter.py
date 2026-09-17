@@ -234,12 +234,16 @@ if _V2:
 
 # Embedding-only DistMult baseline (no message passing): only optimisation params + embedding size.
 # These override the shared grid for DistMult alone (merged after DISTMULT_DROP), so the baseline can
-# be searched harder than the models it has to beat -- which is the point of having it at all.
-# Widened after the DTI -v2b sweep, where the baseline ended up pinned against TWO grid boundaries:
-# 23/29 trials picked the top learning rate 1e-1 (max M 0.659 there vs 0.589 at 3e-2) and 22/29 the
-# top negative rate 10 (max M 0.659 vs 0.619 at 5). A baseline stuck on the boundary is a baseline
-# that was not given its best shot, and the R-GCN beat it by only 0.015 M. A DistMult trial costs
-# ~45 s, so the honest grid is cheap.
+# be searched at least as hard as the models it has to beat -- which is the point of having it.
+# Widened one notch after the DTI -v2b sweep, where DistMult's best trial sat at the TOP of both
+# grids (learning rate 1e-1, 10 negatives per positive), so the sweep could not say whether anything
+# lay beyond. Read the evidence carefully before quoting it: the Bayesian optimiser spent 23 of 29
+# trials at lr 1e-1 and only 3 at 3e-2, so comparing the two MAXIMA is comparing 23 draws with 3.
+# The medians, which do not depend on the number of draws, are 0.5846 at 3e-2 and 0.5847 at 1e-1 --
+# flat, i.e. the baseline had most likely already reached its plateau and this widening is cheap
+# insurance (a DistMult trial costs ~45 s), not the repair of a demonstrated defect. The GNNs need
+# no such widening: their optimum is INTERIOR (both peak at lr 3e-2 and get worse at 1e-1, R-GCN's
+# median falling 0.626 -> 0.337), so their grid provably brackets the maximum.
 DISTMULT_PARAMS = {
 	'learning_rate': {'values': [1e-2, 3e-2, 1e-1, 3e-1]},
 	'mlp_out_layer': {'values': [64, 128, 200, 400]},

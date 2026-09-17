@@ -33,7 +33,7 @@ I grafi ora tengono separati tre livelli di evidenza:
 |---|---|
 | HPO `-v2` **DTI** (90 trial) | superato: era sul bersaglio biochimico. Resta su W&B come documentazione |
 | HPO `-v2` **TREATS** (22 trial R-GCN, M 0,746) | interrotto a un quarto; resta su W&B come riferimento |
-| E0 (confronto protocolli) | valido come studio di protocollo, non va rifatto |
+| E0 (confronto protocolli) | valido come studio di protocollo, non va rifatto. Ma è stato eseguito solo in modalità `pair`, 3 gradini su 6: il ladder completo manca ed è al passo 3b |
 | HPO `-v2b`, E1, E3, E4 | da eseguire sui grafi nuovi |
 
 Perché si rifà anche il TREATS: lo sweep era arrivato a 22 trial su 90 (CompGCN e DistMult non erano
@@ -195,6 +195,41 @@ rilanciare `e2_hpo_tandem2.sh A` (o `B`): lo sweep W&B riprende dallo stesso swe
 
 Nota memoria: CompGCN su TREATS a grafo pieno è il caso più pesante; i trial in OOM vengono
 registrati come saltati e lo sweep continua.
+
+---
+
+## 3b. E0 ladder completo — attribuzione gradino per gradino (~30 min)
+
+Riempie l'unico buco rimasto nella sezione metodologica del paper. Oggi il paper dice che il
+protocollo consolidato porta M da 0,542 a 0,741, ma non sa dire **quale** dei cinque cambiamenti ha
+prodotto quel salto: la frase è `\tbd{per-step attribution}`. Il motivo è che quel confronto non è
+mai stato eseguito per intero, nemmeno sul bersaglio vecchio: girava in modalità `pair`, che misura
+solo tre gradini (`v1`, `+ split fisso`, `v2`). I quattro intermedi non esistono.
+
+```bash
+TASKS=DTI CMP_MODELS=rgcn CMP_RUNS=3 CMP_CONFIG=PKT-DTI-best-v2b \
+  CMP_DIR=experiments/logs/e0_ladder_v2b bash experiments/e0_protocol_compare.sh ladder
+python experiments/protocol_compare_summary.py --logdir experiments/logs/e0_ladder_v2b --out experiments
+```
+
+- **va lanciato dopo lo step 3**, perché usa `PKT-DTI-best-v2b`, la config appena estratta;
+- sei varianti per tre run, più le baseline. Sul Task A nuovo la variante `v2` ha girato in 38 s per
+  run (il bersaglio è passato da 25.713 a 10.305 archi), quindi si sta sotto la mezz'ora. Sul
+  bersaglio vecchio la stessa variante costava 183 s per run: non usare quelle stime;
+- `CMP_DIR` nuovo apposta: il crash-resume di E0 salterebbe le varianti trovando i log di 2b.
+
+Cosa guadagna il paper: i gradini si leggono come attribuzione. Il primo (`+ split fisso`) non cambia
+il training, quindi il suo Δ misura solo quanta della varianza di v1 era rumore di split; gli ultimi
+(`+ negativi espliciti`, `+ grafo pieno`, `+ supervisione disgiunta`) cambiano cosa il modello vede e
+misurano un miglioramento reale. È la differenza fra "misuravamo male" e "il modello è migliorato", e
+senza la scala non si può affermare né l'una né l'altra.
+
+In più lo misura **sulla relazione farmacologica**, non su quella biochimica ereditata: il paper può
+togliere la premessa "questo confronto è stato fatto prima dell'iniezione, i valori assoluti non sono
+confrontabili".
+
+Se vuoi anche CompGCN aggiungi `CMP_MODELS="rgcn compgcn"` (circa un'ora in più). Sul Task B il
+ladder costa molte ore: non è previsto, e non serve alla tesi che la scala sia misurata due volte.
 
 ---
 
