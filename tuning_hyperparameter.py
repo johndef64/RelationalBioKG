@@ -233,9 +233,17 @@ if _V2:
 	SWEEP_CONFIG['parameters']['learning_rate'] = {'values': [1e-3, 3e-3, 1e-2, 3e-2, 1e-1]}
 
 # Embedding-only DistMult baseline (no message passing): only optimisation params + embedding size.
+# These override the shared grid for DistMult alone (merged after DISTMULT_DROP), so the baseline can
+# be searched harder than the models it has to beat -- which is the point of having it at all.
+# Widened after the DTI -v2b sweep, where the baseline ended up pinned against TWO grid boundaries:
+# 23/29 trials picked the top learning rate 1e-1 (max M 0.659 there vs 0.589 at 3e-2) and 22/29 the
+# top negative rate 10 (max M 0.659 vs 0.619 at 5). A baseline stuck on the boundary is a baseline
+# that was not given its best shot, and the R-GCN beat it by only 0.015 M. A DistMult trial costs
+# ~45 s, so the honest grid is cheap.
 DISTMULT_PARAMS = {
-	'learning_rate': {'values': [3e-3, 1e-2, 3e-2, 1e-1]},
+	'learning_rate': {'values': [1e-2, 3e-2, 1e-1, 3e-1]},
 	'mlp_out_layer': {'values': [64, 128, 200, 400]},
+	'train_negative_rate': {'values': [5, 10, 20]},
 }
 DISTMULT_DROP = ['conv_layer_num', 'layer_0', 'layer_1', 'layer_2', 'num_bases', 'opn', 'dropout']
 

@@ -66,7 +66,9 @@ mkdir -p "$CMP_DIR"
 F_V1="$FLAGS_V1 --warm_eval"
 F_FIX="$F_V1 --split_seed ${V2_SPLIT_SEED}"
 F_S1="$F_FIX --select_metric mixed --patience ${PATIENCE_V2}"
-F_S2="$F_S1 --oversample_rate 1 --train_negative_rate ${V2_TRAIN_NEG}"
+# pinned to 5, not ${V2_TRAIN_NEG}: this ladder isolates PROTOCOL changes, so the rung must mean
+# "5 explicit negatives" for every variant, not "whatever the config happened to tune"
+F_S2="$F_S1 --oversample_rate 1 --train_negative_rate 5"
 F_S3="$F_S2 --undersample_rate 1.0"
 F_V2="$F_S3 --disjoint_supervision ${V2_DISJOINT}"
 

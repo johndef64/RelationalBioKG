@@ -65,7 +65,12 @@ export PATIENCE="${PATIENCE:-20}"
 # Every v2 change is a train_and_eval.py flag whose default reproduces v1.
 export PATIENCE_V2="${PATIENCE_V2:-50}"                 # epochs without val-M improvement
 export V2_SPLIT_SEED="${V2_SPLIT_SEED:-42}"             # = split used by the HPO
-export V2_TRAIN_NEG="${V2_TRAIN_NEG:-5}"                # = what x5 oversampling effectively gave
+# 'auto' = the value the HPO tuned for this model, read back from the config (see
+# resolve_train_negative_rate in train_and_eval.py). It is a swept hyperparameter: on DTI -v2b the
+# best R-GCN and the best DistMult both picked 10, so pinning it to 5 here would have made E1 train
+# a configuration the HPO never chose. Configs with no tuned value fall back to 5 (= what the legacy
+# x5 oversampling effectively gave). Set V2_TRAIN_NEG=5 to force the old fixed behaviour.
+export V2_TRAIN_NEG="${V2_TRAIN_NEG:-auto}"
 export V2_DISJOINT="${V2_DISJOINT:-0.3}"
 
 export FLAGS_V1="--early_stopping --patience ${PATIENCE} --negative_sampling filtered --eval_filtered \

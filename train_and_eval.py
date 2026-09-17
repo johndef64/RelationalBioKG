@@ -303,6 +303,30 @@ def get_dataset(tsv_path, task, validation_size, test_size, quiet, seed, oversam
     train_val_triplets, test_triplets, train_val_test_triplets, edge_index, \
     ent2id, relation2id
 
+def resolve_train_negative_rate(args):
+  """--train_negative_rate as an int, or 'auto' = the value the HPO tuned for this model.
+
+  The number of negatives per positive is a swept hyperparameter, so pinning it to a constant in
+  the experiment flags would evaluate a configuration the HPO never selected: on DTI -v2b the best
+  R-GCN and the best DistMult both chose 10, while the flags said 5. 'auto' reads it back from
+  --config; configs tuned before this parameter existed have no such key and fall back to
+  --train_negative_rate_default (5, what the legacy x5 oversampling effectively gave).
+  """
+  v = args.train_negative_rate
+  if v is None:
+    return None
+  if v != 'auto':
+    return int(v)
+  try:
+    with open(models_params_path, 'r') as f:
+      params = json.load(f)[args.config][args.model]
+  except (OSError, KeyError, json.JSONDecodeError):
+    params = {}
+  rate = params.get('train_negative_rate', args.train_negative_rate_default)
+  print(f"[train_negative_rate] auto -> {rate} "
+        f"({'from config ' + args.config if 'train_negative_rate' in params else 'config has no tuned value, default'})")
+  return int(rate)
+
 def get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config_name = "pathogen31-128"):
 
   with open(models_params_path, 'r') as f:
@@ -1092,9 +1116,13 @@ if __name__ == '__main__':
   parser.add_argument('--select_metric', type=str, default='loss', choices=['loss', 'mixed'],
                       help="Checkpoint selection and early stopping on validation 'loss' (legacy) or "
                            "'mixed' = M = 0.2 AUROC + 0.4 AUPRC + 0.4 MRR (same criterion as the HPO).")
-  parser.add_argument('--train_negative_rate', type=int, default=None,
-                      help='Negatives per positive in TRAINING only (val/test keep --negative_rate). '
-                           'Default None = same as --negative_rate.')
+  parser.add_argument('--train_negative_rate', type=str, default=None,
+                      help="Negatives per positive in TRAINING only (val/test keep --negative_rate). "
+                           "An integer, or 'auto' to use the value the HPO stored in --config for this "
+                           "model (falling back to --train_negative_rate_default when the config predates "
+                           "the tuning of this parameter). Default None = same as --negative_rate.")
+  parser.add_argument('--train_negative_rate_default', type=int, default=5,
+                      help="Fallback for --train_negative_rate auto when the config has no tuned value.")
   parser.add_argument('--disjoint_supervision', type=float, default=0.0,
                       help='Fraction of training target edges removed from the message-passing graph at '
                            'each epoch and used only as loss positives (0 = legacy: all in the graph).')
@@ -1204,5 +1232,5 @@ if __name__ == '__main__':
       evaluate_every, negative_rate, model_save_path, oversample_rate, undersample_rate, \
       pretrain_epochs, freeze_base, alpha, gamma, alpha_adv, early_stopping, min_delta, eval_filtered,
       split_seed=args.split_seed, select_metric=args.select_metric,
-      train_negative_rate=args.train_negative_rate, disjoint_supervision=args.disjoint_supervision,
+      train_negative_rate=resolve_train_negative_rate(args), disjoint_supervision=args.disjoint_supervision,
       detect_anomaly=args.detect_anomaly, warm_eval=args.warm_eval, learning_rate=args.learning_rate)
