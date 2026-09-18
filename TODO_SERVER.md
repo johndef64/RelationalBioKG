@@ -235,19 +235,52 @@ ladder costa molte ore: non è previsto, e non serve alla tesi che la scala sia 
 
 ## 4. E1 — la tabella per la tesi
 
-Entrambi i task usano le config `-v2b` appena estratte (`CFG_A` / `CFG_B` le forzano: `resolve_config`
-da solo cercherebbe il suffisso `-v2`). Per allenare un task alla volta: `TASKS=A` oppure `TASKS=B`.
+Un comando solo, `e1_run_v2b.sh`, che fa entrambi i task, tutti i modelli e il summary finale.
+**Va lanciato dentro tmux**: sono molte ore e una disconnessione ucciderebbe il processo.
 
 ```bash
-CFG_A=PKT-DTI-best-v2b CFG_B=PKT-TREATS-best-v2b PROTOCOL=v2 EPOCHS=1500 bash experiments/e1_main_training.sh
-python experiments/e1_summary.py        # -> experiments/logs/v2/e1_summary.md
+git pull
+tmux new -s e1
+bash experiments/e1_run_v2b.sh
 ```
-- 12 seed, tre modelli (R-GCN, CompGCN, DistMult), split fisso;
-- tetto alto apposta: nell'HPO quasi tutti i trial finivano sul tetto delle epoche. Controlla nei log
-  che `best_epoch` non sia di nuovo al tetto; se lo è, rilancia con `EPOCHS=3000`;
-- per una passata rapida: aggiungi `RUNS=5`.
+
+Per staccarti: `Ctrl+b` poi `d`. Per rientrare: `tmux attach -t e1`.
+
+Dentro ci sono già suffisso `-v2b`, 12 semi, tre modelli, 1500 epoche e la generazione della tabella.
+Varianti utili:
+
+```bash
+bash experiments/e1_run_v2b.sh A                      # solo Task A, il task economico (~3 h)
+E1_MODELS="rgcn distmult" bash experiments/e1_run_v2b.sh B
+E1_DRY=1 bash experiments/e1_run_v2b.sh               # stampa controlli e piano, non allena niente
+E1_RESUME=0 bash experiments/e1_run_v2b.sh            # rifà tutto ignorando i log esistenti
+```
+
+Tre cose che lo script fa e che il comando grezzo non faceva:
+
+- **preflight**: prima di allenare qualunque cosa verifica che `PKT-DTI-best-v2b` e
+  `PKT-TREATS-best-v2b` esistano con tutti e tre i modelli, che i dataset ci siano, e che il codice
+  sia aggiornato. Quest'ultimo controllo è il più utile: se dimentichi il `git pull`, il preflight
+  se ne accorge e si ferma, invece di allenare per sei ore con 5 negativi invece dei 10 scelti
+  dall'HPO. Se qualcosa manca stampa cosa e non allena niente;
+- **crash-resume**: una coppia (task, modello) il cui log registra già il run finale viene saltata,
+  quindi dopo un crash o un OOM basta rilanciare lo stesso comando;
+- **tolleranza ai guasti**: se un modello fallisce (CompGCN sul TREATS è il caso che rischia l'OOM)
+  gli altri proseguono, e alla fine ti dice quali sono caduti.
+
+Costo: Task A circa 3 ore, Task B fino a 25 nel caso peggiore, meno con l'early stopping.
+
+Da controllare nei log: che `best_epoch` non sia di nuovo contro il tetto. Nell'HPO quasi tutti i
+trial ci finivano, ed è il motivo delle 1500 epoche; se succede ancora, rilancia con `EPOCHS=3000`.
 
 **È il materiale principale della sezione.** Riportami `e1_summary.md` e `.csv`.
+
+Nella tabella, oltre alle metriche solite, trovi due colonne nuove: `dedup_MRR` e
+`dedup_stereo_MRR`, cioè l'MRR calcolato escludendo dal test le triple il cui fatto è già presente
+in training attraverso un nodo ChEBI quasi-duplicato (varianti di carica, idratazione e sale la
+prima; anche gli enantiomeri la seconda). Sul Task A escludono 12 triple su 2.380, quindi saranno
+identiche alle primarie; sul Task B escludono il 7,6% e il 16% del test, e la differenza fra le due
+colonne **è** la misura della fuga.
 
 ---
 
