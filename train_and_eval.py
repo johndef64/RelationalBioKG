@@ -429,14 +429,28 @@ def get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entiti
 
   if config_name not in models_params:
     raise KeyError("[get_model] Neither requested config nor 'default' found in models_params.json")
-  if model_name == 'distmult' and 'distmult' not in models_params[config_name]:
-    # Baseline without message passing: reuse the R-GCN optimisation settings of the same
-    # config (lr, weight decay, reg, ...) with embedding size = mlp_out_layer.
-    base = models_params[config_name].get('rgcn')
-    if base is None:
-      raise KeyError(f"[get_model] config '{config_name}' has neither 'distmult' nor 'rgcn' params")
-    p = dict(base)
-    print(f"[get_model] DistMult baseline: using R-GCN optimisation params of '{config_name}' (dim={p['mlp_out_layer']})")
+  if model_name == 'distmult':
+    # Baseline without message passing: it has no convolution, so its tuned block legitimately has
+    # no conv_layer_num / layer_* / num_bases (the sweep drops them, see DISTMULT_DROP in
+    # tuning_hyperparameter.py). It must therefore NEVER reach the generic branch below, which
+    # reads those keys -- guarding this branch on "the config has no distmult block", as it used
+    # to, meant that a config where DistMult HAD been tuned crashed with KeyError: 'conv_layer_num'.
+    p = models_params[config_name].get('distmult')
+    if p is None:
+      # config predating the tuning of the baseline: fall back to the R-GCN optimisation settings
+      # of the same config (lr, weight decay, reg, ...) with embedding size = mlp_out_layer.
+      base = models_params[config_name].get('rgcn')
+      if base is None:
+        raise KeyError(f"[get_model] config '{config_name}' has neither 'distmult' nor 'rgcn' params")
+      p = dict(base)
+      print(f"[get_model] DistMult baseline: no tuned 'distmult' block in '{config_name}', "
+            f"reusing its R-GCN optimisation params (dim={p['mlp_out_layer']})")
+    else:
+      print(f"[get_model] DistMult baseline: tuned params from '{config_name}': {p}")
+    missing = [k for k in ('mlp_out_layer', 'learning_rate', 'regularization', 'grad_norm',
+                           'weight_decay', 'scheduler_gamma') if k not in p]
+    if missing:
+      raise KeyError(f"[get_model] distmult params of '{config_name}' lack {missing}")
     model = DistMultKGE(num_entities, num_relations + 1, p['mlp_out_layer'], device=device)
     return model, p['learning_rate'], p['regularization'], p['grad_norm'], p['weight_decay'], p['scheduler_gamma']
   if model_name not in models_params[config_name]:
