@@ -1329,7 +1329,9 @@ if __name__ == '__main__':
   else:
     time_stamp      = time.strftime('%Y%m%d_%H%M%S')
     task_clean      = task.lower().replace('-', '_').replace(',', '_')
-    folder_name = task_clean + '_' + dataset_name + '_' + time_stamp
+    # the model name goes in the folder name: without it, telling an R-GCN folder from a
+    # DistMult one means opening params.json, and models/ becomes unreadable after a few runs
+    folder_name = task_clean + '_' + dataset_name + '_' + model.lower() + '_' + time_stamp
     model_save_dir = os.path.join('models', folder_name)
     os.makedirs(model_save_dir, exist_ok=True)
     model_save_path = os.path.join(model_save_dir, f'{model.lower()}.pt')
