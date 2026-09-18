@@ -61,11 +61,21 @@ MODEL_FOLDER  = os.path.join("models", "REPLACE_WITH_MODEL_FOLDER")
 TOPK          = 50          # how deep drug_eval ranks and stores
 REVIEW_TOPK   = 20          # how many per compound actually go to the reviewer (PathogenKG: 20)
 
-# leave empty -> rank ALL compounds; or pin a curated cohort (entity ids), e.g.:
-# CANDIDATES = ["Compound::CHEBI_28918", "Compound::CHEBI_45783", ...]
-# Declare the cohort BEFORE looking at any output, as in PathogenKG (9 compounds with known and
-# diverse mechanisms of action). Reviewing every compound is not a review, it is a spreadsheet.
-CANDIDATES = []
+# Cohort 1 of docs/coorte_validazione_taskA.md: nine drugs with known and diverse mechanisms of
+# action, declared before looking at any model output, on the PathogenKG pattern. The rationale for
+# each, the DrugBank-injection sanity check, and the archived nutraceutical variant (Cohort 2) are
+# in that file. Leave the list empty to rank ALL compounds, which is not a review but a spreadsheet.
+CANDIDATES = [
+    "Compound::CHEBI_50681",  # methotrexate    antimetabolite, DHFR
+    "Compound::CHEBI_64816",  # doxorubicin     topoisomerase II, intercalation
+    "Compound::CHEBI_27899",  # cisplatin       DNA adducts: no classical protein target (stress test)
+    "Compound::CHEBI_38940",  # sunitinib       multi-kinase inhibitor
+    "Compound::CHEBI_45716",  # vorinostat      HDAC inhibitor (cleanest case: 0 ADME proteins)
+    "Compound::CHEBI_9150",   # simvastatin     HMG-CoA reductase
+    "Compound::CHEBI_41879",  # dexamethasone   glucocorticoid receptor
+    "Compound::CHEBI_50122",  # rosiglitazone   PPAR-gamma agonist
+    "Compound::CHEBI_8069",   # phenobarbital   GABA-A channel + textbook CYP inducer (ADME test)
+]
 
 # --- review protocol ---
 BLIND            = True     # False reproduces the old single-sheet behaviour (not recommended)
