@@ -14,10 +14,16 @@ and attaches a rationale, to feed the human expert review (see expert_review_scr
 For a truly external validation (breaking circularity) use a time-split or an unintegrated
 external DB — not this script.
 
-The "tier" here is an AUTOMATIC triage label (not an expert judgement):
-  Tier 1  held-out positive recovered  OR  >=2 independent KG-evidence types
+The "tier" here is an AUTOMATIC triage label (not an expert judgement). In PathogenKG there was
+no such label at all: the model produced the ranking and a domain expert assigned the three
+plausibility tiers from the literature. This one is a KG-grounded triage added on top, and it is
+deliberately built from ONE kind of evidence only:
+  Tier 1  >=2 independent KG-evidence types
   Tier 2  exactly 1 KG-evidence type
   Tier 3  embedding-only (no in-KG rationale — genuine novel hypothesis)
+`held_out_recovered` is kept as a SEPARATE column and is never folded into the tier. Merging the
+two would put the only non-circular quantity in the same bucket as the circular one, which is
+exactly the distinction this module exists to preserve.
 
 Usage:
   python experiments/interpret_predictions.py \
@@ -104,8 +110,9 @@ def evidence_taskB(ctx, drug, pred_disease, known_diseases):
     return ev
 
 
-def tier(is_heldout, ev):
-    if is_heldout or len(ev) >= 2:
+def tier(ev):
+    """KG-evidence triage only. Held-out recovery is reported separately, never merged in here."""
+    if len(ev) >= 2:
         return 1
     if len(ev) == 1:
         return 2
@@ -129,7 +136,7 @@ def annotate(rankings, df, task_type, topk):
                 "confidence": round(float(p["confidence"]), 4),
                 "held_out_recovered": bool(p.get("is_test_target")),
                 "kg_evidence": "+".join(ev) if ev else "-",
-                "n_evidence": len(ev), "auto_tier": tier(p.get("is_test_target", False), ev),
+                "n_evidence": len(ev), "auto_tier": tier(ev),
             })
     return pd.DataFrame(rows), heldout
 
