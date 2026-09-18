@@ -104,6 +104,10 @@ src/kg_autoencoder_complete.pkl
 # PathogenKG paper figures
 figures/
 
+#notes
+notes/
+future_*
+
 # ==========================================
 # Secrets — never commit
 # ==========================================

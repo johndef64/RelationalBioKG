@@ -86,7 +86,7 @@ export FLAGS_V1="--early_stopping --patience ${PATIENCE} --negative_sampling fil
 export FLAGS_V2="--early_stopping --patience ${PATIENCE_V2} --negative_sampling filtered --eval_filtered \
 --oversample_rate 1 --undersample_rate 1.0 --alpha 0.25 --gamma 3.0 --alpha_adv 2.0 \
 --split_seed ${V2_SPLIT_SEED} --select_metric mixed --train_negative_rate ${V2_TRAIN_NEG} \
---disjoint_supervision ${V2_DISJOINT} --warm_eval"
+--disjoint_supervision ${V2_DISJOINT} --warm_eval --dedup_eval"
 
 # PROTOCOL selects the flags used by E1/E3/E4. It stays v1 until the E0 comparison
 # (experiments/e0_protocol_compare.sh) has validated v2 on the server; then set PROTOCOL=v2

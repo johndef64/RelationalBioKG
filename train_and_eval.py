@@ -45,6 +45,7 @@ import warnings
 warnings.simplefilter(action='ignore')
 
 import os
+import re
 import json
 import time
 import torch
@@ -302,6 +303,94 @@ def get_dataset(tsv_path, task, validation_size, test_size, quiet, seed, oversam
     train_triplets, train_index, flattened_features_per_type, val_triplets, \
     train_val_triplets, test_triplets, train_val_test_triplets, edge_index, \
     ent2id, relation2id
+
+# ---------------------------------------------------------------------------
+# Near-duplicate chemical entities (reporting only, never changes training).
+#
+# ChEBI keeps protonation states, hydration states, salts and stereoisomers as SEPARATE
+# classes, so one therapeutic agent can appear as several nodes: methotrexate and
+# methotrexate(2-), warfarin and (R)-warfarin, apraclonidine and apraclonidine hydrochloride.
+# A random edge-level split can therefore put the same fact on both sides, and a test triple
+# whose twin is in training is not a real test of generalisation.
+#
+# We do NOT group these nodes before splitting: the HPO selected its configurations on the
+# current split, so changing it would invalidate that selection. Instead --dedup_eval reports
+# the metrics again on the test triples that have NO twin fact in training, exactly as
+# --warm_eval reports them on the non-cold-start triples. Both are extra columns produced by
+# one extra forward pass of the already-trained model; the primary metrics are untouched.
+#
+# Two groupings are reported, because one of the two is a pharmacological judgement call:
+#   dedup         charge + hydration + salt counterion. Indisputably the same agent.
+#   dedup_stereo  the above plus stereochemical descriptors ((R)/(S)/(+)/(-)/D/L/cis/trans).
+#                 Defensible for indication prediction (warfarin is prescribed as the racemate)
+#                 but not always (omeprazole / esomeprazole are marketed as distinct drugs), so
+#                 it is reported as a sensitivity bound rather than as the headline number.
+# Greek-letter prefixes (alpha/beta/gamma/delta) are deliberately NOT stripped: they usually
+# denote genuinely different compounds (hexachlorocyclohexane isomers, tocopherols).
+NODE_LABELS_PATH = './dataset/PKT_subgraphs/node_labels.tsv'
+
+_DEDUP_COUNTERION = {'sodium', 'potassium', 'calcium', 'magnesium', 'lithium', 'zinc', 'ammonium',
+                     'iron', 'aluminium', 'aluminum', 'chloride', 'bromide', 'iodide', 'sulfate',
+                     'sulphate', 'phosphate', 'nitrate', 'acetate', 'citrate', 'carbonate',
+                     'hydroxide', 'oxide'}
+_DEDUP_SALT = (r'\s+(hydrochloride|hydrobromide|sulfate|sulphate|acetate|sodium|potassium|calcium|'
+               r'magnesium|chloride|citrate|maleate|mesylate|tartrate|phosphate|besylate|fumarate|'
+               r'succinate|bromide|nitrate|oxalate|lactate|gluconate|stearate|palmitate)$')
+_DEDUP_HYDRATE = r'\s+(anhydrous|hydrate|monohydrate|dihydrate|trihydrate|sesquihydrate)$'
+_DEDUP_STEREO = r'^(\(\+/-\)|\(\+\)|\(-\)|\(r\)|\(s\)|\(e\)|\(z\)|\(rs\)|trans|cis|dl|d|l)[\s\-]'
+
+
+def _normalise_compound(label, strip_stereo):
+  """Collapse ChEBI naming variants of the same therapeutic agent to one key."""
+  s = label.lower().strip()
+  s = re.sub(r'\s*\(human\)$', '', s)
+  s = re.sub(r'\(\d*[+-]\)', '', s)                      # charge: methotrexate(2-)
+  for _ in range(3):
+    s = re.sub(_DEDUP_HYDRATE, '', s.strip())            # hydration: cidofovir dihydrate
+  prev = None
+  while prev != s:                                       # salt, unless only a counterion is left
+    prev = s
+    cand = re.sub(_DEDUP_SALT, '', s.strip())
+    if cand != s and cand.strip() not in _DEDUP_COUNTERION and len(cand.strip()) >= 5:
+      s = cand
+  if strip_stereo:
+    prev = None
+    while prev != s:
+      prev = s
+      s = re.sub(_DEDUP_STEREO, '', s.strip())
+  return re.sub(r'[^a-z0-9]', '', s)
+
+
+def compound_group_map(ent2id, strip_stereo, labels_path=NODE_LABELS_PATH):
+  """{entity index -> group key} for compounds whose label is known. None if unavailable."""
+  if not os.path.exists(labels_path):
+    return None
+  groups = {}
+  try:
+    with open(labels_path, encoding='utf-8') as fh:
+      fh.readline()
+      for line in fh:
+        parts = line.rstrip('\n').split('\t')
+        if len(parts) < 2 or parts[0] not in ent2id:
+          continue
+        key = _normalise_compound(parts[1], strip_stereo)
+        if key:
+          groups[ent2id[parts[0]]] = key
+  except OSError:
+    return None
+  return groups or None
+
+
+def duplicate_leak_mask(test_triplets, train_triplets, group_of):
+  """True where the test triple's fact is already asserted in training by a twin node."""
+  test_np = test_triplets.cpu().numpy() if torch.is_tensor(test_triplets) else np.asarray(test_triplets)
+  train_np = train_triplets.cpu().numpy() if torch.is_tensor(train_triplets) else np.asarray(train_triplets)
+  seen = set()
+  for h, r, t in train_np:
+    seen.add((group_of.get(int(h), int(h)), int(r), int(t)))
+  flags = [(group_of.get(int(h), int(h)), int(r), int(t)) in seen for h, r, t in test_np]
+  return torch.tensor(flags, dtype=torch.bool)
+
 
 def resolve_train_negative_rate(args):
   """--train_negative_rate as an int, or 'auto' = the value the HPO tuned for this model.
@@ -710,7 +799,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
   evaluate_every, negative_rate, model_save_path, oversample_rate, undersample_rate, \
   pretrain_epochs, freeze_base, alpha, gamma, alpha_adv, early_stopping, min_delta, eval_filtered=False,
   split_seed=None, select_metric='loss', train_negative_rate=None, disjoint_supervision=0.0,
-  detect_anomaly=False, warm_eval=False, learning_rate=None):
+  detect_anomaly=False, warm_eval=False, dedup_eval=False, learning_rate=None):
   """
   Protocol knobs (defaults = legacy PathogenKG behaviour, "v1"):
     split_seed           None -> split/undersampling/val-test negatives follow the run seed (v1);
@@ -723,6 +812,8 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
                          r in (0,1) -> see SupervisionSampler.
     detect_anomaly       autograd anomaly detection (debug only; was always on, very slow).
     warm_eval            also report test metrics excluding cold-start triples.
+    dedup_eval           also report test metrics excluding triples whose fact is already
+                         in training through a near-duplicate ChEBI node (reporting only).
     learning_rate        None -> the config's learning rate; float -> override (e.g. baselines).
   """
   all_run_metrics = []
@@ -1035,6 +1126,39 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
           run_record.update({"warm_Auroc": warm["Auroc"], "warm_Auprc": warm["Auprc"], "warm_MRR": warm["MRR"],
                              "warm_Hits@1": warm["Hits@"][1], "warm_Hits@3": warm["Hits@"][3],
                              "warm_Hits@10": warm["Hits@"][10], "cold_start_fraction": n_cold / max(1, len(cold))})
+      if dedup_eval and eval_filtered:
+        # Same shape as the warm block above: mask the test set, re-score the survivors with the
+        # model we already trained, write extra keys. Training and the primary metrics are untouched.
+        for tag, strip_stereo in (("dedup", False), ("dedup_stereo", True)):
+          groups = compound_group_map(ent2id, strip_stereo)
+          if groups is None:
+            print(f"[dedup_eval] {NODE_LABELS_PATH} not found or unusable: skipping {tag} metrics")
+            break
+          leaked = duplicate_leak_mask(test_triplets, train_triplets, groups)
+          n_leaked = int(leaked.sum().item())
+          clean_triplets = torch.as_tensor(test_triplets)[~leaked]
+          print(f"Run {i} | {tag}: test triples whose fact is already in train via a twin node: "
+                f"{n_leaked}/{len(leaked)} ({n_leaked / max(1, len(leaked)):.2%})")
+          run_record[f"{tag}_leaked_fraction"] = n_leaked / max(1, len(leaked))
+          if clean_triplets.size(0) == 0:
+            continue
+          with torch.no_grad():
+            if not USE_ALTERNATIVE_NEG_SAMPLING:
+              d_tt, d_labels = neg_sampler(clean_triplets, negative_rate)
+            else:
+              d_tt, d_labels = neg_sampler(clean_triplets, all_entities_arr, negative_rate,
+                                           all_true_arr, seed=data_seed + 4000)
+            dmetrics = test(model, regularization, flattened_features_per_type, train_index,
+                            d_tt.to(device), d_labels.to(device), train_val_test_triplets,
+                            alpha, gamma, alpha_adv, change_points, use_filtered_eval=True,
+                            all_target_triplets=train_val_test_triplets, num_entities=num_entities)
+          print(f"Run {i} | {tag.upper()} Test Auroc: {dmetrics['Auroc']:.3f}, "
+                f"Test Auprc: {dmetrics['Auprc']:.3f}, Test MRR: {dmetrics['MRR']:.3f}, "
+                f"TEST HITS: {dmetrics['Hits@']}")
+          run_record.update({f"{tag}_Auroc": dmetrics["Auroc"], f"{tag}_Auprc": dmetrics["Auprc"],
+                             f"{tag}_MRR": dmetrics["MRR"], f"{tag}_Hits@1": dmetrics["Hits@"][1],
+                             f"{tag}_Hits@3": dmetrics["Hits@"][3], f"{tag}_Hits@10": dmetrics["Hits@"][10]})
+
       all_run_metrics.append(run_record)
       print(f"[i] Completed run {i}/{runs}")
 
@@ -1130,6 +1254,11 @@ if __name__ == '__main__':
                       help='Enable torch autograd anomaly detection (debug only; slow). Legacy code had it always on.')
   parser.add_argument('--learning_rate', type=float, default=None,
                       help='Override the learning rate of the selected config (default: use the config value).')
+  parser.add_argument('--dedup_eval', action='store_true',
+                      help="Also report test metrics on the triples whose fact is NOT already in "
+                           "training through a near-duplicate ChEBI node (charge, hydration, salt "
+                           "and, as a sensitivity bound, stereochemical variants of the same agent). "
+                           "Reporting only: it changes neither the split nor the training.")
   parser.add_argument('--warm_eval', action='store_true',
                       help='Also report test metrics excluding cold-start triples (endpoint without edges in the training graph).')
   parser.add_argument('--eval_filtered', action='store_true', default=True,
@@ -1233,4 +1362,5 @@ if __name__ == '__main__':
       pretrain_epochs, freeze_base, alpha, gamma, alpha_adv, early_stopping, min_delta, eval_filtered,
       split_seed=args.split_seed, select_metric=args.select_metric,
       train_negative_rate=resolve_train_negative_rate(args), disjoint_supervision=args.disjoint_supervision,
-      detect_anomaly=args.detect_anomaly, warm_eval=args.warm_eval, learning_rate=args.learning_rate)
+      detect_anomaly=args.detect_anomaly, warm_eval=args.warm_eval, dedup_eval=args.dedup_eval,
+      learning_rate=args.learning_rate)

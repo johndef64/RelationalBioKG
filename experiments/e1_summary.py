@@ -30,11 +30,20 @@ RUN_RE = re.compile(r"Run\s+(\d+)\s*\|\s*Test Auroc:\s*([\d.]+),\s*Test Auprc:\s
                     r"Test MRR:\s*([\d.]+),\s*TEST HITS:\s*(\{[^}]*\})")
 WARM_RE = re.compile(r"Run\s+(\d+)\s*\|\s*WARM Test Auroc:\s*([\d.]+),\s*Test Auprc:\s*([\d.]+),\s*"
                      r"Test MRR:\s*([\d.]+)")
+# --dedup_eval: test metrics excluding triples whose fact is already in training through a
+# near-duplicate ChEBI node. DEDUP = charge/hydration/salt variants (the defensible grouping);
+# DEDUP_STEREO additionally treats enantiomers as one agent (sensitivity bound). Absent from
+# logs produced without the flag, in which case the columns simply stay empty.
+DEDUP_RE = re.compile(r"Run\s+(\d+)\s*\|\s*DEDUP Test Auroc:\s*([\d.]+),\s*Test Auprc:\s*([\d.]+),\s*"
+                      r"Test MRR:\s*([\d.]+)")
+DEDUP_STEREO_RE = re.compile(r"Run\s+(\d+)\s*\|\s*DEDUP_STEREO Test Auroc:\s*([\d.]+),\s*"
+                             r"Test Auprc:\s*([\d.]+),\s*Test MRR:\s*([\d.]+)")
 TIME_RE = re.compile(r"Run\s+(\d+)\s*\|\s*best_epoch:\s*(\w+)\s*\|\s*train_time_sec:\s*([\d.]+)")
 HITS_RE = re.compile(r"(\d+)\s*:\s*([\d.]+)")
 NAME_RE = re.compile(r"^e1_([A-Za-z0-9,]+)_([a-z]+)_(\d{8}_\d{6})\.log$")
 
-METRICS = ["AUROC", "AUPRC", "MRR", "Hits@1", "Hits@3", "Hits@10", "M", "warm_MRR"]
+METRICS = ["AUROC", "AUPRC", "MRR", "Hits@1", "Hits@3", "Hits@10", "M", "warm_MRR",
+           "dedup_MRR", "dedup_stereo_MRR"]
 MODEL_ORDER = ["distmult", "rgcn", "compgcn"]
 MODEL_LABEL = {"distmult": "DistMult (no GNN)", "rgcn": "R-GCN", "compgcn": "CompGCN"}
 
@@ -44,7 +53,11 @@ def parse(path):
     with open(path, encoding="utf-8", errors="ignore") as fh:
         for raw in fh:
             for line in raw.split("\r"):
-                if (m := WARM_RE.search(line)):
+                if (m := DEDUP_STEREO_RE.search(line)):
+                    runs.setdefault(int(m.group(1)), {})["dedup_stereo_MRR"] = float(m.group(4))
+                elif (m := DEDUP_RE.search(line)):
+                    runs.setdefault(int(m.group(1)), {})["dedup_MRR"] = float(m.group(4))
+                elif (m := WARM_RE.search(line)):
                     runs.setdefault(int(m.group(1)), {})["warm_MRR"] = float(m.group(4))
                 elif (m := RUN_RE.search(line)):
                     a, p, mrr = float(m.group(2)), float(m.group(3)), float(m.group(4))
