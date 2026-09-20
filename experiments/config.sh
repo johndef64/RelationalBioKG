@@ -109,6 +109,58 @@ else
 fi
 mkdir -p "$LOG_DIR"
 
+# ---- running a long job without letting the terminal freeze it ----
+# "cmd 2>&1 | tee LOG" writes to the terminal as well as to the log, which ties the job's progress
+# to someone draining that terminal. Under VS Code Remote a disconnected client stops acknowledging
+# the terminal's flow control: the pty buffer fills, tee blocks inside write(), the pipe backs up,
+# and the training process blocks inside write() too. It stays alive, holds the GPU and does
+# nothing until a client reconnects. One E1 TREATS seed sat frozen exactly this way for 40 hours
+# (2431 min against ~25 min for its siblings), between a laptop being shut down on the Friday
+# evening and switched back on on the Sunday morning.
+#
+# run_logged sends the job's own output straight to the file, where nothing can block it, and lets
+# a separate tail do the talking to the terminal: if the terminal stalls, only the tail stalls.
+# Still launch long jobs under tmux or nohup -- this protects against a stalled terminal, not a
+# closed one.
+run_logged () {          # run_logged <logfile> <command...>
+  local log="$1"; shift
+  : > "$log"
+  "$@" > "$log" 2>&1 &
+  local pid=$!
+  tail -n +1 -f "$log" --pid="$pid" 2>/dev/null &
+  local tpid=$!
+  local rc=0
+  wait "$pid" || rc=$?              # plain "wait" under set -e would abort before we read $?
+  _reap_tail "$tpid"
+  return "$rc"
+}
+
+# Give the tail up to 3 s to print what is left and exit by itself (--pid makes it check once a
+# second), then kill it. Killing it immediately loses the output of short commands; waiting for it
+# unconditionally would reintroduce the original bug, since a tail writing to a stalled terminal
+# blocks in write() exactly as tee did.
+_reap_tail () {
+  local tpid="$1" waited=0
+  while kill -0 "$tpid" 2>/dev/null && [ "$waited" -lt 3 ]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+  kill "$tpid" 2>/dev/null || true
+  wait "$tpid" 2>/dev/null || true
+}
+
+run_logged_append () {   # same, but appending to an existing log
+  local log="$1"; shift
+  "$@" >> "$log" 2>&1 &
+  local pid=$!
+  tail -n 0 -f "$log" --pid="$pid" 2>/dev/null &
+  local tpid=$!
+  local rc=0
+  wait "$pid" || rc=$?
+  _reap_tail "$tpid"
+  return "$rc"
+}
+
 # Activate conda env if available (harmless if already active)
 if command -v conda >/dev/null 2>&1; then
   # shellcheck disable=SC1091

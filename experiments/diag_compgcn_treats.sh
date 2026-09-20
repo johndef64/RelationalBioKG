@@ -81,12 +81,11 @@ for nb in $NB_LIST; do
   cfg="DIAG-TREATS-nb${nb}"
   log="${LOG_DIR}/diag_compgcn_treats_nb${nb}_$(date +%Y%m%d_%H%M%S).log"
   echo "[diag] === CompGCN / TREATS / num_bases=${nb} -> $log ==="
-  python train_and_eval.py \
+  run_logged "$log" python train_and_eval.py \
     --tsv "$TSV_B" --task "$TASK_B" --model compgcn --config "$cfg" \
     --runs "$DIAG_RUNS" --epochs "$DIAG_EPOCHS" \
     --early_stopping --patience "$PATIENCE" --negative_sampling filtered --eval_filtered \
-    --oversample_rate 5 --undersample_rate 0.5 --alpha 0.25 --gamma 3.0 --alpha_adv 2.0 \
-    2>&1 | tee "$log"
+    --oversample_rate 5 --undersample_rate 0.5 --alpha 0.25 --gamma 3.0 --alpha_adv 2.0
 done
 
 echo "[diag] done. Compare 'Test MRR' across num_bases values in ${LOG_DIR}/diag_compgcn_treats_*.log"

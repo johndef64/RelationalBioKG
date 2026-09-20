@@ -897,7 +897,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       pt_flattened_feats = {node_type:(features.to(device) if features is not None else None) 
                       for node_type, features in pt_flattened_feats.items()}
 
-      for epoch in tqdm(range(1, pretrain_epochs+1)):
+      for epoch in tqdm(range(1, pretrain_epochs+1), disable=None):
           # negative sampling on all relations
           neg_triplets, neg_labels = neg_sampler(pt_train_triplets.cpu(), negative_rate)
           neg_triplets, neg_labels = neg_triplets.to(device), neg_labels.to(device)
@@ -993,7 +993,10 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       sup_sampler = SupervisionSampler(train_index, train_triplets, num_relations, disjoint_supervision,
                                        oversample_rate, random_seed)
     run_start = time.time()
-    with trange(1, (epochs + 1), desc=f'Run {i} | Epochs', position=0) as epochs_tqdm:
+    # disable=None means "draw the bar only on a real terminal". Redirected to a log the bar was
+    # rewriting a line thousands of times per run, which bloated the log and, more to the point,
+    # was the bulk of the output volume that used to fill the terminal buffer and freeze the job.
+    with trange(1, (epochs + 1), desc=f'Run {i} | Epochs', position=0, disable=None) as epochs_tqdm:
       for epoch in epochs_tqdm:
         if sup_sampler is not None:
           epoch_index, epoch_positives = sup_sampler.sample(epoch)
@@ -1052,7 +1055,12 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
           else:
             val_loss = mixed_metric(val_metrics)
             improved = val_loss > (best_val_loss + min_delta)
-          print(f"[val] run {i} epoch {epoch} | loss {val_metrics['Loss']:.4f} | AUROC {val_metrics['Auroc']:.4f} "
+          # Wall-clock stamp on every validation line. Until the run ends the log carries no time
+          # reference at all (train_time_sec is printed only per finished seed), so a job frozen for
+          # hours on a stalled volume or a throttled pod looks exactly like one that is merely slow.
+          # One seed of E1 TREATS took 145875 s against ~1500 s for its siblings and that was only
+          # visible after the fact; with the stamp the gap is readable in the log while it happens.
+          print(f"[val] {time.strftime('%Y-%m-%d %H:%M:%S')} run {i} epoch {epoch} | loss {val_metrics['Loss']:.4f} | AUROC {val_metrics['Auroc']:.4f} "
                 f"| AUPRC {val_metrics['Auprc']:.4f} | MRR {val_metrics['MRR']:.4f} | M {mixed_metric(val_metrics):.4f}")
           if improved:
             best_val_loss = val_loss

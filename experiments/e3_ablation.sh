@@ -62,12 +62,11 @@ train () {  # $1=tag  $2=tsv  ... extra flags
   local cfg; cfg="${ABL_CONFIG:-$(resolve_config "$A_TASK")}"
   if [ "$PROTOCOL" = "v2" ]; then
     # shellcheck disable=SC2086
-    python train_and_eval.py --tsv "$tsv" --task "$A_TASK" --model "$MODEL" --config "$cfg" \
-      --runs "$ABL_RUNS" --epochs "$ABL_EPOCHS" $FLAGS_V2 "$@" 2>&1 | tee "$log"
+    run_logged "$log" python train_and_eval.py --tsv "$tsv" --task "$A_TASK" --model "$MODEL" --config "$cfg" \
+      --runs "$ABL_RUNS" --epochs "$ABL_EPOCHS" $FLAGS_V2 "$@"
   else
-    python train_and_eval.py --tsv "$tsv" --task "$A_TASK" --model "$MODEL" --config "$cfg" \
-      --runs "$ABL_RUNS" --epochs "$ABL_EPOCHS" --early_stopping --patience "$PATIENCE" --eval_filtered "$@" \
-      2>&1 | tee "$log"
+    run_logged "$log" python train_and_eval.py --tsv "$tsv" --task "$A_TASK" --model "$MODEL" --config "$cfg" \
+      --runs "$ABL_RUNS" --epochs "$ABL_EPOCHS" --early_stopping --patience "$PATIENCE" --eval_filtered "$@"
   fi
 }
 

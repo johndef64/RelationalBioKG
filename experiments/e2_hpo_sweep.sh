@@ -40,5 +40,5 @@ export PKT_HPO_RUNS="${PKT_HPO_RUNS:-100}"
 
 log="${LOG_DIR}/e2_hpo_${WHICH}_$(date +%Y%m%d_%H%M%S).log"
 echo "[E2] sweep task=$WHICH tsv=$PKT_TSV project=$WANDB_PROJECT runs=$PKT_HPO_RUNS -> $log"
-python tuning_hyperparameter.py 2>&1 | tee "$log"
+run_logged "$log" python tuning_hyperparameter.py
 echo "[E2] done. Inspect the sweep on W&B; copy the best config into src/models_params.json."

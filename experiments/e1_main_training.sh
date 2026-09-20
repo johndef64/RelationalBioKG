@@ -31,9 +31,9 @@ run_one () {  # $1=tsv  $2=task  $3=model  $4=config override (may be empty)
   fi
   local log="${LOG_DIR}/e1_${task}_${model}_$(date +%Y%m%d_%H%M%S).log"
   echo "[E1] task=$task model=$model config=$cfg -> $log"
-  python train_and_eval.py \
+  run_logged "$log" python train_and_eval.py \
     --tsv "$tsv" --task "$task" --model "$model" --config "$cfg" \
-    --runs "$RUNS" --epochs "$EPOCHS" $COMMON_FLAGS 2>&1 | tee "$log"
+    --runs "$RUNS" --epochs "$EPOCHS" $COMMON_FLAGS
 }
 
 for t in $TASKS; do

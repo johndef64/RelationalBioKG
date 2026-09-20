@@ -56,8 +56,8 @@ run_one () {   # $1 task  $2 model  $3 tag  $4 config  $5.. extra flags
   local log="${prefix}_$(date +%Y%m%d_%H%M%S).log"
   echo "[conv] ${task} | ${model} | ${tag} | config=${cfg} epochs=${CONV_EPOCHS} -> ${log}"
   # shellcheck disable=SC2068
-  python train_and_eval.py --tsv "$(tsv_of "$task")" --task "$task" --model "$model" --config "$cfg" \
-    --runs "$CONV_RUNS" --epochs "$CONV_EPOCHS" $COMMON_FLAGS $@ 2>&1 | tee "$log" \
+  run_logged "$log" python train_and_eval.py --tsv "$(tsv_of "$task")" --task "$task" --model "$model" --config "$cfg" \
+    --runs "$CONV_RUNS" --epochs "$CONV_EPOCHS" $COMMON_FLAGS $@ \
     || echo "[conv] FAILED ${task}/${model}/${tag} (see ${log})"
 }
 

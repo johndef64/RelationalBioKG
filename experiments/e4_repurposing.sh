@@ -33,16 +33,16 @@ CANDIDATE_POOL="${CANDIDATE_POOL:-all}"
 echo "[E4] task=$WHICH model=$MODEL_FOLDER target_type=$TGT pool=$CANDIDATE_POOL -> $log"
 
 # 1) rank all compounds against all targets of the right type
-python drug_eval.py --model_folder "$MODEL_FOLDER" --tsv "$TSV" --task "$TASK" \
-  --target_type "$TGT" --compound all --topk "$TOPK" --candidate_pool "$CANDIDATE_POOL" 2>&1 | tee "$log"
+run_logged "$log" python drug_eval.py --model_folder "$MODEL_FOLDER" --tsv "$TSV" --task "$TASK" \
+  --target_type "$TGT" --compound all --topk "$TOPK" --candidate_pool "$CANDIDATE_POOL"
 
 # 2) summarise
-python drug_eval_results.py 2>&1 | tee -a "$log" || echo "[E4] (drug_eval_results optional step skipped)"
+run_logged_append "$log" python drug_eval_results.py || echo "[E4] (drug_eval_results optional step skipped)"
 
 # 3) interpretability: KG-evidence + held-out recovery on the novel links
 RANKINGS=$(ls -t "${MODEL_FOLDER}"/drug_eval_results/*rankings*.json | head -1)
-python experiments/interpret_predictions.py --rankings "$RANKINGS" --tsv "$TSV" \
-  --task_type "$WHICH" --topk "$TOPK" 2>&1 | tee -a "$log"
+run_logged_append "$log" python experiments/interpret_predictions.py --rankings "$RANKINGS" --tsv "$TSV" \
+  --task_type "$WHICH" --topk "$TOPK"
 
 echo "[E4] done. See ${MODEL_FOLDER}/drug_eval_results/ (rankings, *_interpreted.csv)."
 echo "[E4] For expert 3-tier review, set MODEL_FOLDER/TASK in expert_review_script.py and run it."

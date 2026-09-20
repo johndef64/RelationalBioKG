@@ -102,8 +102,8 @@ run_variant () {   # $1 task  $2 model  $3 variant  $4 config  $5.. flags
   local log="${prefix}_$(date +%Y%m%d_%H%M%S).log"
   echo "[E0] ${task} | ${model} | ${variant} | config=${cfg} -> ${log}"
   # shellcheck disable=SC2068
-  python train_and_eval.py --tsv "$(tsv_of "$task")" --task "$task" --model "$model" --config "$cfg" \
-    --runs "$CMP_RUNS" --epochs "$CMP_EPOCHS" $@ 2>&1 | tee "$log" \
+  run_logged "$log" python train_and_eval.py --tsv "$(tsv_of "$task")" --task "$task" --model "$model" --config "$cfg" \
+    --runs "$CMP_RUNS" --epochs "$CMP_EPOCHS" $@ \
     || echo "[E0] FAILED ${task}/${model}/${variant} (see ${log})"
 }
 
@@ -121,8 +121,8 @@ for task in $TASKS; do
     else
       log="${pop_prefix}_$(date +%Y%m%d_%H%M%S).log"
       echo "[E0] ${task} | popularity baseline -> ${log}"
-      python experiments/baseline_popularity.py --tsv "$(tsv_of "$task")" --task "$task" \
-        --split_seed "$V2_SPLIT_SEED" 2>&1 | tee "$log" || echo "[E0] FAILED ${task}/popularity"
+      run_logged "$log" python experiments/baseline_popularity.py --tsv "$(tsv_of "$task")" --task "$task" \
+        --split_seed "$V2_SPLIT_SEED" || echo "[E0] FAILED ${task}/popularity"
     fi
     # DistMult without message passing, v2 protocol (disjoint supervision is irrelevant without a graph)
     for lr in $CMP_DISTMULT_LRS; do
