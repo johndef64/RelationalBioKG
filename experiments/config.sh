@@ -34,11 +34,18 @@ export HP_CONFIG="${HP_CONFIG:-BIOKG-128}"
 # otherwise fall back to $HP_CONFIG. Set USE_BEST=0 to always use $HP_CONFIG (e.g. baselines).
 export USE_BEST="${USE_BEST:-1}"
 resolve_config () {   # $1 = task interaction (DTI / TREATS); echoes the config name to use
-  local want="PKT-$1-best"
-  # protocol v2 prefers configs tuned under v2 (PKT-<TASK>-best-v2), falling back to the v1 ones
-  if [ "${PROTOCOL:-v1}" = "v2" ] && \
-     python -c "import json,sys;sys.exit(0 if 'PKT-$1-best-v2' in json.load(open('src/models_params.json')) else 1)" 2>/dev/null; then
-    want="PKT-$1-best-v2"
+  local want="PKT-$1-best" s found=0
+  # Protocol v2 prefers configs tuned under v2, newest suffix first: -v2b is the HPO on the reworked
+  # data (DTI injection, TICKET 01) that E1 was trained with; -v2 predates that rework. This used to
+  # look for -v2 only, and since models_params.json holds -v2b and not -v2 it fell through SILENTLY
+  # to PKT-<TASK>-best, the configuration tuned under the v1 protocol on the old target relation.
+  if [ "${PROTOCOL:-v1}" = "v2" ]; then
+    for s in ${V2_CONFIG_SUFFIXES:--v2b -v2}; do
+      if python -c "import json,sys;sys.exit(0 if 'PKT-$1-best$s' in json.load(open('src/models_params.json')) else 1)" 2>/dev/null; then
+        want="PKT-$1-best$s"; found=1; break
+      fi
+    done
+    [ "$found" = 1 ] || echo "[config] WARNING: PROTOCOL=v2 but no PKT-$1-best{${V2_CONFIG_SUFFIXES:--v2b -v2}} config: falling back to $want (not tuned under v2)" >&2
   fi
   if [ "$USE_BEST" = "1" ] && \
      python -c "import json,sys;sys.exit(0 if '$want' in json.load(open('src/models_params.json')) else 1)" 2>/dev/null; then

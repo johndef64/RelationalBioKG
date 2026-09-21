@@ -6,20 +6,22 @@
 #        v2         : focal off · adversarial off · 1 training negative (k=1) · no disjoint supervision
 #                     · 50% random background undersampling (control documenting the v2 choice)
 #
-#   E3b  RELATIONAL-CONTEXT ablation — train Task A (DTI) on subgraphs that drop one context layer
-#        at a time (built by analysis/07_build_ablation_subgraphs.py):
-#          core_ppi / no_ppi / no_go / no_pathway / no_drugctx / full
-#        (context subgraphs exist for Task A only)
+#   E3b  RELATIONAL-CONTEXT ablation — train on subgraphs that drop one context layer at a time
+#        (built by analysis/07_build_ablation_subgraphs.py, listed in ablation_index_{A,B}.md):
+#          Task A: full / core_ppi / no_ppi / no_go / no_pathway / no_drugctx / no_biochem
+#          Task B: full / no_ppi / no_go / no_pathway / no_biochem / no_pharma / no_disease_ctx
 #
 # PROTOCOL (experiments/config.sh):
 #   v1 -> legacy behaviour, logs in experiments/logs/e3_<tag>_<ts>.log
 #   v2 -> FLAGS_V2 + one override per tag, ABL_RUNS=5 seeds (fixed split: variance = init only),
-#         model ABL_MODEL (default rgcn), task ABL_TASK (A or B, component family),
+#         model ABL_MODEL (default rgcn), task ABL_TASK (A or B, both families),
+#         at most ABL_EPOCHS=1500 epochs (the E1 budget; early stopping ends most runs well before),
 #         logs in experiments/logs/v2/e3_<TASK>/e3_<tag>_<ts>.log  (never mixed with v1)
 #
 # Usage:  bash experiments/e3_ablation.sh                                  # v1, both families
 #         PROTOCOL=v2 bash experiments/e3_ablation.sh                      # v2, Task A, both families
 #         PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component # v2, Task B, component only
+#         PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh context   # v2, Task B, context only
 # Summary: python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI --out experiments/logs/v2/e3_DTI
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -29,7 +31,10 @@ WHICH="${1:-all}"
 ABL_RESUME="${ABL_RESUME:-1}"   # 1 = crash-resume: skip tags already fully completed. Set 0 to force redo.
 
 if [ "$PROTOCOL" = "v2" ]; then
-  ABL_RUNS="${ABL_RUNS:-5}"; ABL_EPOCHS="${ABL_EPOCHS:-$EPOCHS}"
+  # 1500 = the E1 budget. It used to default to $EPOCHS (800 under v2), which is below the best
+  # epoch of some E1 Task A seeds (up to 925): the ablation would have been cut short where E1 was not,
+  # and every delta against it would have mixed the ablated factor with a smaller training budget.
+  ABL_RUNS="${ABL_RUNS:-5}"; ABL_EPOCHS="${ABL_EPOCHS:-1500}"
   MODEL="${ABL_MODEL:-rgcn}"
   ABL_TASK="${ABL_TASK:-A}"
   if [ "$ABL_TASK" = "B" ]; then A_TSV="$TSV_B"; A_TASK="$TASK_B"; else A_TSV="$TSV_A"; A_TASK="$TASK_A"; fi
@@ -97,22 +102,26 @@ component_ablation () {
 }
 
 context_ablation () {
-  if [ "$A_TASK" != "$TASK_A" ]; then
-    echo "[E3b] context ablation subgraphs exist for Task A (DTI) only — skipped for $A_TASK"; return 0
+  local abl="dataset/PKT_subgraphs/ablation" pfx variants
+  if [ "$A_TASK" = "$TASK_A" ]; then
+    pfx="ablA"; variants="full core_ppi no_ppi no_go no_pathway no_drugctx no_biochem"
+  else
+    [ "$PROTOCOL" = "v2" ] || { echo "[E3b] Task B context ablation is v2 only — skipped"; return 0; }
+    pfx="ablB"; variants="full no_ppi no_go no_pathway no_biochem no_pharma no_disease_ctx"
   fi
-  echo "== E3b relational-context ablation (Task A / DTI) =="
-  local abl="dataset/PKT_subgraphs/ablation"
-  if [ ! -f "$abl/pkt_ablA_full.tsv.zip" ]; then
+  echo "== E3b relational-context ablation (Task $A_TASK) =="
+  if [ ! -f "$abl/pkt_${pfx}_full.tsv.zip" ]; then
     echo "[E3b] building ablation subgraphs..."; python analysis/07_build_ablation_subgraphs.py
   fi
-  # NB ctx_full is trained on ablA_full even though it holds the same triples as the Task A subgraph:
-  # the rows are in a different order and the stratified split depends on row order, so only the
-  # ablA_* files share the same split with each other.
-  for v in full core_ppi no_ppi no_go no_pathway no_drugctx; do
+  # NB ctx_full is trained on the ablation "full" file even though it holds the same triples as the
+  # task subgraph: the rows are in a different order and the stratified split depends on row order,
+  # so only the files of one ablation family share the same split with each other. The context
+  # deltas are therefore read against ctx_full, never against the E1 numbers.
+  for v in $variants; do
     if [ "$PROTOCOL" = "v2" ]; then
-      train "ctx_${v}" "$abl/pkt_ablA_${v}.tsv.zip"
+      train "ctx_${v}" "$abl/pkt_${pfx}_${v}.tsv.zip"
     else
-      train "ctx_${v}" "$abl/pkt_ablA_${v}.tsv.zip" \
+      train "ctx_${v}" "$abl/pkt_${pfx}_${v}.tsv.zip" \
         --oversample_rate 5 --undersample_rate 0.5 --alpha 0.25 --gamma 3.0 --alpha_adv 2.0 --negative_sampling filtered
     fi
   done

@@ -312,5 +312,91 @@
             "scheduler_gamma": 0.999,
             "model_name": "rgcn"
         }
+    },
+    "PKT-DTI-best-v2b": {
+        "compgcn": {
+            "conv_layer_num": 1,
+            "dropout": 0.3,
+            "layer_0": 64,
+            "layer_1": 200,
+            "layer_2": 128,
+            "mlp_out_layer": 128,
+            "learning_rate": 0.03,
+            "opn": "mult",
+            "grad_norm": 2,
+            "regularization": 0.001,
+            "weight_decay": 0.01,
+            "scheduler_gamma": 0.997,
+            "model_name": "compgcn",
+            "train_negative_rate": 5
+        },
+        "rgcn": {
+            "conv_layer_num": 1,
+            "layer_0": 128,
+            "layer_1": 128,
+            "layer_2": 64,
+            "mlp_out_layer": 200,
+            "learning_rate": 0.03,
+            "grad_norm": 2,
+            "num_bases": 15,
+            "regularization": 0.001,
+            "weight_decay": 0.01,
+            "scheduler_gamma": 0.999,
+            "model_name": "rgcn",
+            "train_negative_rate": 10
+        },
+        "distmult": {
+            "mlp_out_layer": 200,
+            "learning_rate": 0.1,
+            "grad_norm": 0.5,
+            "regularization": 0.01,
+            "weight_decay": 0.05,
+            "scheduler_gamma": 0.995,
+            "model_name": "distmult",
+            "train_negative_rate": 10
+        }
+    },
+    "PKT-TREATS-best-v2b": {
+        "compgcn": {
+            "conv_layer_num": 1,
+            "dropout": 0.4,
+            "layer_0": 200,
+            "layer_1": 128,
+            "layer_2": 128,
+            "mlp_out_layer": 200,
+            "learning_rate": 0.01,
+            "opn": "sub",
+            "grad_norm": 2,
+            "regularization": 0.001,
+            "weight_decay": 0.001,
+            "scheduler_gamma": 0.999,
+            "model_name": "compgcn",
+            "train_negative_rate": 1
+        },
+        "rgcn": {
+            "conv_layer_num": 1,
+            "layer_0": 128,
+            "layer_1": 200,
+            "layer_2": 64,
+            "mlp_out_layer": 200,
+            "learning_rate": 0.1,
+            "grad_norm": 2,
+            "num_bases": 20,
+            "regularization": 0.0001,
+            "weight_decay": 0.05,
+            "scheduler_gamma": 0.999,
+            "model_name": "rgcn",
+            "train_negative_rate": 5
+        },
+        "distmult": {
+            "mlp_out_layer": 400,
+            "learning_rate": 0.03,
+            "grad_norm": 1,
+            "regularization": 0.001,
+            "weight_decay": 0.05,
+            "scheduler_gamma": 0.997,
+            "model_name": "distmult",
+            "train_negative_rate": 5
+        }
     }
 }
