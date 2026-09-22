@@ -169,6 +169,10 @@ RelationalBioKG/
 │   ├── 09_extract_chebi_roles.py       #   ChEBI role inventory (why filtering does not work)
 │   └── 10_build_dti_drugbank.py        #   drug--target layer from DrugBank via UniProt
 ├── experiments/                 # run scripts (E0–E4), config, baselines, summaries, smoke_test.sh
+│   ├── mechanistic_chains.py    #   drug → predicted target → gene/pathway → disease routes
+│   ├── dump_test_ranks.py       #   per-triple test ranks from a saved run (needs PYTHONHASHSEED=0)
+│   └── stratified_analysis.py   #   who the model works for: degree, competitors, redundancy, regimes
+├── plots/                       # one script per paper/thesis figure + make_all.py
 └── docs/                        # project reports, consolidation plan v2, expert-validation requests
 ```
 
@@ -230,6 +234,21 @@ run list for the next server session is in **[`TODO_SERVER.md`](TODO_SERVER.md)*
 | **E2** | Bayesian hyperparameter optimisation (W&B), baseline tuned too | `experiments/e2_hpo_tandem2.sh` |
 | **E3** | ablations (component machinery + relational context) | `experiments/e3_ablation.sh` |
 | **E4** | compound-centric repurposing + interpretability + expert review | `experiments/e4_repurposing.sh` |
+| **E5** | per-triple ranks of a trained run, then stratified analysis | `experiments/dump_test_ranks.py`, `experiments/stratified_analysis.py` |
+
+```bash
+# E5 — who the model actually works for (no GPU beyond the forward pass, no retraining)
+PYTHONHASHSEED=0 python experiments/dump_test_ranks.py \
+  --model_folder models/<run> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI
+python experiments/stratified_analysis.py --ranks models/<run>/test_ranks_DTI.csv \
+  --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI \
+  --compare "DistMult=models/<other run>/test_ranks_DTI.csv"
+```
+
+`PYTHONHASHSEED=0` is not optional when a checkpoint is reloaded: entity ids come from the iteration
+order of string sets, so a different hash seed silently maps the saved embeddings onto the wrong
+entities and the ranks become noise. `dump_test_ranks.py` refuses to start without it, and prints the
+MRR it reconstructs so it can be checked against the run's own logs.
 
 ### Training & evaluation protocol
 
@@ -267,10 +286,18 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
   evidence for each novel link (shared PPI / pathway / GO for Task A; molecular meta-path + phenotype
   overlap for Task B). This evidence is *circular* w.r.t. the model (same graph it trained on): it
   explains *why*, it does not prove *true*.
+- **`experiments/mechanistic_chains.py`** — the route from a predicted target to a disease
+  (protein → gene / pathway / interaction partner → disease), searched in the Task B graph and ranked
+  shortest and least hubby first. Each chain says whether the drug already treats that disease, which
+  splits "mechanism for a known indication" from "repurposing candidate with a route". Same
+  circularity caveat as above.
 - **`expert_review_script.py`** — human 3-tier review (PathogenKG §5 style): brings knowledge
-  *external* to the KG, which is what genuinely breaks the circularity. Produces a review sheet with
-  empty `expert_tier / expert_plausible / expert_notes` columns; clinician request docs are in
-  [`docs/`](docs/).
+  *external* to the KG, which is what genuinely breaks the circularity. Produces a blinded review
+  sheet (no rank, score or automatic tier) interleaved with random and mid-rank decoys, plus the key
+  to score it with `aggregate`. On Task A, 22.2% of the top-20 predictions for nine drugs were rated
+  plausible against 1.1% of the decoys ($p=4\cdot10^{-7}$), and the automatic KG triage agreed with
+  the expert on only 8.3% of them — graph evidence explains a prediction, it does not validate it.
+  See [`docs/report_E4.md`](docs/report_E4.md); clinician request docs are in [`docs/`](docs/).
 - A **time-split** (train on an older PheKnowLator release, test on later-added edges) would be the
   strongest automatic external validation — proposed, not yet built.
 
@@ -282,6 +309,10 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
 - [`TICKET_01_DTI_drug_scope.md`](TICKET_01_DTI_drug_scope.md) — the Task A target relation: why the
   PheKnowLator one is biochemical, what was tried, and how the pharmacological layer was injected.
 - [`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md) — audit of the training/evaluation protocol, v2 changes and their verification.
+- [`PROGETTO.md`](PROGETTO.md) — the project in plain language: where it comes from, what has been learnt so far (Italian).
+- [`docs/report_E1.md`](docs/report_E1.md) — main comparison, 3 models × 2 tasks × 12 seeds, with the robustness checks.
+- [`docs/report_E4.md`](docs/report_E4.md) — blinded expert review of the Task A predictions.
+- [`docs/report_stratificata.md`](docs/report_stratificata.md) — who the model works for: supervision regimes, what beats the true target, annotation bias, redundancy.
 - [`docs/report_progetto_RelationalPKT.md`](docs/report_progetto_RelationalPKT.md) — full project report.
 - [`docs/report_HPO_risultati_finali.md`](docs/report_HPO_risultati_finali.md) — first HPO (protocol v1; superseded by the v2 HPO).
 - [`docs/richiesta_candidati_validazione_medico.md`](docs/richiesta_candidati_validazione_medico.md) — candidate request for a clinician/biologist.

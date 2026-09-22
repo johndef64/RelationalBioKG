@@ -27,6 +27,7 @@ to be injected: [`TICKET_01_DTI_drug_scope.md`](../TICKET_01_DTI_drug_scope.md).
 | §5 tiered biological plausibility (expert) | `drug_eval_script.py` (manual cohort) | **E4** `expert_review_script.py` |
 | ablations (loss/sampling/model/context) | flags of `train_and_eval.py` | **E3** `e3_ablation.sh` |
 | §4 KG stats (Table 2) | `kg_stats_visualization.py` | optional, on the subgraph TSVs |
+| — (no counterpart upstream) | (new) | **E5** `dump_test_ranks.py` + `stratified_analysis.py` |
 
 ## Adaptations made to the original code (backward compatible)
 - `train_and_eval.py`: added `--config` (pick `BIOKG-128` etc. from `src/models_params.json`;
@@ -50,8 +51,14 @@ reproduce the legacy one (verified bit-for-bit). Full rationale and evidence:
 | training target edges | all inside the message-passing graph | `--disjoint_supervision 0.3` |
 | extra reporting | — | `--warm_eval` (no cold-start), best epoch, time |
 
-`experiments/config.sh` defines `FLAGS_V1`, `FLAGS_V2`, `PROTOCOL` (default `v1` until E0 validates
-v2) and exports `PYTHONHASHSEED=0` (without it identical commands gave different results).
+`experiments/config.sh` defines `FLAGS_V1`, `FLAGS_V2`, `PROTOCOL` (default `v1`, so pass
+`PROTOCOL=v2` — E0 has since validated v2 and every result from E1 onwards uses it) and exports
+`PYTHONHASHSEED=0` (without it identical commands gave different results).
+
+E0 measured what the consolidation is worth, one correction at a time on Task A: M from 0.476 to
+0.648, of which 78% comes from selecting the checkpoint on validation M instead of the loss. The
+three architectures span 0.027 on the same task, so the protocol matters roughly sixfold more than
+the choice of encoder ([`docs/report_E1.md`](../docs/report_E1.md) for the comparison it enabled).
 
 ## Run order
 ```bash
@@ -80,9 +87,10 @@ bash experiments/e2_hpo_tandem2.sh    # suffix -v2b, 30 trials/model on Task A, 
 # E1 — main training & model comparison with the v2 protocol and v2 configs
 PROTOCOL=v2 bash experiments/e1_main_training.sh
 
-# E3 — ablations (component machinery + relational context). NOTE: e3_ablation.sh still encodes the
-#      v1 component list; it is to be adapted to v2 after E0 (see docs/piano_consolidamento_v2.md §4)
-bash experiments/e3_ablation.sh          # or: component | context
+# E3 — ablations (component machinery + relational context), 13 variants x 5 seeds per task.
+#      Resumes by itself: a variant whose log already has 5 completed runs is skipped.
+PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all      # ABL_TASK=B for the other task
+python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI --out experiments/logs/v2/e3_DTI
 
 # E4 — repurposing + interpretability (point at a model folder from E1)
 # folder name = <task>_<dataset>_<timestamp>, e.g.:
@@ -91,6 +99,14 @@ bash experiments/e4_repurposing.sh B models/treats_pkt_taskB_treats_<timestamp>
 
 # (one-time) build readable node labels used by the expert review sheet
 python analysis/08_build_node_labels.py
+
+# E5 — per-triple ranks of a finished run, then the stratified analysis (CPU + one forward pass)
+PYTHONHASHSEED=0 python experiments/dump_test_ranks.py \
+  --model_folder models/dti_pkt_taskA_dti_<timestamp> \
+  --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI
+python experiments/stratified_analysis.py --ranks models/<run>/test_ranks_DTI.csv \
+  --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI \
+  --compare "DistMult=models/<other run>/test_ranks_DTI.csv"
 ```
 All knobs (RUNS, EPOCHS, HP_CONFIG, MODELS, …) live in `experiments/config.sh` and can be
 overridden inline, e.g. `RUNS=3 EPOCHS=100 bash experiments/e1_main_training.sh` for a quick pass.
@@ -179,21 +195,48 @@ bash experiments/expert_review.sh
 # -> models/<folder>/drug_eval_results/expert_review_task<A|B>_<ts>.csv
 ```
 
-**Step 3 — capture the human evaluation.** The sheet has, per candidate link, the model
-columns (`drug_label, prediction_label, confidence, kg_evidence, auto_tier, held_out_recovered`)
-plus three EMPTY columns the expert fills in Excel/Sheets:
+**Step 3 — capture the human evaluation.** The script writes **two** files: a `_BLIND.csv` for the
+reviewer and a `_KEY.csv` that must not be opened before the review is finished. The blind sheet
+carries only `item_id, drug_label, prediction_label` plus three EMPTY columns, and its rows are
+shuffled across drugs: no rank, no score, no graph evidence, no automatic tier, and the model's
+predictions are interleaved with decoys (random candidates and mid-rank ones) in a proportion known
+only to the key. Without both provisions a plausibility rate cannot be interpreted.
 
 | column | what the expert writes |
 |---|---|
-| `expert_tier` | `1` known/plausible mechanism · `2` possible · `3` implausible |
+| `expert_tier` | `High` documented or strong mechanistic rationale · `Moderate` indirect but reasonable · `Low` no support |
 | `expert_plausible` | `y` / `n` |
-| `expert_notes` | mechanism, reference, reasoning |
+| `expert_notes` | mechanism, reference, reasoning (`ADME` for pharmacokinetic pairs) |
 
-Save the filled file, then aggregate it (expert-tier distribution, auto-vs-expert agreement,
-% plausible):
+Save the filled file, then aggregate it against the key — plausibility per stratum, the difference
+between predictions and decoys, held-out positives recovered, and auto-vs-expert agreement:
 ```bash
-bash experiments/expert_review.sh aggregate models/<folder>/drug_eval_results/expert_review_taskA_<ts>_filled.csv
+python expert_review_script.py aggregate <filled_BLIND.csv> <matching_KEY.csv>
 ```
+
+**Step 4 — the mechanistic chain behind each prediction.** A pair is not yet a hypothesis: what makes
+it one is the route from the predicted target to a disease. `mechanistic_chains.py` searches it in the
+**Task B** graph (Task A has no diseases in it) along four typed meta-paths — protein→gene→disease,
+protein→gene←disease-by-dysfunction, protein→pathway←gene→disease, protein→PPI→gene→disease — keeping
+the shortest, and among equals the ones through the most specific intermediates:
+```bash
+python experiments/mechanistic_chains.py \
+  --review models/<folder>/drug_eval_results/<sheet>_BLIND_compiled.csv \
+  --key    models/<folder>/drug_eval_results/<sheet>_KEY.csv
+# or, without a review, for any list of pairs (CSV with columns drug,protein as Type::id):
+python experiments/mechanistic_chains.py --pairs my_pairs.csv
+```
+Each chain is flagged by whether the drug already treats the disease it lands on: those explain an
+existing indication, the others are repurposing candidates with a stated route. The chains come from
+the graph the model trained on, so they belong to interpretability, not validation.
+
+Instructions written for the reviewer are in
+[`docs/drug_eval/istruzioni_revisione_taskA.md`](../docs/drug_eval/istruzioni_revisione_taskA.md), the
+cohort and its rationale in [`docs/coorte_validazione_taskA.md`](../docs/coorte_validazione_taskA.md),
+and the result of the first round in [`docs/report_E4.md`](../docs/report_E4.md): 22.2% of the top-20
+predictions plausible against 1.1% of the decoys, all eight recovered held-out targets confirmed, and
+an auto-vs-expert agreement of 8.3% — the graph-based triage explains predictions but does not rank
+them by truth.
 
 > All experiment steps are bash `.sh` that auto-activate the `gnn` env via `config.sh`
 > (`e1`–`e4`, `expert_review.sh`, and `interpret.sh` for standalone interpretability) — so they
@@ -204,9 +247,36 @@ The expert's judgement is knowledge *external* to the KG — that is what makes 
 (non-circular) validation, with the `kg_evidence`/`auto_tier` columns acting only as triage to
 focus the expert on the strongest candidates first.
 
+## E5 — per-triple ranks and stratified analysis
+
+E1 keeps aggregate metrics only, so nothing in the logs answers "who does the model work for".
+`dump_test_ranks.py` recomputes the rank of every test triple from a finished run and
+`stratified_analysis.py` reads that dump.
+
+- **`dump_test_ranks.py`** rebuilds split, message-passing graph and architecture from the run's own
+  `*_params.json` (the same code path as `drug_eval.py`) and ranks with
+  `src/evaluation_metrics_filtered._compute_ranks`, i.e. the function E1 itself used: filtered,
+  type-constrained, both directions. It prints the MRR it reconstructs, which must equal the run's
+  test MRR — treat any mismatch as a bug, not as a new result. Per triple it stores the two ranks,
+  the degrees of both endpoints (target-relation and context), the cold-start flag and the top-k
+  candidates that outrank the true tail.
+- **`stratified_analysis.py`** produces: MRR by degree; what beats the true target (how often the
+  higher-ranked candidates are relatives of it — same family by label, specific GO function or
+  pathway with at most 50 members, direct interaction — each against a random-candidate baseline);
+  redundancy of the held-out edge; cold start; and the three supervision regimes, with
+  `--compare "label=other_ranks.csv"` for a paired comparison between models on the same split.
+
+**`PYTHONHASHSEED=0` is mandatory here.** Entity ids follow the iteration order of string sets, so a
+different hash seed maps the saved embeddings onto the wrong entities: the run completes and reports
+an MRR near zero. `dump_test_ranks.py` refuses to start without it; `config.sh` exports it for the
+`.sh` scripts, but these two are run directly with `python`.
+
+Results for Task A are in [`docs/report_stratificata.md`](../docs/report_stratificata.md). Task B
+needs the `treats_*` checkpoints, which live on the server: only `metrics`/`params` were copied back.
+
 ## Smoke test (already run locally)
-`train_and_eval.py` on `pkt_taskA_dti.tsv.zip --task DTI` loads (1,136,665 triples), selects
-25,713 DTI targets, splits, trains and runs filtered evaluation end-to-end. The only local
+`train_and_eval.py` on `pkt_taskA_dti.tsv.zip --task DTI` loads (1,155,994 triples), selects
+10,305 DTI targets, splits, trains and runs filtered evaluation end-to-end. The only local
 failure is the final full-graph ranking hitting the **Windows TDR GPU watchdog (2 s)** on the
 4 GB Quadro M2200 — a local hardware/OS limit, not a code issue. It does **not** occur on the
 server GPU (Linux, adequate VRAM).

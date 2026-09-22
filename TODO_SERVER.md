@@ -38,7 +38,7 @@ I grafi ora tengono separati tre livelli di evidenza:
 | 3b · E0 ladder completo sul Task A | ✅ fatto: M 0,476 → 0,648, il 78% del guadagno viene dal checkpoint su M. È nel paper (tabella `tab:ladder`) |
 | 4 · E1, 3 modelli × 2 task × 12 seed | ✅ fatto il 21/09. Report: [`docs/report_E1.md`](docs/report_E1.md). Tabelle nel paper e nel capitolo di tesi |
 | 5 · E3 ablazione (componenti + contesto, A e B) | ⏳ lanciato il 21/09, interrotto dalla caduta del server (A 10/13, B 3/13): stato, controlli e ripresa in [`ABLATION_STATUS.md`](ABLATION_STATUS.md) |
-| 6 · E4 revisione esperta, Task A, R-GCN | ✅ revisione chiusa il 22/09 (Antonio Iodice): 22,2% plausibili nei top-20 contro 1,1% dei decoy. Report: [`docs/report_E4.md`](docs/report_E4.md). Nel paper (§5.6) e nel capitolo. Mancano le catene composto → proteina → pathway → malattia |
+| 6 · E4 revisione esperta, Task A, R-GCN | ✅ chiusa il 22/09: 22,2% plausibili nei top-20 contro 1,1% dei decoy; catene meccanicistiche estratte per tutte e 40 le coppie. Report: [`docs/report_E4.md`](docs/report_E4.md). Nel paper (§5.6) e nel capitolo. Il revisore va citato solo come *domain expert*, senza nome |
 | convergence check CompGCN sul TREATS | facoltativo, dopo E3 (§7) |
 | HPO `-v2` DTI e TREATS | superati: restano su W&B come documentazione, non vanno mescolati |
 
