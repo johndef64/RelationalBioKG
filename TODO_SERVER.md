@@ -29,12 +29,18 @@ I grafi ora tengono separati tre livelli di evidenza:
 | `DRUG_ADME` | enzimi, trasportatori, proteine plasmatiche, 9.024 archi | DrugBank via UniProt | contesto |
 | `CPI_BIOCHEM` | substrati, cofattori, catalisi, 25.713 archi | PheKnowLator | contesto |
 
-| Cosa | Stato |
+### Stato al 21 settembre 2026
+
+| Passo | Stato |
 |---|---|
-| HPO `-v2` **DTI** (90 trial) | superato: era sul bersaglio biochimico. Resta su W&B come documentazione |
-| HPO `-v2` **TREATS** (22 trial R-GCN, M 0,746) | interrotto a un quarto; resta su W&B come riferimento |
-| E0 (confronto protocolli) | valido come studio di protocollo, non va rifatto. Ma è stato eseguito solo in modalità `pair`, 3 gradini su 6: il ladder completo manca ed è al passo 3b |
-| HPO `-v2b`, E1, E3, E4 | da eseguire sui grafi nuovi |
+| 0-2 · dataset ricostruiti, smoke test | ✅ fatto |
+| 3 · HPO `-v2b` (30 trial per modello su A, 15 su B) | ✅ fatto; config `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b` in `src/models_params.json` (ora anche nel repo) |
+| 3b · E0 ladder completo sul Task A | ✅ fatto: M 0,476 → 0,648, il 78% del guadagno viene dal checkpoint su M. È nel paper (tabella `tab:ladder`) |
+| 4 · E1, 3 modelli × 2 task × 12 seed | ✅ fatto il 21/09. Report: [`docs/report_E1.md`](docs/report_E1.md). Tabelle nel paper e nel capitolo di tesi |
+| 5 · E3 ablazione (componenti + contesto, A e B) | ⏳ lanciato il 21/09, interrotto dalla caduta del server (A 10/13, B 3/13): stato, controlli e ripresa in [`ABLATION_STATUS.md`](ABLATION_STATUS.md) |
+| 6 · E4 revisione esperta, Task A, R-GCN | ✅ revisione chiusa il 22/09 (Antonio Iodice): 22,2% plausibili nei top-20 contro 1,1% dei decoy. Report: [`docs/report_E4.md`](docs/report_E4.md). Nel paper (§5.6) e nel capitolo. Mancano le catene composto → proteina → pathway → malattia |
+| convergence check CompGCN sul TREATS | facoltativo, dopo E3 (§7) |
+| HPO `-v2` DTI e TREATS | superati: restano su W&B come documentazione, non vanno mescolati |
 
 Perché si rifà anche il TREATS: lo sweep era arrivato a 22 trial su 90 (CompGCN e DistMult non erano
 nemmeno partiti), quindi doveva comunque girare per il grosso del lavoro. Tanto vale che giri sul
@@ -198,7 +204,11 @@ registrati come saltati e lo sweep continua.
 
 ---
 
-## 3b. E0 ladder completo — attribuzione gradino per gradino (~30 min)
+## 3b. E0 ladder completo — attribuzione gradino per gradino (~30 min) — ✅ FATTO
+
+> Risultato: v1 M 0,476 → v2 M 0,648 (MRR 0,076 → 0,317). Split fisso −0,001 (p = 0,95), checkpoint su
+> M +0,135 (78%), negativi espliciti −0,002, grafo pieno +0,014 (8%), supervisione disgiunta +0,026
+> (15%). Il testo sotto resta come documentazione di come è stato eseguito.
 
 Riempie l'unico buco rimasto nella sezione metodologica del paper. Oggi il paper dice che il
 protocollo consolidato porta M da 0,542 a 0,741, ma non sa dire **quale** dei cinque cambiamenti ha
@@ -233,7 +243,22 @@ ladder costa molte ore: non è previsto, e non serve alla tesi che la scala sia 
 
 ---
 
-## 4. E1 — la tabella per la tesi
+## 4. E1 — la tabella per la tesi — ✅ FATTO (21/09)
+
+> **Risultato.** Task A: R-GCN batte il modello senza encoder su AUROC/AUPRC/M (0,684 contro 0,657) ma
+> pareggia sull'MRR (0,408 contro 0,407, p = 0,83): il contesto aiuta a riconoscere una coppia
+> plausibile, non a ordinare il bersaglio giusto. Task B: DistMult vince su tutto (MRR 0,692 contro
+> 0,348 e 0,229). Analisi completa, controlli (cold-start, quasi-duplicati ChEBI, convergenza) e punti
+> aperti in [`docs/report_E1.md`](docs/report_E1.md).
+>
+> **Da sapere:** CompGCN sul TREATS non è arrivato a convergenza in 1500 epoche (limite inferiore). Il
+> seed 6 di R-GCN TREATS è durato 40 ore per il blocco del terminale (§ "Regole per i job lunghi"):
+> il risultato è valido, il suo `train_time_sec` no.
+>
+> Modelli: `models/dti_pkt_taskA_dti.tsv_20260918_{130755,135629,153101}` (R-GCN, CompGCN, DistMult)
+> e `models/treats_pkt_taskB_treats.tsv_{20260918_151621,compgcn_20260920_123201,distmult_20260920_212827}`.
+> Le sei cartelle `dti_…_20260918_09*` sono smoke test e si possono cancellare
+> (`python experiments/models_index.py --stale`). Il testo sotto resta come documentazione.
 
 Un comando solo, `e1_run_v2b.sh`, che fa entrambi i task, tutti i modelli e il summary finale.
 **Va lanciato dentro tmux**: sono molte ore e una disconnessione ucciderebbe il processo.
@@ -284,17 +309,51 @@ colonne **è** la misura della fuga.
 
 ---
 
-## 5. E3 — ablation (dopo E1)
+## 5. E3 — ablation — ⏳ lanciato il 21/09
 
-Modello di default R-GCN; se E1 dice che CompGCN è migliore, usa `ABL_MODEL=compgcn`. Anche qui la
-config va forzata con `ABL_CONFIG`, altrimenti lo script risolve il suffisso `-v2`, cioè i dati vecchi.
+Modello R-GCN, il migliore di E1 sul Task A. E3 **non riusa** i modelli di E1: riaddestra da zero con
+la stessa config (`PKT-<TASK>-best-v2b`), gli stessi seed (`BASE_SEED + i`) e, per `comp_*`, lo
+stesso split. 13 varianti per task × 5 seed, tetto 1500 epoche come E1.
+
+Tre difetti corretti il 21/09, prima del lancio (servono `git pull` e il commit relativo):
+- `resolve_config` cercava solo `-v2` e ripiegava **in silenzio** sulla config v1: ora prova `-v2b`,
+  poi `-v2`, e avvisa se non trova nessuna delle due. `ABL_CONFIG` non serve più;
+- il tetto era 800 epoche (default di `$EPOCHS`), sotto l'epoca migliore di alcuni seed E1 (925): ora
+  1500;
+- mancava la variante `no_biochem`, e il contesto del Task B non era supportato: ora ci sono entrambi.
 
 ```bash
-ABL_CONFIG=PKT-DTI-best-v2b PROTOCOL=v2 bash experiments/e3_ablation.sh                      # Task A
-ABL_CONFIG=PKT-TREATS-best-v2b PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component   # Task B
+# preparazione, una volta sola
+for t in DTI TREATS; do
+  [ -d experiments/logs/v2/e3_$t ] && mv experiments/logs/v2/e3_$t experiments/logs/v2/e3_${t}_pre_v2b
+done
+
+tmux new -s e3A     # dentro:  conda activate gnn && PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all
+tmux new -s e3B     # dentro:  conda activate gnn && PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh all
+```
+
+Durata in parallelo: Task A circa 6 ore, Task B circa 30. Se una sessione si ferma (per esempio per
+un out-of-memory), rilancia lo stesso comando: le varianti complete vengono saltate.
+
+```bash
+# config effettiva (deve dire PKT-DTI-best-v2b, rgcn, 1500)
+grep -h "\[i\] Protocol" experiments/logs/v2/e3_DTI/e3_comp_full_*.log | grep -o "'config': '[^']*'\|'model': '[^']*'\|'epochs': [0-9]*"
+# avanzamento: seed completati su 5 per variante
+for t in DTI TREATS; do echo "== $t"; for f in experiments/logs/v2/e3_$t/*.log; do printf "  %-45s %s/5\n" "$(basename $f)" "$(grep -c 'Completed run' $f)"; done; done
+# out-of-memory
+grep -l "CUDA out of memory" experiments/logs/v2/e3_*/*.log
+# riepilogo, a fine corsa
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI    --out experiments/logs/v2/e3_DTI
 python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_TREATS --out experiments/logs/v2/e3_TREATS
 ```
+
+**Controllo di coerenza gratuito:** `comp_full` del Task A è la stessa ricetta dei seed 0-4 di E1
+R-GCN, quindi il suo MRR deve stare vicino a 0,420 / 0,399 / 0,374 / 0,439 / 0,402 (media 0,407).
+Qualche millesimo di scarto è normale; se esce molto diverso, qualcosa nella catena è cambiato.
+
+Come leggere: le varianti `ctx_*` si confrontano con `ctx_full`, **non** con E1 (i file di ablazione
+hanno un altro ordine delle righe, quindi un altro split). Guarda ΔAUROC oltre a ΔMRR: E1 dice che
+sul Task A il contesto agisce sulla discriminazione più che sul ranking.
 
 Le due varianti di contesto nuove sono quelle che rispondono a una domanda biologica:
 - Task A `no_biochem`: la biochimica di PheKnowLator aiuta a predire i bersagli farmacologici?
@@ -304,7 +363,22 @@ Le due varianti di contesto nuove sono quelle che rispondono a una domanda biolo
 
 ---
 
-## 6. E4 — repurposing e revisione esperta
+## 6. E4 — repurposing e revisione esperta — ✅ Task A fatto (22/09)
+
+> Dal 21/09 E4 del Task A si fa **sul PC locale**, con il checkpoint R-GCN migliore di E1
+> (`models/dti_pkt_taskA_dti.tsv_20260918_130755`, run 3), la coorte 1 di
+> [`docs/coorte_validazione_taskA.md`](docs/coorte_validazione_taskA.md) e il foglio cieco con decoy di
+> `expert_review_script.py`. La GPU del server resta libera per E3. I comandi sotto restano validi per
+> chi volesse rifarlo sul server.
+>
+> **21/09: foglio generato.** 270 voci (9 composti × 20 predizioni, più 45 decoy casuali e 45 di centro
+> classifica), pool `relation` (2.188 proteine). File in
+> `models/dti_pkt_taskA_dti.tsv_20260918_130755/drug_eval_results/`:
+> `expert_review_taskA_20260921_174910_BLIND.csv` (da compilare) e `…_KEY.csv` (**da non aprire**
+> prima di aver finito). A revisione conclusa:
+> `python expert_review_script.py aggregate <BLIND compilato> <KEY>`.
+> Prima della generazione sono stati corretti due difetti dei decoy: potevano includere bersagli veri
+> nascosti nel test, e quelli casuali venivano pescati fuori dal pool del modello.
 
 ```bash
 ls -td models/dti_pkt_taskA_dti* | head       # cartelle di E1
@@ -322,12 +396,49 @@ CANDIDATE_POOL=relation bash experiments/e4_repurposing.sh B models/<cartella_ta
 
 ---
 
+## 7. Facoltativo, dopo E3 — convergenza di CompGCN sul TREATS
+
+In E1 CompGCN sul Task B aveva ancora la validazione in salita a 1500 epoche (+0,025 di MRR nelle
+ultime 250). Non cambia il confronto con DistMult, ma lascia aperto l'ordine fra le due GNN sul Task B.
+Circa 6 ore per 3 seed:
+
+```bash
+# i log di convergenza vecchi (sweep -v2) verrebbero presi per lavoro già fatto: spostali
+[ -d experiments/logs/v2/conv ] && mv experiments/logs/v2/conv experiments/logs/v2/conv_pre_v2b
+
+tmux new -s conv   # dentro:
+CONV_TASKS=TREATS CONV_MODELS=compgcn CONV_RUNS=3 CONV_EPOCHS=4000 CONV_GNN_LRS="" \
+  bash experiments/convergence_check.sh
+```
+`CONV_GNN_LRS=""` fa girare solo il learning rate della config tunata: di default lo script prova
+anche 0,03 e 0,1, che qui non servono. La config è `PKT-TREATS-best-v2b` grazie alla correzione di
+`resolve_config`. Tabella in `experiments/logs/v2/conv/convergence_summary.md`.
+
+---
+
+## Regole per i job lunghi (dal blocco del 18-20/09)
+
+Il seed 6 di R-GCN TREATS è rimasto fermo 40 ore. Gli script scrivevano con `tee` anche sul terminale
+VS Code; a PC spento il terminale non veniva più svuotato, il buffer si riempiva e il training si
+bloccava dentro una `write()`. È ripartito da solo alla riaccensione.
+
+- **Corretto nel codice:** `run_logged` in `experiments/config.sh` scrive solo su file, e un `tail`
+  separato mostra l'output. Se il terminale si blocca, si blocca solo il `tail`. Ogni riga `[val]`
+  ha ora l'orario, e `e1_progress.sh` mostra la colonna `MIN/MAX m` con `!!` se un seed dura più di 4
+  volte il più veloce.
+- **Lancia comunque tutto in `tmux`**: la correzione protegge da un terminale bloccato, non da uno
+  chiuso.
+- **Mai `git pull` mentre uno script `.sh` è in esecuzione**: bash legge lo script a pezzi e, se il
+  file cambia sotto di lui, riprende dal punto sbagliato. Il pull si fa a job finito.
+
+---
+
 ## Cosa riportare indietro
 
-1. `analysis/out/06_subgraph_stats.md` e `analysis/out/10_dti_drugbank_report.md` (dataset ricostruiti)
-2. `experiments/logs/v2/e1_summary.md` + `.csv` ← **priorità**
-3. `experiments/logs/v2/e3_*/ablation_summary.md`
-4. le cartelle `models/.../drug_eval_results/` usate in E4
+1. ~~`experiments/logs/v2/e1_summary.md` + `.csv`~~ ✅ ricevuti
+2. `experiments/logs/v2/e3_DTI/ablation_summary.md` e `experiments/logs/v2/e3_TREATS/ablation_summary.md`,
+   più i log `e3_*` delle due cartelle ← **prossima priorità**
+3. `python experiments/models_index.py --current-only` sul server, per sapere cosa tenere in `models/`
 
 ## Se qualcosa non torna
 

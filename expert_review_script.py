@@ -57,9 +57,16 @@ Then:
 
 # ----------------------- CONFIG -----------------------
 TASK          = "A"                                              # "A" = DTI (targets), "B" = TREATS (diseases)
-MODEL_FOLDER  = os.path.join("models", "REPLACE_WITH_MODEL_FOLDER")
+# E1 R-GCN, Task A: best M (0.684) and MRR tied with DistMult (docs/report_E1.md). drug_eval loads the
+# seed with the best test MRR (run 3, MRR 0.439, above the 0.408 mean: to be stated when reporting).
+MODEL_FOLDER  = os.path.join("models", "dti_pkt_taskA_dti.tsv_20260918_130755")
 TOPK          = 50          # how deep drug_eval ranks and stores
 REVIEW_TOPK   = 20          # how many per compound actually go to the reviewer (PathogenKG: 20)
+# 'relation' = rank only the nodes that occur in the target relation, the pool of the training
+# evaluation and of the negative sampler: a node outside it was never a negative in training, so its
+# score is not calibrated against true targets. Random decoys are drawn from the SAME pool, otherwise
+# they would be proteins never seen in pharmacology, recognisable as implausible at a glance.
+CANDIDATE_POOL = "relation"
 
 # Cohort 1 of docs/coorte_validazione_taskA.md: nine drugs with known and diverse mechanisms of
 # action, declared before looking at any model output, on the PathogenKG pattern. The rationale for
@@ -97,7 +104,8 @@ LABELS_TSV = "dataset/PKT_subgraphs/node_labels.tsv"
 def run_drug_eval(cfg):
     """Run drug_eval.py for the cohort (all compounds, or one call per curated compound)."""
     common = ["--model_folder", MODEL_FOLDER, "--tsv", cfg["tsv"], "--task", cfg["task_rel"],
-              "--target_type", cfg["target_type"], "--topk", str(TOPK)]
+              "--target_type", cfg["target_type"], "--topk", str(TOPK),
+              "--candidate_pool", CANDIDATE_POOL]
     if not CANDIDATES:
         print("[i] No CANDIDATES set -> ranking ALL compounds (--compound all)")
         subprocess.run([sys.executable, "drug_eval.py", *common, "--compound", "all"], check=True)
@@ -124,11 +132,34 @@ def load_all_rankings():
     return merged
 
 
-def _decoy_pool(df, target_type):
-    """Every node of the target type in the task graph: the pool random decoys are drawn from."""
-    nodes = set(df.loc[df["head"].str.startswith(target_type + "::"), "head"]) | \
-            set(df.loc[df["tail"].str.startswith(target_type + "::"), "tail"])
+def _decoy_pool(df, cfg):
+    """The pool random decoys are drawn from: the same candidate pool drug_eval ranked.
+
+    'relation' -> the tails of the target relation; 'all' -> every node of the target type.
+    """
+    target_type = cfg["target_type"]
+    if CANDIDATE_POOL == "relation":
+        nodes = set(df.loc[df["interaction"] == cfg["task_rel"], "tail"])
+        nodes = {n for n in nodes if n.startswith(target_type + "::")}
+    else:
+        nodes = set(df.loc[df["head"].str.startswith(target_type + "::"), "head"]) | \
+                set(df.loc[df["tail"].str.startswith(target_type + "::"), "tail"])
     return sorted(nodes)
+
+
+def _true_targets(df, cfg):
+    """drug -> every target asserted in the task graph (train, validation AND test).
+
+    A decoy must be a pair the graph does not assert. The rankings flag train/val positives
+    (is_known_positive) and test ones (is_test_target) separately, and only the first used to be
+    excluded: a held-out true target falling in the mid-rank window could be drawn as a 'decoy',
+    and a reviewer judging it plausible would count against the model.
+    """
+    rel = df[df["interaction"] == cfg["task_rel"]]
+    out = defaultdict(set)
+    for h, t in zip(rel["head"], rel["tail"]):
+        out[h].add(t)
+    return out
 
 
 def _build_items(rankings, ann, df, cfg):
@@ -138,7 +169,8 @@ def _build_items(rankings, ann, df, cfg):
     """
     import random
     rng = random.Random(DECOY_SEED)
-    pool = _decoy_pool(df, cfg["target_type"])
+    pool = _decoy_pool(df, cfg)
+    truth = _true_targets(df, cfg)
     items = []
 
     for drug, sub in ann.groupby("drug", sort=True):
@@ -152,18 +184,20 @@ def _build_items(rankings, ann, df, cfg):
 
         preds = rankings.get(drug, [])
         seen = {r["prediction"] for _, r in sub.iterrows()}
+        known = truth.get(drug, set()) | {p["tail"] for p in preds
+                                          if p.get("is_known_positive") or p.get("is_test_target")}
 
         # decoys the model ranked, but low
         mid = [p for p in preds if MIDRANK_FROM <= int(p.get("rank", 0)) <= MIDRANK_TO
-               and not p.get("is_known_positive") and p["tail"] not in seen]
+               and p["tail"] not in known and p["tail"] not in seen]
         for p in rng.sample(mid, min(DECOY_MIDRANK, len(mid))):
             seen.add(p["tail"])
             items.append(dict(drug_id=drug, prediction_id=p["tail"], stratum="decoy_midrank",
                               rank=p.get("rank"), confidence=p.get("confidence"),
                               kg_evidence="", n_evidence=0, auto_tier="", held_out_recovered=False))
 
-        # decoys the model never proposed
-        known = {p["tail"] for p in preds if p.get("is_known_positive")}
+        # random pairs: uniform over the candidate pool, minus true targets and items already drawn.
+        # Deliberately NOT restricted to low ranks: the control is "a random pair", whatever its rank.
         cand = [n for n in pool if n not in known and n not in seen]
         for n in rng.sample(cand, min(DECOY_RANDOM, len(cand))):
             seen.add(n)

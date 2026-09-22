@@ -18,6 +18,7 @@ read.ipynb
 bkps/
 archives/
 archive*
+plots/*
 
 # ==========================================
 # ML Tracking & Logs
