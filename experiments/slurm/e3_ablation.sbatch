@@ -25,7 +25,7 @@
 #SBATCH --qos=low
 #SBATCH --gres=gpu:rtx3090:1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --mem=32G
 #SBATCH --time=72:00:00
 #SBATCH --requeue
 
