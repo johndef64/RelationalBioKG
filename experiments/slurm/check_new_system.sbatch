@@ -16,13 +16,15 @@
 #   4  comp_full and ctx_full, the same recipe, give identical test metrics seed by seed
 #   5  resume skips completed variants; a resume with different settings is refused
 #
-# Run it on the GPU type the real job will use (edit --gres, or pass it on the command line).
+# It takes any free GPU; to test a specific type, pass e.g. --gres=gpu:rtx5000ada:1 on the command line.
 # =============================================================================
 #SBATCH --job-name=check
 #SBATCH --output=experiments/slurm/%x-%j.out
 #SBATCH --error=experiments/slurm/%x-%j.out
 #SBATCH --qos=low
-#SBATCH --gres=gpu:rtx3090:1
+#SBATCH --gres=gpu:1
+##SBATCH --gres=gpu:rtx3090:1      # iknos-gpu1, RTX 3090, 24 GB
+##SBATCH --gres=gpu:rtx5000ada:1   # iknos-gpu2, RTX 5000 Ada, 32 GB
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=03:00:00

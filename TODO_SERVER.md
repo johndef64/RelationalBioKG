@@ -354,14 +354,15 @@ sbatch experiments/slurm/check_new_system.sbatch
 squeue -u $USER
 tail -n 12 experiments/slurm/check-<jobid>.out
 
-# 2. solo se i 5 test sono PASS: le due ablazioni, ognuna su un tipo di GPU fisso
-sbatch --job-name=e3A --gres=gpu:rtx3090:1    --export=ALL,ABL_TASK=A,ABL_VERSION=v2,ABL_RUNS=10 experiments/slurm/e3_ablation.sbatch
-sbatch --job-name=e3B --gres=gpu:rtx5000ada:1 --export=ALL,ABL_TASK=B,ABL_VERSION=v1             experiments/slurm/e3_ablation.sbatch
+# 2. solo se i 5 test sono PASS: le due ablazioni, su una GPU libera qualsiasi (--gres=gpu:1)
+sbatch --job-name=e3A --export=ALL,ABL_TASK=A,ABL_VERSION=v2,ABL_RUNS=10 experiments/slurm/e3_ablation.sbatch
+sbatch --job-name=e3B --export=ALL,ABL_TASK=B,ABL_VERSION=v1             experiments/slurm/e3_ablation.sbatch
 ```
 
-- **Il tipo di GPU è fissato apposta**: nella coda `low` un job può essere interrotto e rimesso in coda,
-  e senza `--gres` esplicito potrebbe ripartire sull'altro nodo, mescolando hardware nella stessa
-  versione.
+- **GPU**: gli sbatch chiedono una GPU qualsiasi. I tipi disponibili sono `gpu:rtx3090:1` (iknos-gpu1,
+  24 GB) e `gpu:rtx5000ada:1` (iknos-gpu2, 32 GB); per fissarne uno aggiungi per esempio
+  `--gres=gpu:rtx3090:1` al comando. Nella coda `low` un job interrotto può ripartire sull'altro nodo:
+  ogni lancio scrive la sua GPU nel `MANIFEST.md` della versione, quindi un eventuale mix si vede lì.
 - **Se un job viene interrotto o supera il tempo**, risottomettilo con **lo stesso identico comando**:
   riprende la stessa versione e salta le varianti già complete. `ABL_VERSION` è sempre esplicito per
   questo.
