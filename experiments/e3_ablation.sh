@@ -112,7 +112,7 @@ else
   # experiments/ablation/ itself is not in git.
   PREREG="${ABL_PREREG_DIR:-experiments/prereg}/PREREGISTRATION_${A_TASK}.json"
   if [ -f "$PREREG" ] && [ ! -f "$ABL_DIR/PREREGISTRATION.json" ]; then
-    cp -p "$PREREG" "$ABL_DIR/PREREGISTRATION.json"; echo "[E3] pre-registration frozen into $ABL_DIR/"
+    cp "$PREREG" "$ABL_DIR/PREREGISTRATION.json"; echo "[E3] pre-registration frozen into $ABL_DIR/"
   fi
   # under Slurm the driver's own output (skips, warnings, final status) also belongs to the version
   if [ -n "${SLURM_JOB_ID:-}" ]; then
