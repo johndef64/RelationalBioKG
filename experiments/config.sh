@@ -168,8 +168,9 @@ run_logged_append () {   # same, but appending to an existing log
   return "$rc"
 }
 
-# Activate conda env if available (harmless if already active)
-if command -v conda >/dev/null 2>&1; then
+# Activate conda env if available (harmless if already active). On the iknos cluster the environment
+# is activated by the job with `iknos_activate gnn` and PKT_SKIP_CONDA=1 keeps this from replacing it.
+if [ "${PKT_SKIP_CONDA:-0}" != "1" ] && command -v conda >/dev/null 2>&1; then
   # shellcheck disable=SC1091
   source "$(conda info --base)/etc/profile.d/conda.sh" 2>/dev/null || true
   conda activate "$CONDA_ENV" 2>/dev/null || true

@@ -23,6 +23,19 @@ raw + Holm) are in the CSV.
 Read-only on the logs -> safe to run while the ablation is still going (partial tags
 show fewer runs; tests need n>=2 paired points, else p is left blank).
 
+PRE-REGISTRATION (optional). If the version folder holds a PREREGISTRATION.json (or one is given
+with --prereg), the tests follow it instead of the defaults above:
+  "primary":  {"comp": [...], "ctx": [...]}   Holm is applied among these only; every other variant
+                                             is SECONDARY: raw p reported, never starred.
+  "alternative": "less" | "two-sided"         direction of the primary tests, declared in advance
+                                             ("less" = removing the piece lowers the metric).
+  "equivalence": {"margin": {"MRR": 0.02}, "tags": {...}}
+                                             TOST equivalence test for the "does not matter" claims:
+                                             p < 0.05 means the difference is shown to lie within
+                                             +/- margin, which a non-significant test cannot show.
+The file must be written before the version's results are looked at; its timestamp and content are
+echoed in the summary so a reader can check that. Every Delta also gets a 95% paired t interval.
+
 Requires scipy for the tests. Without it, means/std/SEM/Delta are still produced and a
 note is printed (p-values blank).
 
@@ -115,11 +128,51 @@ def holm(pairs):
     return out
 
 
+def diff_stats(a, b, margin=None):
+    """Paired difference b - a: 95% t interval and, given a margin, the TOST equivalence p."""
+    d = [y - x for x, y in zip(a, b)]
+    n = len(d)
+    if n < 2 or not HAVE_SCIPY:
+        return None, None, None
+    mean, sd = st.mean(d), st.stdev(d)
+    se = sd / math.sqrt(n)
+    tcrit = _sp.t.ppf(0.975, n - 1)
+    lo, hi = mean - tcrit * se, mean + tcrit * se
+    p_eq = None
+    if margin is not None and se > 0:
+        # two one-sided tests: difference > -margin and difference < +margin
+        p_low = 1 - _sp.t.cdf((mean + margin) / se, n - 1)
+        p_high = _sp.t.cdf((mean - margin) / se, n - 1)
+        p_eq = max(p_low, p_high)
+    return lo, hi, p_eq
+
+
+def load_prereg(path):
+    import json
+    if not path or not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        pre = json.load(f)
+    pre["_path"] = path
+    pre["_mtime"] = __import__("datetime").datetime.fromtimestamp(os.path.getmtime(path)).isoformat(" ", "seconds")
+    return pre
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--logdir", default="experiments/logs")
     ap.add_argument("--out", default="experiments")
+    ap.add_argument("--prereg", default=None,
+                    help="pre-registration JSON (default: PREREGISTRATION.json next to --logdir)")
     args = ap.parse_args()
+    pre = load_prereg(args.prereg or os.path.join(os.path.dirname(os.path.normpath(args.logdir)),
+                                                   "PREREGISTRATION.json"))
+    # one direction for all families, or {"comp": "less", "ctx": "two-sided"}
+    _alt = (pre or {}).get("alternative", "two-sided")
+    alt_for = (lambda fam: _alt.get(fam, "two-sided")) if isinstance(_alt, dict) else (lambda fam: _alt)
+    alternative = _alt if isinstance(_alt, str) else ", ".join(f"{k}: {v}" for k, v in _alt.items())
+    margins = ((pre or {}).get("equivalence") or {}).get("margin", {})
+    eq_tags = ((pre or {}).get("equivalence") or {}).get("tags", {})
 
     logs = sorted(glob.glob(os.path.join(args.logdir, "e3_*.log")))
     by_tag = {}  # tag -> (runs, source_log); keep the log with MORE runs on duplicates
@@ -149,7 +202,8 @@ def main():
             sem = sd / math.sqrt(n) if n > 1 else 0.0
             stats[tag][k] = {"n": n, "mean": mean, "std": sd, "sem": sem,
                              "delta": None, "p_t": None, "p_t_holm": None,
-                             "p_w": None, "p_w_holm": None}
+                             "p_w": None, "p_w_holm": None,
+                             "ci_lo": None, "ci_hi": None, "p_equiv": None, "role": ""}
 
     # ---- paired tests vs family reference (comp_full / ctx_full) ----
     families = {}
@@ -165,23 +219,33 @@ def main():
             continue
         ref_runs = by_tag[ref_tag][0]
         variants = [t for t in tags if t != ref_tag]
+        # without a pre-registration every variant is tested two-sided and Holm runs over all of
+        # them (the historical behaviour); with one, only the declared primaries enter Holm
+        primary = set((pre or {}).get("primary", {}).get(fam, variants))
+        equiv = set(eq_tags.get(fam, []))
         for k in METRICS:
             p_t_pairs, p_w_pairs = [], []
             for t in variants:
                 a, b = paired(ref_runs, by_tag[t][0], k)
                 stats[t][k]["delta"] = (st.mean(b) - st.mean(a)) if a else None  # variant - full
+                is_primary = t in primary
+                stats[t][k]["role"] = ("primary" if is_primary else "secondary") if pre else ""
+                alt = alt_for(fam) if (pre and is_primary) else "two-sided"
                 pt = pw = None
                 if HAVE_SCIPY and len(a) >= 2 and any(x != y for x, y in zip(a, b)):
                     try:
-                        pt = float(_sp.ttest_rel(b, a).pvalue)
+                        pt = float(_sp.ttest_rel(b, a, alternative=alt).pvalue)
                     except Exception:
                         pt = None
                     try:
-                        pw = float(_sp.wilcoxon(b, a).pvalue)
+                        pw = float(_sp.wilcoxon(b, a, alternative=alt).pvalue)
                     except Exception:
                         pw = None
                 stats[t][k]["p_t"], stats[t][k]["p_w"] = pt, pw
-                p_t_pairs.append((t, pt)); p_w_pairs.append((t, pw))
+                lo, hi, peq = diff_stats(a, b, margins.get(k) if t in equiv else None)
+                stats[t][k]["ci_lo"], stats[t][k]["ci_hi"], stats[t][k]["p_equiv"] = lo, hi, peq
+                if is_primary:
+                    p_t_pairs.append((t, pt)); p_w_pairs.append((t, pw))
             for t, adj in holm(p_t_pairs).items():
                 stats[t][k]["p_t_holm"] = adj
             for t, adj in holm(p_w_pairs).items():
@@ -192,7 +256,8 @@ def main():
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["family", "tag", "is_reference", "metric", "n", "mean", "std", "sem",
-                    "delta_vs_full", "p_ttest", "p_ttest_holm", "p_wilcoxon", "p_wilcoxon_holm",
+                    "delta_vs_full", "ci95_lo", "ci95_hi", "role", "alternative",
+                    "p_ttest", "p_ttest_holm", "p_wilcoxon", "p_wilcoxon_holm", "p_equivalence",
                     "source_log"])
         for tag in sorted(by_tag):
             fam = family_of(tag)
@@ -200,10 +265,12 @@ def main():
             for k in METRICS:
                 s = stats[tag][k]
                 fmt = lambda x: ("" if x is None else round(x, 6))
+                alt = (alt_for(fam) if s["role"] == "primary" else "two-sided") if not is_ref else ""
                 w.writerow([fam, tag, int(is_ref), k, s["n"], round(s["mean"], 4),
                             round(s["std"], 4), round(s["sem"], 4), fmt(s["delta"]),
+                            fmt(s["ci_lo"]), fmt(s["ci_hi"]), s["role"], alt,
                             fmt(s["p_t"]), fmt(s["p_t_holm"]), fmt(s["p_w"]), fmt(s["p_w_holm"]),
-                            by_tag[tag][1]])
+                            fmt(s["p_equiv"]), by_tag[tag][1]])
 
     # ---- Markdown (per-family tables, mean+/-std with significance markers) ----
     def marker(s, is_ref):
@@ -239,6 +306,46 @@ def main():
                     cells.append(f"{s['mean']:.3f} ± {s['std']:.3f}{marker(s, is_ref)}")
                 f.write(f"| {name} | {n} | " + " | ".join(cells) + " |\n")
             f.write("\n")
+        # ---- effects: delta, interval and verdict per variant, for the metrics that carry claims ----
+        f.write("## Effects against the reference\n\n")
+        if pre:
+            f.write(f"Tests follow the pre-registration `{os.path.basename(pre['_path'])}` "
+                    f"(last modified {pre['_mtime']}): primary variants are tested "
+                    f"**{alternative}** with Holm among primaries only; secondary variants get a "
+                    f"two-sided raw p and no star; equivalence is TOST against ±margin.\n\n")
+        else:
+            f.write("No pre-registration found: every variant is primary, two-sided, Holm over "
+                    "the family.\n\n")
+
+        def verdict(s):
+            if s["role"] == "secondary":
+                if s["p_equiv"] is not None and s["p_equiv"] < 0.05:
+                    return "equivalent to reference"
+                return "secondary (descriptive)"
+            p = s["p_t_holm"]
+            if p is not None and p < 0.05:
+                return "effect confirmed"
+            if s["p_equiv"] is not None and s["p_equiv"] < 0.05:
+                return "equivalent to reference"
+            return "not shown"
+
+        for k in [m for m in ("MRR", "AUROC") if m in METRICS]:
+            f.write(f"### {k}" + (f" (equivalence margin ±{margins[k]})" if k in margins else "") + "\n\n")
+            f.write("| tag | role | Δ | 95% CI | p (Holm if primary) | p equivalence | verdict |\n")
+            f.write("|---|---|---|---|---|---|---|\n")
+            for fam in ("comp", "ctx"):
+                for tag in sorted(t for t in families.get(fam, []) if t != f"{fam}_full"):
+                    s = stats[tag][k]
+                    if s["delta"] is None:
+                        continue
+                    p = s["p_t_holm"] if s["role"] != "secondary" else s["p_t"]
+                    ci = (f"[{s['ci_lo']:+.3f}, {s['ci_hi']:+.3f}]" if s["ci_lo"] is not None else "")
+                    pe = "" if s["p_equiv"] is None else f"{s['p_equiv']:.3g}"
+                    ps = "" if p is None else f"{p:.3g}"
+                    f.write(f"| {tag} | {s['role'] or 'primary'} | {s['delta']:+.3f} | {ci} | {ps} | {pe} | "
+                            f"{verdict(s)} |\n")
+            f.write("\n")
+
         if ref_missing:
             f.write(f"_Note: no `*_full` reference found for: {', '.join(ref_missing)} "
                     f"→ no paired tests for that family._\n")

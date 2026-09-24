@@ -336,14 +336,37 @@ nessuna versione: se le copi, tienile a parte (`archives/e3_server_partial/`).
 - **Il GPU finisce nei log** (`[i] GPU: …` all'avvio) e nel manifesto.
 - **Una variante che fallisce non ferma più le altre**: viene segnalata alla fine e la versione resta
   senza `COMPLETE`, così il rilancio la riprende.
+- **Pre-registrazione.** Alla creazione di una versione lo script vi copia
+  `experiments/prereg/PREREGISTRATION_<TASK>.json`: confronti primari, direzione dei test, soglia di
+  equivalenza. Il riepilogo la segue. **Non modificare quei file dopo aver lanciato**: valgono perché
+  sono scritti prima dei risultati, e il commit ne certifica la data.
+- **`experiments/ablation/` non è in git** (`.gitignore`), quindi sul server `DTI_v1` non c'è: il Task A
+  va lanciato con **`ABL_VERSION=v2`** esplicito, altrimenti lo script lo chiamerebbe `DTI_v1`.
+- **Task A con 10 semi** (`ABL_RUNS=10`): `DTI_v1` è il pilota, `DTI_v2` la conferma.
+
+**Sul cluster iknos non si lancia niente da terminale** (il nodo di gestione non ha GPU) **e non si usa
+tmux**: ogni corsa è un job Slurm (`docs/guida_all_uso_del_nuovo_server.md`). Dalla root del repo:
 
 ```bash
 git pull
-# controlla il piano: versione scelta, impostazioni, comandi (non scrive e non allena niente)
-ABL_DRY=1 PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh all
+# 1. verifica del sistema nuovo (circa 40 minuti, un job): alla fine del .out una riga PASS/FAIL per test
+sbatch experiments/slurm/check_new_system.sbatch
+squeue -u $USER
+tail -n 12 experiments/slurm/check-<jobid>.out
 
-tmux new -s e3B     # dentro:  conda activate gnn && PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh all
+# 2. solo se i 5 test sono PASS: le due ablazioni, ognuna su un tipo di GPU fisso
+sbatch --job-name=e3A --gres=gpu:rtx3090:1    --export=ALL,ABL_TASK=A,ABL_VERSION=v2,ABL_RUNS=10 experiments/slurm/e3_ablation.sbatch
+sbatch --job-name=e3B --gres=gpu:rtx5000ada:1 --export=ALL,ABL_TASK=B,ABL_VERSION=v1             experiments/slurm/e3_ablation.sbatch
 ```
+
+- **Il tipo di GPU è fissato apposta**: nella coda `low` un job può essere interrotto e rimesso in coda,
+  e senza `--gres` esplicito potrebbe ripartire sull'altro nodo, mescolando hardware nella stessa
+  versione.
+- **Se un job viene interrotto o supera il tempo**, risottomettilo con **lo stesso identico comando**:
+  riprende la stessa versione e salta le varianti già complete. `ABL_VERSION` è sempre esplicito per
+  questo.
+- Tutto l'output sta in `experiments/ablation/<TASK>_<versione>/`, compreso `driver.log` con i messaggi
+  dello script; il `.out` di Slurm contiene solo le prime righe.
 
 Il Task B va fatto **tutto su una macchina sola**, riferimenti compresi. Durata circa 30 ore.
 
@@ -435,8 +458,9 @@ bloccava dentro una `write()`. È ripartito da solo alla riaccensione.
   separato mostra l'output. Se il terminale si blocca, si blocca solo il `tail`. Ogni riga `[val]`
   ha ora l'orario, e `e1_progress.sh` mostra la colonna `MIN/MAX m` con `!!` se un seed dura più di 4
   volte il più veloce.
-- **Lancia comunque tutto in `tmux`**: la correzione protegge da un terminale bloccato, non da uno
-  chiuso.
+- **Mai tmux.** Sul cluster iknos i job lunghi si sottomettono con `sbatch` (vedi §5 ed
+  `experiments/slurm/`): girano da soli anche a browser e PC spenti. Le istruzioni con tmux più sopra
+  (§4 E1, §7) sono della vecchia macchina e restano solo come storia.
 - **Mai `git pull` mentre uno script `.sh` è in esecuzione**: bash legge lo script a pezzi e, se il
   file cambia sotto di lui, riprende dal punto sbagliato. Il pull si fa a job finito.
 

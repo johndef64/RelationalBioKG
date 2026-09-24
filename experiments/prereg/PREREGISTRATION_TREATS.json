@@ -1,0 +1,22 @@
+{
+  "task": "TREATS (Task B)",
+  "written": "2026-09-24, before TREATS_v1 was run",
+  "design": "No clean pilot (the 3/13 partial server run is not used). Hypotheses by analogy with Task A, except for the direction of the context family, set by E1.",
+
+  "primary": {
+    "comp": ["comp_neg1", "comp_no_focal", "comp_no_adv"],
+    "ctx": ["ctx_no_pharma", "ctx_no_disease_ctx"]
+  },
+  "alternative": {"comp": "less", "ctx": "two-sided"},
+  "equivalence": {
+    "margin": {"MRR": 0.02, "AUROC": 0.01},
+    "tags": {"ctx": ["ctx_no_ppi", "ctx_no_go", "ctx_no_pathway", "ctx_no_biochem"]}
+  },
+
+  "rationale": {
+    "comp_primary": "Same three pieces as Task A: number of training negatives, focal loss, adversarial weighting.",
+    "ctx_primary": "The two blocks that answer a biological question on the indication task: the injected pharmacological layer (no_pharma) and the disease side of the graph (no_disease_ctx).",
+    "direction": "two-sided for the context family: on Task B, E1 found that message passing over the context LOWERS every metric (DistMult 0.692 vs R-GCN 0.348), so removing context may help R-GCN. A one-sided test would presuppose the opposite.",
+    "multiplicity": "Holm within each family over its primaries only (3 and 2 tests)."
+  }
+}

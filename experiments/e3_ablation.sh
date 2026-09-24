@@ -107,6 +107,19 @@ else
   else
     echo "$SETTINGS" > "$ABL_DIR/settings.env"
   fi
+  # the pre-registration is frozen into the version when the version is created, before any result.
+  # It lives in experiments/prereg/ (tracked by git, so the commit date proves when it was written);
+  # experiments/ablation/ itself is not in git.
+  PREREG="${ABL_PREREG_DIR:-experiments/prereg}/PREREGISTRATION_${A_TASK}.json"
+  if [ -f "$PREREG" ] && [ ! -f "$ABL_DIR/PREREGISTRATION.json" ]; then
+    cp -p "$PREREG" "$ABL_DIR/PREREGISTRATION.json"; echo "[E3] pre-registration frozen into $ABL_DIR/"
+  fi
+  # under Slurm the driver's own output (skips, warnings, final status) also belongs to the version
+  if [ -n "${SLURM_JOB_ID:-}" ]; then
+    echo "[E3] Slurm job $SLURM_JOB_ID: driver output -> $ABL_DIR/driver.log"
+    exec >> "$ABL_DIR/driver.log" 2>&1
+    echo "===== $(date '+%F %T') Slurm job $SLURM_JOB_ID on $(hostname), restart ${SLURM_RESTART_COUNT:-0}"
+  fi
   GPU="$(nvidia-smi --query-gpu=name,driver_version --format=csv,noheader 2>/dev/null | head -1 || true)"
   {
     [ -s "$ABL_DIR/MANIFEST.md" ] || printf '# E3 ablation — %s, %s\n\n| launch | host | GPU | commit | what |\n|---|---|---|---|---|\n' "$A_TASK" "$VERSION"
