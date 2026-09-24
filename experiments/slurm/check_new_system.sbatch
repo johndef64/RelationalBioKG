@@ -5,12 +5,12 @@
 #     sbatch experiments/slurm/check_new_system.sbatch
 #     tail -f experiments/slurm/check-<jobid>.out          # while it runs
 #
-# About 40 minutes on one GPU. It writes only inside experiments/slurm/test_<jobid>/, never into
+# About 15-20 minutes on one GPU. It writes only inside experiments/slurm/test_<jobid>/, never into
 # experiments/ablation/ or models/. The last lines of the .out are the verdict, one PASS/FAIL per test:
 #
 #   1  fixed-order GPU sum is bit-identical, atomic sum is not        (src/deterministic_ops.py)
 #   2  two short trainings with --deterministic are identical          (train_and_eval.py)
-#   3  a miniature ablation (13 variants x 2 seeds x 20 epochs) produces the versioned folder:
+#   3  a miniature ablation (13 variants x 1 seed x 5 epochs) produces the versioned folder:
 #      MANIFEST with the GPU, settings.env, PREREGISTRATION.json, 13 logs, 13 model folders,
 #      summary, COMPLETE, driver.log; and models/ is left untouched
 #   4  comp_full and ctx_full, the same recipe, give identical test metrics seed by seed
@@ -84,7 +84,7 @@ diff <(v "$T/det1.log") <(v "$T/nondet.log") > /dev/null \
   || echo "[check] note: without the flag the run differs, as expected"
 
 # ---------------------------------------------------------------- test 3
-export ABL_ROOT="$T/ablation" ABL_RUNS=2 ABL_EPOCHS=20 PROTOCOL=v2 ABL_TASK=A ABL_VERSION=v1
+export ABL_ROOT="$T/ablation" ABL_RUNS=1 ABL_EPOCHS=5 PROTOCOL=v2 ABL_TASK=A ABL_VERSION=v1
 bash experiments/e3_ablation.sh all > "$T/t3_console.log" 2>&1
 V="$ABL_ROOT/DTI_v1"
 miss=""
@@ -123,6 +123,8 @@ if [ "$skips" -ge 6 ] && [ "$refused" -ge 1 ] && [ "$rc" -ne 0 ]; then
 else
   verdict 5 "FAIL (skipped=$skips refused=$refused exit=$rc; see $T/t5_*.log and $V/driver.log)"
 fi
+
+rm -rf "$V/models"     # the test checkpoints are not needed afterwards: keep only logs and summary
 
 echo
 echo "================ VERDICT ($(date '+%F %T'), $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1))"

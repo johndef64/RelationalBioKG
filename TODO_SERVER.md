@@ -349,7 +349,7 @@ tmux**: ogni corsa è un job Slurm (`docs/guida_all_uso_del_nuovo_server.md`). D
 
 ```bash
 git pull
-# 1. verifica del sistema nuovo (circa 40 minuti, un job): alla fine del .out una riga PASS/FAIL per test
+# 1. verifica del sistema nuovo (circa 15-20 minuti, un job): alla fine del .out una riga PASS/FAIL per test
 sbatch experiments/slurm/check_new_system.sbatch
 squeue -u $USER
 tail -n 12 experiments/slurm/check-<jobid>.out
