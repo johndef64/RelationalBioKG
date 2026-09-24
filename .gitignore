@@ -87,6 +87,7 @@ src/dataset-stats.py
 
 # Experiments
 experiments/hpo*
+experiments/ablation*
 
 # Bacterial / DRKG tuning & evaluation utilities
 # (RelationalPKT uses experiments/ + tuning_hyperparameter.py instead)
@@ -122,3 +123,8 @@ wandb_key*
 # ==========================================
 !dataset/DRUGBANK/uniprot_entry_names.json
 !dataset/DRUGBANK/taxons/drugbank_microorganisms_with_pathogen_status.csv
+# ==========================================
+# Ablation runs (experiments/ablation/<TASK>_v<N>/): manifest, logs and summary are versioned;
+# checkpoints are not (models/ above already excludes every models/ folder, at any depth).
+# ==========================================
+!experiments/ablation/**/logs/

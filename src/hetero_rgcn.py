@@ -5,6 +5,9 @@ import torch.nn.functional as F
 from torch_geometric.nn import RGCNConv
 from torch.nn.modules.module import Module
 
+# gather/spmm fall back to the original ops unless --deterministic is on (src/deterministic_ops.py)
+from src.deterministic_ops import gather, spmm as det_spmm
+
 class DynamicMLP(nn.Module):
     def __init__(self, in_channels, hidden_layer_size_list, output_channel, activation_function):
         super().__init__()
@@ -76,9 +79,9 @@ class HeterogeneousRGCN(nn.Module):
         return x
 
     def distmult(self, embedding, triplets):
-            s = embedding[triplets[:,0]]
-            r = self.relation_embedding[triplets[:,1]]
-            o = embedding[triplets[:,2]]
+            s = gather(embedding, triplets[:,0])
+            r = gather(self.relation_embedding, triplets[:,1])
+            o = gather(embedding, triplets[:,2])
             score = torch.sum(s * r * o, dim=1)
             return score
 
@@ -88,7 +91,7 @@ class HeterogeneousRGCN(nn.Module):
     def reg_loss(self, embedding, triplets):
             """ Compute Schlichtkrull L2 penalty for the decoder """
             s_index, p_index, o_index = triplets.t()
-            s, p, o = embedding[s_index, :], self.relation_embedding[p_index, :], embedding[o_index, :]
+            s, p, o = gather(embedding, s_index), gather(self.relation_embedding, p_index), gather(embedding, o_index)
             return s.pow(2).mean() + p.pow(2).mean() + o.pow(2).mean()
 
 class RGCNConv(Module):
@@ -155,7 +158,7 @@ class RGCNConv(Module):
         # Apply normalisation
         sums = sum_sparse(adj_indices, vals, adj_size, device=device)
         vals = vals / sums
-        af = torch_sparse.spmm(adj_indices.T, vals, adj_size[0], adj_size[1], node_embeddings)
+        af = det_spmm(adj_indices.T, vals, adj_size[0], adj_size[1], node_embeddings)
         af = af.view(self.every_relation, adj_size[1], self.in_channels) #(R, n, E)
         output = torch.einsum('rio, rni -> no', weights, af)
         # add bias to output

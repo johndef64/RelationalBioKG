@@ -88,9 +88,12 @@ bash experiments/e2_hpo_tandem2.sh    # suffix -v2b, 30 trials/model on Task A, 
 PROTOCOL=v2 bash experiments/e1_main_training.sh
 
 # E3 — ablations (component machinery + relational context), 13 variants x 5 seeds per task.
-#      Resumes by itself: a variant whose log already has 5 completed runs is skipped.
-PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all      # ABL_TASK=B for the other task
-python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI --out experiments/logs/v2/e3_DTI
+#      All output of a run (logs, checkpoints, summary, manifest) goes to ONE versioned folder,
+#      experiments/ablation/<TASK>_v<N>/; see experiments/ablation/README.md. Deterministic by default.
+#      Relaunching resumes the latest incomplete version; ABL_NEW=1 starts a new one.
+ABL_DRY=1 PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all   # print the plan first
+PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all             # ABL_TASK=B for the other task
+# the summary is regenerated at the end of every launch, in experiments/ablation/<TASK>_v<N>/summary/
 
 # E4 — repurposing + interpretability (point at a model folder from E1)
 # folder name = <task>_<dataset>_<timestamp>, e.g.:

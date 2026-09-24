@@ -841,6 +841,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
     "early_stopping": early_stopping, "patience": patience, "epochs": epochs,
     "alpha": alpha, "gamma": gamma, "alpha_adv": alpha_adv, "config": CONFIG_NAME, "model": model_name,
     "learning_rate_override": learning_rate,
+    "deterministic": os.environ.get("PKT_DETERMINISTIC") == "1",
   }
   print(f"[i] Protocol: {protocol}")
 
@@ -1274,6 +1275,16 @@ if __name__ == '__main__':
                            'each epoch and used only as loss positives (0 = legacy: all in the graph).')
   parser.add_argument('--detect_anomaly', action='store_true',
                       help='Enable torch autograd anomaly detection (debug only; slow). Legacy code had it always on.')
+  parser.add_argument('--deterministic', action='store_true',
+                      help='Bit-reproducible training on GPU: R-GCN aggregation and decoder gradients are '
+                           'summed in a fixed order instead of with atomic additions (src/deterministic_ops.py). '
+                           'Off by default, so E0/E1 keep their original code path.')
+  parser.add_argument('--models_dir', type=str, default='models',
+                      help="Where the run folder is created (default 'models'). Ablations write inside "
+                           "their own versioned folder under experiments/ablation/.")
+  parser.add_argument('--run_name', type=str, default=None,
+                      help='Exact name of the run folder inside --models_dir (default: '
+                           '<task>_<dataset>_<model>_<timestamp>). Used by the ablation, one folder per variant.')
   parser.add_argument('--learning_rate', type=float, default=None,
                       help='Override the learning rate of the selected config (default: use the config value).')
   parser.add_argument('--dedup_eval', action='store_true',
@@ -1323,6 +1334,12 @@ if __name__ == '__main__':
   min_delta       = args.min_delta
   eval_filtered   = args.eval_filtered
   CONFIG_NAME     = args.config  # override the module-level hyperparameter config (used by get_model)
+  if args.deterministic:
+    from src.deterministic_ops import configure as _configure_determinism
+    _configure_determinism()
+    print("[i] Deterministic mode: fixed-order GPU sums for R-GCN and the decoder (src/deterministic_ops.py)")
+  if torch.cuda.is_available():
+    print(f"[i] GPU: {torch.cuda.get_device_name(0)} | torch {torch.__version__} | CUDA {torch.version.cuda}")
 
   # get dataset_name (use os.path for cross-platform compatibility)
   dataset_basename = os.path.basename(args.tsv)
@@ -1339,8 +1356,8 @@ if __name__ == '__main__':
     task_clean      = task.lower().replace('-', '_').replace(',', '_')
     # the model name goes in the folder name: without it, telling an R-GCN folder from a
     # DistMult one means opening params.json, and models/ becomes unreadable after a few runs
-    folder_name = task_clean + '_' + dataset_name + '_' + model.lower() + '_' + time_stamp
-    model_save_dir = os.path.join('models', folder_name)
+    folder_name = args.run_name or (task_clean + '_' + dataset_name + '_' + model.lower() + '_' + time_stamp)
+    model_save_dir = os.path.join(args.models_dir, folder_name)
     os.makedirs(model_save_dir, exist_ok=True)
     model_save_path = os.path.join(model_save_dir, f'{model.lower()}.pt')
 

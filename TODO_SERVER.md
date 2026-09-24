@@ -37,7 +37,7 @@ I grafi ora tengono separati tre livelli di evidenza:
 | 3 · HPO `-v2b` (30 trial per modello su A, 15 su B) | ✅ fatto; config `PKT-DTI-best-v2b` e `PKT-TREATS-best-v2b` in `src/models_params.json` (ora anche nel repo) |
 | 3b · E0 ladder completo sul Task A | ✅ fatto: M 0,476 → 0,648, il 78% del guadagno viene dal checkpoint su M. È nel paper (tabella `tab:ladder`) |
 | 4 · E1, 3 modelli × 2 task × 12 seed | ✅ fatto il 21/09. Report: [`docs/report_E1.md`](docs/report_E1.md). Tabelle nel paper e nel capitolo di tesi |
-| 5 · E3 ablazione (componenti + contesto, A e B) | ⏳ lanciato il 21/09, interrotto dalla caduta del server (A 10/13, B 3/13): stato, controlli e ripresa in [`ABLATION_STATUS.md`](ABLATION_STATUS.md) |
+| 5 · E3 ablazione (componenti + contesto, A e B) | Task A ✅ completo su un'altra macchina, in [`experiments/ablation/DTI_v1/`](experiments/ablation/DTI_v1/MANIFEST.md). Task B ⏳ da rifare intero su una macchina sola con lo script nuovo (§5); la corsa parziale del server (3/13) non si unisce |
 | 6 · E4 revisione esperta, Task A, R-GCN | ✅ chiusa il 22/09: 22,2% plausibili nei top-20 contro 1,1% dei decoy; catene meccanicistiche estratte per tutte e 40 le coppie. Report: [`docs/report_E4.md`](docs/report_E4.md). Nel paper (§5.6) e nel capitolo. Il revisore va citato solo come *domain expert*, senza nome |
 | convergence check CompGCN sul TREATS | facoltativo, dopo E3 (§7) |
 | HPO `-v2` DTI e TREATS | superati: restano su W&B come documentazione, non vanno mescolati |
@@ -309,54 +309,63 @@ colonne **è** la misura della fuga.
 
 ---
 
-## 5. E3 — ablation — ⏳ lanciato il 21/09
+## 5. E3 — ablation — Task A ✅ (`DTI_v1`), Task B ⏳
 
 Modello R-GCN, il migliore di E1 sul Task A. E3 **non riusa** i modelli di E1: riaddestra da zero con
-la stessa config (`PKT-<TASK>-best-v2b`), gli stessi seed (`BASE_SEED + i`) e, per `comp_*`, lo
-stesso split. 13 varianti per task × 5 seed, tetto 1500 epoche come E1.
+la stessa config (`PKT-<TASK>-best-v2b`), gli stessi seed (`BASE_SEED + i`) e lo stesso split. 13
+varianti per task × 5 seed, tetto 1500 epoche come E1.
 
-Tre difetti corretti il 21/09, prima del lancio (servono `git pull` e il commit relativo):
-- `resolve_config` cercava solo `-v2` e ripiegava **in silenzio** sulla config v1: ora prova `-v2b`,
-  poi `-v2`, e avvisa se non trova nessuna delle due. `ABL_CONFIG` non serve più;
-- il tetto era 800 epoche (default di `$EPOCHS`), sotto l'epoca migliore di alcuni seed E1 (925): ora
-  1500;
-- mancava la variante `no_biochem`, e il contesto del Task B non era supportato: ora ci sono entrambi.
+**Stato al 24/09.** Il Task A è completo in [`experiments/ablation/DTI_v1/`](experiments/ablation/DTI_v1/MANIFEST.md),
+eseguito su un'altra macchina (non il server): 13/13 varianti, audit superato, risultati e limiti nel
+manifesto. Le corse parziali del server (Task A 10/13 del 21/09, Task B 3/13) **non vanno unite** a
+nessuna versione: se le copi, tienile a parte (`archives/e3_server_partial/`).
+
+### Cosa è cambiato il 24/09 (serve `git pull`, a job fermi)
+
+- **Una cartella versionata per ogni run.** Tutto quello che produce un'ablazione (log, checkpoint,
+  riepilogo, manifesto con macchina, GPU e commit) finisce in `experiments/ablation/<TASK>_v<N>/`.
+  Niente più in `models/` (riservato a E1) né in `experiments/logs/`. Dettagli:
+  [`experiments/ablation/README.md`](experiments/ablation/README.md).
+- **Ripresa automatica della versione giusta.** Rilanciando lo stesso comando si riprende l'ultima
+  versione incompleta; se è completa se ne apre una nuova. `ABL_VERSION=v<N>` forza una versione,
+  `ABL_NEW=1` ne apre sempre una nuova. Una versione ripresa con impostazioni diverse viene rifiutata.
+- **Modalità deterministica attiva di default** (`--deterministic`, `src/deterministic_ops.py`): due
+  esecuzioni della stessa variante con lo stesso seme sono identiche bit per bit, verificato su 30
+  epoche del Task A, costo circa +7% di tempo. In `DTI_v1` non c'era, e il seme 4 di `comp_full` e
+  `ctx_full`, stessa ricetta, dava MRR 0,356 e 0,386. `ABL_DETERMINISTIC=0` torna al vecchio percorso.
+- **Il GPU finisce nei log** (`[i] GPU: …` all'avvio) e nel manifesto.
+- **Una variante che fallisce non ferma più le altre**: viene segnalata alla fine e la versione resta
+  senza `COMPLETE`, così il rilancio la riprende.
 
 ```bash
-# preparazione, una volta sola
-for t in DTI TREATS; do
-  [ -d experiments/logs/v2/e3_$t ] && mv experiments/logs/v2/e3_$t experiments/logs/v2/e3_${t}_pre_v2b
-done
+git pull
+# controlla il piano: versione scelta, impostazioni, comandi (non scrive e non allena niente)
+ABL_DRY=1 PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh all
 
-tmux new -s e3A     # dentro:  conda activate gnn && PROTOCOL=v2 ABL_TASK=A bash experiments/e3_ablation.sh all
 tmux new -s e3B     # dentro:  conda activate gnn && PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh all
 ```
 
-Durata in parallelo: Task A circa 6 ore, Task B circa 30. Se una sessione si ferma (per esempio per
-un out-of-memory), rilancia lo stesso comando: le varianti complete vengono saltate.
+Il Task B va fatto **tutto su una macchina sola**, riferimenti compresi. Durata circa 30 ore.
 
 ```bash
-# config effettiva (deve dire PKT-DTI-best-v2b, rgcn, 1500)
-grep -h "\[i\] Protocol" experiments/logs/v2/e3_DTI/e3_comp_full_*.log | grep -o "'config': '[^']*'\|'model': '[^']*'\|'epochs': [0-9]*"
-# avanzamento: seed completati su 5 per variante
-for t in DTI TREATS; do echo "== $t"; for f in experiments/logs/v2/e3_$t/*.log; do printf "  %-45s %s/5\n" "$(basename $f)" "$(grep -c 'Completed run' $f)"; done; done
-# out-of-memory
-grep -l "CUDA out of memory" experiments/logs/v2/e3_*/*.log
-# riepilogo, a fine corsa
-python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_DTI    --out experiments/logs/v2/e3_DTI
-python experiments/ablation_summary.py --logdir experiments/logs/v2/e3_TREATS --out experiments/logs/v2/e3_TREATS
+V=experiments/ablation/TREATS_v1
+cat $V/MANIFEST.md                                  # quando, dove, che GPU, che commit
+for f in $V/logs/*.log; do printf "  %-45s %s/5\n" "$(basename $f)" "$(grep -c 'Completed run' $f)"; done
+grep -l "CUDA out of memory\|Traceback" $V/logs/*.log
+cat $V/summary/ablation_summary.md                  # rigenerato a fine di ogni lancio
 ```
 
-**Controllo di coerenza gratuito:** `comp_full` del Task A è la stessa ricetta dei seed 0-4 di E1
-R-GCN, quindi il suo MRR deve stare vicino a 0,420 / 0,399 / 0,374 / 0,439 / 0,402 (media 0,407).
-Qualche millesimo di scarto è normale; se esce molto diverso, qualcosa nella catena è cambiato.
+**Controllo di coerenza:** con `--deterministic`, `comp_full` e `ctx_full` devono risultare
+**identici** seme per seme: stesso grafo, stesso ordine delle righe, stessa ricetta. Se differiscono,
+qualcosa non è deterministico e va segnalato prima di leggere i Δ.
 
-Come leggere: le varianti `ctx_*` si confrontano con `ctx_full`, **non** con E1 (i file di ablazione
-hanno un altro ordine delle righe, quindi un altro split). Guarda ΔAUROC oltre a ΔMRR: E1 dice che
-sul Task A il contesto agisce sulla discriminazione più che sul ranking.
+Come leggere: ogni variante si confronta col riferimento della sua famiglia (`comp_full` o
+`ctx_full`) dentro la stessa versione. Guarda ΔAUROC oltre a ΔMRR: E1 dice che sul Task A il
+contesto agisce sulla discriminazione più che sul ranking.
 
-Le due varianti di contesto nuove sono quelle che rispondono a una domanda biologica:
+Le due varianti di contesto che rispondono a una domanda biologica:
 - Task A `no_biochem`: la biochimica di PheKnowLator aiuta a predire i bersagli farmacologici?
+  Risposta di `DTI_v1`: no (+0,002 di MRR).
 - Task B `no_pharma`: quanto aggiunge il livello farmacologico alla predizione dell'indicazione?
   (prima dell'iniezione solo il 4,9% dei farmaci con un `TREATS` aveva un bersaglio molecolare, ora
   il 34,3%).
@@ -436,8 +445,8 @@ bloccava dentro una `write()`. È ripartito da solo alla riaccensione.
 ## Cosa riportare indietro
 
 1. ~~`experiments/logs/v2/e1_summary.md` + `.csv`~~ ✅ ricevuti
-2. `experiments/logs/v2/e3_DTI/ablation_summary.md` e `experiments/logs/v2/e3_TREATS/ablation_summary.md`,
-   più i log `e3_*` delle due cartelle ← **prossima priorità**
+2. ~~Task A~~ ✅ `experiments/ablation/DTI_v1/`. Per il Task B: l'intera cartella
+   `experiments/ablation/TREATS_v<N>/`, senza `models/` (basta manifesto, log e `summary/`) ← **prossima priorità**
 3. `python experiments/models_index.py --current-only` sul server, per sapere cosa tenere in `models/`
 
 ## Se qualcosa non torna
