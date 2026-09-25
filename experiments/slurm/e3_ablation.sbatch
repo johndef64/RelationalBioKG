@@ -18,7 +18,8 @@
 # resumes exactly that version, skipping the variants already complete. Resubmit with the SAME command.
 #
 # Where the output goes: everything in experiments/ablation/<TASK>_<version>/ (logs, checkpoints,
-# summary, manifest, driver.log). This file's own .out only holds the first lines.
+# summary, manifest, driver.log). This file's own .out only holds the first lines. At the end the job
+# packs that folder (checkpoints excluded) and its .out into experiments/slurm/e3_<TASK>_<version>-<jobid>.zip.
 # =============================================================================
 #SBATCH --job-name=e3
 #SBATCH --output=experiments/slurm/%x-%j.out
@@ -45,4 +46,13 @@ export PROTOCOL=v2
 
 echo "[job] $(date '+%F %T') $SLURM_JOB_ID on $(hostname) | task $ABL_TASK version $ABL_VERSION runs ${ABL_RUNS:-5}"
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
-bash experiments/e3_ablation.sh all
+rc=0
+bash experiments/e3_ablation.sh all || rc=$?
+
+# everything to download in one file: the whole version folder (logs, summary, manifest, driver.log,
+# rankings), checkpoints excluded, plus this job's .out. Written also when the run stopped early.
+case "$ABL_TASK" in A|a|DTI) T=DTI ;; *) T=TREATS ;; esac
+V="${ABL_ROOT:-experiments/ablation}/${T}_${ABL_VERSION}"
+python experiments/slurm/zip_results.py "experiments/slurm/e3_${T}_${ABL_VERSION}-${SLURM_JOB_ID}.zip" \
+  "$V" "experiments/slurm/${SLURM_JOB_NAME:-e3}-${SLURM_JOB_ID}.out" || true
+exit $rc

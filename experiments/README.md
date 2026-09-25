@@ -268,14 +268,20 @@ E1 keeps aggregate metrics only, so nothing in the logs answers "who does the mo
   pathway with at most 50 members, direct interaction — each against a random-candidate baseline);
   redundancy of the held-out edge; cold start; and the three supervision regimes, with
   `--compare "label=other_ranks.csv"` for a paired comparison between models on the same split.
+- **Over all seeds.** `dump_test_ranks.py --run all` dumps every checkpoint of a folder
+  (`<folder>/ranks/test_ranks_<TASK>_run<i>.csv`, data rebuilt once, each checked against its E1 MRR;
+  `--run <i>` for one seed, default `best`). `stratified_multiseed.py` then reports the same strata as
+  mean ± sd over seeds with Welch's test against a reference model, as in E1.
+  `python experiments/e1_models_index.py` lists which checkpoint is which seed and which is best.
+  For Task B on the cluster: `sbatch experiments/slurm/stratified_taskB.sbatch`.
 
 **`PYTHONHASHSEED=0` is mandatory here.** Entity ids follow the iteration order of string sets, so a
 different hash seed maps the saved embeddings onto the wrong entities: the run completes and reports
 an MRR near zero. `dump_test_ranks.py` refuses to start without it; `config.sh` exports it for the
 `.sh` scripts, but these two are run directly with `python`.
 
-Results for Task A are in [`docs/report_stratificata.md`](../docs/report_stratificata.md). Task B
-needs the `treats_*` checkpoints, which live on the server: only `metrics`/`params` were copied back.
+Results for Task A are in [`docs/report_stratificata.md`](../docs/report_stratificata.md), confirmed
+over all 12 seeds in its §0bis (tables: `experiments/logs/v2/stratified_multiseed_DTI.md`).
 
 ## Smoke test (already run locally)
 `train_and_eval.py` on `pkt_taskA_dti.tsv.zip --task DTI` loads (1,155,994 triples), selects

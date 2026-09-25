@@ -130,3 +130,7 @@ echo
 echo "================ VERDICT ($(date '+%F %T'), $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1))"
 for k in 1 2 3 4 5; do echo "  test $k: ${R[$k]:-not run}"; done
 echo "  details in $T/"
+
+# everything to download in one file: the test folder and this job's .out
+python experiments/slurm/zip_results.py "experiments/slurm/check-${SLURM_JOB_ID:-local}.zip" \
+  "$T" "experiments/slurm/${SLURM_JOB_NAME:-check}-${SLURM_JOB_ID:-local}.out"

@@ -241,7 +241,7 @@ def resolve_model_folder(folder_path):
   else:
     print(f"[i] No *_metrics.json found, defaulting to run0")
 
-  best_run_files = [f for f in pt_files if f'run{best_run_idx}' in f]
+  best_run_files = [f for f in pt_files if f.endswith(f'_run{best_run_idx}.pt')]  # not 'run1' in 'run10'
   if not best_run_files:
     run0 = [f for f in pt_files if 'run0' in f]
     model_file = run0[0] if run0 else pt_files[0]

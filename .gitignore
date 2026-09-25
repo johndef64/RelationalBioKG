@@ -109,6 +109,7 @@ figures/
 #notes
 notes/
 future_*
+spiegazioni/
 
 # ==========================================
 # Secrets — never commit
@@ -126,3 +127,4 @@ wandb_key*
 # Slurm job output and the scratch folders of check_new_system.sbatch
 experiments/slurm/*.out
 experiments/slurm/test_*/
+experiments/slurm/*.zip
