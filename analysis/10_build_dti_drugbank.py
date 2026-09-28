@@ -38,6 +38,7 @@ import zipfile
 from pathlib import Path
 
 import requests
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 ROOT = Path(__file__).resolve().parents[1]
 DRUGBANK_ZIP = ROOT / "dataset" / "DRUGBANK" / "drug-bank-5110.zip"
@@ -202,6 +203,7 @@ def protein_go_terms(labels):
     print("      task graph not built yet: reading protein--GO annotations from the raw KG "
           "(one pass, a few minutes) ...")
     import ijson                                     # only needed on this path
+    ensure_pkt_files(("nodes.zip", "edges.zip"))
     uri2node = {}
     with zipfile.ZipFile(PKT_DIR / "nodes.zip") as z, z.open("nodes.json") as f:
         for o in ijson.items(f, "item"):

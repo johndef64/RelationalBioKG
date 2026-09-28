@@ -20,6 +20,7 @@ import pickle
 import csv
 from pathlib import Path
 from collections import defaultdict
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 PKT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT"
 OUT_DIR = Path(__file__).resolve().parent / "out"
@@ -61,6 +62,7 @@ TRACK = {
 
 
 def main():
+    ensure_pkt_files(('edges.zip',))
     print("Loading uri->type lookup ...", flush=True)
     with open(LOOKUP_PKL, "rb") as fh:
         uri_to_type = pickle.load(fh)

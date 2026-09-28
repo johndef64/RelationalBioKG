@@ -16,6 +16,7 @@ import zipfile
 import pickle
 from pathlib import Path
 from collections import Counter
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 PKT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT"
 OUT_DIR = Path(__file__).resolve().parent / "out"
@@ -29,6 +30,7 @@ SUMMARY_MD = OUT_DIR / "01_nodes_summary.md"
 
 
 def main():
+    ensure_pkt_files(('nodes.zip',))
     by_type = Counter()
     by_class = Counter()
     by_namespace = Counter()

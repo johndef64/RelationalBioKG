@@ -66,8 +66,11 @@ drug → target → pathway → disease chain.
 
 ## The PheKnowLator (PKT) knowledge graph
 
-Human biomedical KG in `dataset/PKT/` as `nodes.json` (~483 MB) + `edges.json` (~4.6 GB), streamed
-with `ijson`.
+Human biomedical KG in `dataset/PKT/` as `nodes.json` (~483 MB) + `edges.json` (~4.6 GB), zipped
+(`nodes.zip`, `edges.zip`, 289 MB together) and streamed with `ijson`. It is the ontology backbone of
+**KG-TransomicNet**, published on Hugging Face as
+[`johndef64/KG-TransomicNet`](https://huggingface.co/datasets/johndef64/KG-TransomicNet) (folder
+`PKT/`); see [Step 0](#step-0--download-the-source-graph) to get it.
 
 - **780,753 nodes**, **11,132,839 edges**, 0 unresolved endpoints.
 - Node types: rna 192,975 · **chemical 150,326** (ChEBI) · variant 144,966 · **protein 96,085** (PR) ·
@@ -91,6 +94,39 @@ identical molecular **CORE** (PPI + protein→GO + pathway + gene↔protein brid
 | Task A | `dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip` | 1,155,994 | 69,233 | 98.33% / 1.67% | `--task DTI` |
 | Task B | `dataset/PKT_subgraphs/pkt_taskB_treats.tsv.zip` | 1,873,237 | 95,111 | 98.97% / 1.03% | `--task TREATS` |
 | Unified | `dataset/PKT_subgraphs/pkt_unified.tsv.zip` | = Task B | = Task B | | `--task DTI,TREATS` |
+
+### Step 0 — download the source graph
+
+The two input files are the `PKT/` folder of the Hugging Face dataset
+[`johndef64/KG-TransomicNet`](https://huggingface.co/datasets/johndef64/KG-TransomicNet): the ontology
+backbone on its own, without the ArangoDB dump or the multi-omics layers, which this project does not
+use.
+
+**This happens automatically.** Every script in `analysis/` that reads them calls
+`analysis/pkt_source.py`, which downloads a missing file from Hugging Face (public, no login) and
+checks its SHA-256 against the release all results were computed from. Files already present are left
+untouched. To fetch them up front, or to verify an existing copy:
+
+```bash
+python analysis/pkt_source.py
+```
+
+The same by hand:
+
+```bash
+mkdir -p dataset/PKT
+for f in nodes.zip edges.zip; do
+  curl -L -o dataset/PKT/$f \
+    https://huggingface.co/datasets/johndef64/KG-TransomicNet/resolve/main/PKT/$f
+done
+sha256sum dataset/PKT/nodes.zip dataset/PKT/edges.zip    # must match the two lines below
+# 129f4f1110d56e7695fce0d8e160f1b9c54c5664be8fff5d07f8204a4ccfad7b  nodes.zip  (64,673,549 bytes)
+# 24642dec8b220eb9264113c29fc4784a0fea75e70d5bc5c594e1d5ce60fae2cc  edges.zip  (224,508,605 bytes)
+```
+
+The same with the Hugging Face CLI: `huggingface-cli download johndef64/KG-TransomicNet --repo-type
+dataset --include "PKT/*.zip" --local-dir dataset`. These are the exact files every result in this
+repository was computed from (checksums verified against the local copy on 2026-09-28).
 
 ### Step 1 — the pharmacological layer (`analysis/10_build_dti_drugbank.py`)
 
@@ -164,6 +200,7 @@ RelationalBioKG/
 │
 ├── analysis/                    # KG analysis & dataset builders (01–10_*.py) + out/
 │   ├── 06_build_subgraphs.py    #   task graphs (three evidence layers)
+│   ├── pkt_source.py            #   downloads + verifies dataset/PKT/*.zip from Hugging Face if missing
 │   ├── 07_build_ablation_subgraphs.py  #   context-ablation variants (--task A|B)
 │   ├── 09_extract_chebi_roles.py       #   ChEBI role inventory (why filtering does not work)
 │   └── 10_build_dti_drugbank.py        #   drug--target layer from DrugBank via UniProt
@@ -202,6 +239,9 @@ GPU — see the TDR note in `experiments/README.md`). Full experiment runs are m
 
 ```bash
 conda activate gnn
+
+# 0. Inputs (one-time): the PKT graph is downloaded from Hugging Face automatically by the build
+#    scripts (or now: python analysis/pkt_source.py); DrugBank names by hand, see Step 1
 
 # 1. Build the task subgraphs (one-time): pharmacological layer, then the graphs
 python analysis/10_build_dti_drugbank.py

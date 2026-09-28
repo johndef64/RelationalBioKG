@@ -12,6 +12,7 @@ import ijson
 import zipfile
 import csv
 from pathlib import Path
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 PKT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT"
 OUT = Path(__file__).resolve().parents[1] / "dataset" / "PKT_subgraphs" / "node_labels.tsv"
@@ -24,6 +25,7 @@ TYPE_PREFIX = {
 
 
 def main():
+    ensure_pkt_files(('nodes.zip',))
     n = 0
     with zipfile.ZipFile(PKT_DIR / "nodes.zip") as z, z.open("nodes.json") as f, \
          open(OUT, "w", newline="", encoding="utf-8") as out:

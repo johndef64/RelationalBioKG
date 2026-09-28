@@ -26,6 +26,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 import ijson
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 ROOT = Path(__file__).resolve().parents[1]
 NODES_ZIP = ROOT / "dataset" / "PKT" / "nodes.zip"
@@ -57,6 +58,7 @@ def task_a_compound_degrees():
 
 
 def main():
+    ensure_pkt_files(('nodes.zip', 'edges.zip'))
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     print("[1/3] reading nodes ...")

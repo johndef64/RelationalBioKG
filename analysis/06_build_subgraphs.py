@@ -62,6 +62,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import ijson
+from pkt_source import ensure_pkt_files   # downloads dataset/PKT/*.zip from Hugging Face if missing
 
 PKT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT"
 OUT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT_subgraphs"
@@ -240,6 +241,7 @@ def main():
                     help="legacy build: no injected layer, the biochemical relation is the Task A "
                          "target and keeps the name DTI")
     args = ap.parse_args()
+    ensure_pkt_files(('nodes.zip', 'edges.zip'))
 
     uri2node = build_node_lookup()
     edges = extract_edges(uri2node)
