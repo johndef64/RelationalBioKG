@@ -133,4 +133,4 @@ for f in dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip dataset/PKT_subgraphs/pkt_t
   [ -f "$f" ] && echo "  data ok  $f" || echo "  data MISSING  $f  (copy dataset/PKT_subgraphs/ or run: python analysis/06_build_subgraphs.py)"
 done
 
-log "done. Next:  conda activate $ENV_NAME  &&  wandb login   (then see TODO_SERVER.md)"
+log "done. Next:  conda activate $ENV_NAME  &&  wandb login   (then see experiments/README.md)"

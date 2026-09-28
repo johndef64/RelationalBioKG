@@ -155,7 +155,6 @@ RelationalBioKG/
 ├── drug_eval_results.py         # summarise drug-eval outputs
 ├── tuning_hyperparameter.py     # Bayesian W&B HPO (PKT_HPO_PROTOCOL=v1|v2)
 ├── expert_review_script.py      # human 3-tier expert review driver (cohort → review sheet)
-├── TODO_SERVER.md               # step-by-step run list for the next server session
 ├── TICKET_01_DTI_drug_scope.md  # why Task A needed an injected drug--target layer, and how it was built
 ├── src/                         # encoders (hetero_rgcn/compgcn/rgat), kge_distmult baseline, utils, metrics, params
 │
@@ -224,8 +223,7 @@ python drug_eval.py --model_folder models/<your_model_folder> \
 ```
 
 Full, scripted pipeline (both tasks, HPO, ablations, repurposing) lives in
-**[`experiments/`](experiments/)** — see [`experiments/README.md`](experiments/README.md). The
-run list for the next server session is in **[`TODO_SERVER.md`](TODO_SERVER.md)**.
+**[`experiments/`](experiments/)** — see [`experiments/README.md`](experiments/README.md).
 
 | Exp | What | Script |
 |---|---|---|
@@ -305,7 +303,6 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
 
 ## Documentation
 
-- [`TODO_SERVER.md`](TODO_SERVER.md) — what to run on the server, in order (Italian).
 - [`TICKET_01_DTI_drug_scope.md`](TICKET_01_DTI_drug_scope.md) — the Task A target relation: why the
   PheKnowLator one is biochemical, what was tried, and how the pharmacological layer was injected.
 - [`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md) — audit of the training/evaluation protocol, v2 changes and their verification.
