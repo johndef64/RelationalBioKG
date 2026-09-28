@@ -118,6 +118,7 @@ setup_wandb.sh
 .netrc
 *.key
 wandb_key*
+TODO_SERVER*
 
 # ==========================================
 # Whitelist (Do NOT ignore these)
