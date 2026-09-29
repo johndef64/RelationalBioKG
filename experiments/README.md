@@ -273,7 +273,8 @@ E1 keeps aggregate metrics only, so nothing in the logs answers "who does the mo
   `--run <i>` for one seed, default `best`). `stratified_multiseed.py` then reports the same strata as
   mean ± sd over seeds with Welch's test against a reference model, as in E1.
   `python experiments/e1_models_index.py` lists which checkpoint is which seed and which is best.
-  For Task B on the cluster: `sbatch experiments/slurm/stratified_taskB.sbatch`.
+  On a GPU with enough memory, set `PKT_EVAL_BATCH_ROWS=1000000` to rank faster; on smaller or
+  display-attached GPUs keep it low (e.g. 50000) and add `--encode_on_cpu` for Task B.
 
 **`PYTHONHASHSEED=0` is mandatory here.** Entity ids follow the iteration order of string sets, so a
 different hash seed maps the saved embeddings onto the wrong entities: the run completes and reports
