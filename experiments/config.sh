@@ -35,10 +35,8 @@ export HP_CONFIG="${HP_CONFIG:-BIOKG-128}"
 export USE_BEST="${USE_BEST:-1}"
 resolve_config () {   # $1 = task interaction (DTI / TREATS); echoes the config name to use
   local want="PKT-$1-best" s found=0
-  # Protocol v2 prefers configs tuned under v2, newest suffix first: -v2b is the HPO on the reworked
-  # data (DTI injection, TICKET 01) that E1 was trained with; -v2 predates that rework. This used to
-  # look for -v2 only, and since models_params.json holds -v2b and not -v2 it fell through SILENTLY
-  # to PKT-<TASK>-best, the configuration tuned under the v1 protocol on the old target relation.
+  # Protocol v2 prefers configs tuned under v2, newest suffix first: -v2b is the HPO on the final
+  # data (with the DrugBank DTI layer, analysis/10_build_dti_drugbank.py) used for all results.
   if [ "${PROTOCOL:-v1}" = "v2" ]; then
     for s in ${V2_CONFIG_SUFFIXES:--v2b -v2}; do
       if python -c "import json,sys;sys.exit(0 if 'PKT-$1-best$s' in json.load(open('src/models_params.json')) else 1)" 2>/dev/null; then
@@ -62,8 +60,8 @@ export RUNS="${RUNS:-12}"
 if [ "${PROTOCOL:-v1}" = "v2" ]; then export EPOCHS="${EPOCHS:-800}"; else export EPOCHS="${EPOCHS:-400}"; fi
 export PATIENCE="${PATIENCE:-20}"
 
-# ---- training protocols (see docs/piano_consolidamento_v2.md) ----
-# v1 = legacy PathogenKG protocol: x5 oversampling, 50% random background undersampling, split
+# ---- training protocols ----
+# v1 = PathogenKG protocol: x5 oversampling, 50% random background undersampling, split
 #      changing at every run, checkpoint/early stopping on validation LOSS, training target edges
 #      inside the message-passing graph.
 # v2 = consolidated protocol: fixed split, checkpoint/early stopping on validation M (as the HPO),
@@ -73,19 +71,13 @@ export PATIENCE="${PATIENCE:-20}"
 export PATIENCE_V2="${PATIENCE_V2:-50}"                 # epochs without val-M improvement
 export V2_SPLIT_SEED="${V2_SPLIT_SEED:-42}"             # = split used by the HPO
 # 'auto' = the value the HPO tuned for this model, read back from the config (see
-# resolve_train_negative_rate in train_and_eval.py). It is a swept hyperparameter: on DTI -v2b the
-# best R-GCN and the best DistMult both picked 10, so pinning it to 5 here would have made E1 train
-# a configuration the HPO never chose. Configs with no tuned value fall back to 5 (= what the legacy
-# x5 oversampling effectively gave). Set V2_TRAIN_NEG=5 to force the old fixed behaviour.
+# resolve_train_negative_rate in train_and_eval.py); configs with no tuned value fall back to 5.
 export V2_TRAIN_NEG="${V2_TRAIN_NEG:-auto}"
 export V2_DISJOINT="${V2_DISJOINT:-0.3}"
 
 # CUDA allocator: keep one arena that can grow instead of many fixed blocks. Full-batch training on
-# the big context graph allocates a few large tensors per epoch, which fragments the pool: in the DTI
-# -v2b sweep 5 of CompGCN's 30 trials died of CUDA_OOM on a 24 GB card, one of them with 4.26 GiB
-# reserved-but-unallocated (i.e. free memory the allocator could not hand out in one piece). Those
-# trials were all in the WIDE part of the search space (layer_0 = 200), so the loss was not random:
-# CompGCN was left with 25 usable trials and its largest configurations were never evaluated.
+# the large context graph allocates a few large tensors per epoch, which otherwise fragments the pool
+# and causes out-of-memory errors with free memory still reserved.
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 export FLAGS_V1="--early_stopping --patience ${PATIENCE} --negative_sampling filtered --eval_filtered \
@@ -95,9 +87,8 @@ export FLAGS_V2="--early_stopping --patience ${PATIENCE_V2} --negative_sampling 
 --split_seed ${V2_SPLIT_SEED} --select_metric mixed --train_negative_rate ${V2_TRAIN_NEG} \
 --disjoint_supervision ${V2_DISJOINT} --warm_eval --dedup_eval"
 
-# PROTOCOL selects the flags used by E1/E3/E4. It stays v1 until the E0 comparison
-# (experiments/e0_protocol_compare.sh) has validated v2 on the server; then set PROTOCOL=v2
-# (and use the v2 HPO configs, PKT-<TASK>-best-v2).
+# PROTOCOL selects the flags used by E1/E3/E4: v1 reproduces the PathogenKG protocol, v2 is the
+# consolidated protocol used for all reported results (with the PKT-<TASK>-best-v2b configs).
 export PROTOCOL="${PROTOCOL:-v1}"
 if [ "$PROTOCOL" = "v2" ]; then
   export COMMON_FLAGS="$FLAGS_V2"
@@ -108,7 +99,7 @@ else
 fi
 
 # ---- logging ----
-# v2 logs go to their own folder so they never mix with the legacy v1 logs (E1/E3 summaries glob by name)
+# v2 logs go to their own folder so they never mix with v1 logs (E1/E3 summaries glob by name)
 if [ "${PROTOCOL:-v1}" = "v2" ]; then
   export LOG_DIR="${LOG_DIR:-experiments/logs/v2}"
 else
@@ -118,17 +109,12 @@ mkdir -p "$LOG_DIR"
 
 # ---- running a long job without letting the terminal freeze it ----
 # "cmd 2>&1 | tee LOG" writes to the terminal as well as to the log, which ties the job's progress
-# to someone draining that terminal. Under VS Code Remote a disconnected client stops acknowledging
-# the terminal's flow control: the pty buffer fills, tee blocks inside write(), the pipe backs up,
-# and the training process blocks inside write() too. It stays alive, holds the GPU and does
-# nothing until a client reconnects. One E1 TREATS seed sat frozen exactly this way for 40 hours
-# (2431 min against ~25 min for its siblings), between a laptop being shut down on the Friday
-# evening and switched back on on the Sunday morning.
+# to someone draining that terminal: if the terminal stops reading (e.g. a disconnected remote
+# session), tee blocks inside write() and the training process blocks with it, holding the GPU.
 #
 # run_logged sends the job's own output straight to the file, where nothing can block it, and lets
 # a separate tail do the talking to the terminal: if the terminal stalls, only the tail stalls.
-# Still launch long jobs under tmux or nohup -- this protects against a stalled terminal, not a
-# closed one.
+# Long jobs should still run under nohup or a batch scheduler, which also survive a closed terminal.
 run_logged () {          # run_logged <logfile> <command...>
   local log="$1"; shift
   : > "$log"
@@ -144,8 +130,8 @@ run_logged () {          # run_logged <logfile> <command...>
 
 # Give the tail up to 3 s to print what is left and exit by itself (--pid makes it check once a
 # second), then kill it. Killing it immediately loses the output of short commands; waiting for it
-# unconditionally would reintroduce the original bug, since a tail writing to a stalled terminal
-# blocks in write() exactly as tee did.
+# unconditionally would block the same way, since a tail writing to a stalled terminal blocks in
+# write() exactly as tee does.
 _reap_tail () {
   local tpid="$1" waited=0
   while kill -0 "$tpid" 2>/dev/null && [ "$waited" -lt 3 ]; do
@@ -168,8 +154,8 @@ run_logged_append () {   # same, but appending to an existing log
   return "$rc"
 }
 
-# Activate conda env if available (harmless if already active). On the iknos cluster the environment
-# is activated by the job with `iknos_activate gnn` and PKT_SKIP_CONDA=1 keeps this from replacing it.
+# Activate conda env if available (harmless if already active). Set PKT_SKIP_CONDA=1 when the
+# environment is already activated, e.g. by a Slurm job.
 if [ "${PKT_SKIP_CONDA:-0}" != "1" ] && command -v conda >/dev/null 2>&1; then
   # shellcheck disable=SC1091
   source "$(conda info --base)/etc/profile.d/conda.sh" 2>/dev/null || true

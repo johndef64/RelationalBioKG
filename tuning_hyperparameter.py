@@ -15,16 +15,13 @@ from src.hetero_rgat import HeterogeneousRGAT as rgat
 from src.hetero_compgcn import HeterogeneousCompGCN as compgcn
 from src.kge_distmult import DistMultKGE
 
-# WandB configuration — logs to the RelationalPKT project (NOT pathogenkg).
+# WandB configuration: logs to the RelationalPKT project.
 # Overridable via env vars (WANDB_ENTITY / WANDB_PROJECT).
-# ---- anonymized version (restore before publishing) ----
-# ENTITY = os.environ.get("WANDB_ENTITY", "YOUR_WANDB_ENTITY")
-# ---- real coordinates (in clear for now, anonymize later) ----
-ENTITY = os.environ.get("WANDB_ENTITY", "giovannimaria-defilippis-university-of-naples-federico-ii")
+ENTITY = os.environ.get("WANDB_ENTITY")  # W&B entity; None = your default entity
 PROJECT_NAME = os.environ.get("WANDB_PROJECT", "RelationalPKT")
-# Dataset / task for the sweep — override for PKT via env (see experiments/e2_hpo_sweep.sh)
-HPO_TSV   = os.environ.get("PKT_TSV",  "dataset/PathogenKG_n31_core.tsv.zip")
-HPO_TASK  = os.environ.get("PKT_TASK", "TARGET")
+# Dataset / task for the sweep, overridable via env (see experiments/e2_hpo_sweep.sh)
+HPO_TSV   = os.environ.get("PKT_TSV",  "dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip")
+HPO_TASK  = os.environ.get("PKT_TASK", "DTI")
 HPO_EPOCHS   = int(os.environ.get("PKT_HPO_EPOCHS", "200"))
 HPO_PATIENCE = int(os.environ.get("PKT_HPO_PATIENCE", "50"))
 HPO_RUNS     = int(os.environ.get("PKT_HPO_RUNS", "100"))
@@ -33,8 +30,8 @@ HPO_RUNS     = int(os.environ.get("PKT_HPO_RUNS", "100"))
 HPO_RESUME   = os.environ.get("PKT_HPO_RESUME", "0") == "1"
 SWEEP_DIR    = os.path.join("experiments", "hpo_sweeps")
 
-# ---- Training protocol of the sweep (see docs/piano_consolidamento_v2.md) ----
-#   v1 = legacy PathogenKG protocol used by the first PKT HPO: oversample x5, undersample 0.5,
+# ---- Training protocol of the sweep ----
+#   v1 = PathogenKG protocol: oversample x5, undersample 0.5,
 #        early stopping on val M but test on the LAST model, opn in {sub, corr(=mult)}.
 #   v2 = consolidated protocol: oversample 1 + train negatives as a hyperparameter, full
 #        context graph, disjoint supervision edges, best-checkpoint (val M) restored before test,
@@ -232,18 +229,7 @@ if _V2:
 	# searched over the same range as the baseline they have to beat.
 	SWEEP_CONFIG['parameters']['learning_rate'] = {'values': [1e-3, 3e-3, 1e-2, 3e-2, 1e-1]}
 
-# Embedding-only DistMult baseline (no message passing): only optimisation params + embedding size.
-# These override the shared grid for DistMult alone (merged after DISTMULT_DROP), so the baseline can
-# be searched at least as hard as the models it has to beat -- which is the point of having it.
-# Widened one notch after the DTI -v2b sweep, where DistMult's best trial sat at the TOP of both
-# grids (learning rate 1e-1, 10 negatives per positive), so the sweep could not say whether anything
-# lay beyond. Read the evidence carefully before quoting it: the Bayesian optimiser spent 23 of 29
-# trials at lr 1e-1 and only 3 at 3e-2, so comparing the two MAXIMA is comparing 23 draws with 3.
-# The medians, which do not depend on the number of draws, are 0.5846 at 3e-2 and 0.5847 at 1e-1 --
-# flat, i.e. the baseline had most likely already reached its plateau and this widening is cheap
-# insurance (a DistMult trial costs ~45 s), not the repair of a demonstrated defect. The GNNs need
-# no such widening: their optimum is INTERIOR (both peak at lr 3e-2 and get worse at 1e-1, R-GCN's
-# median falling 0.626 -> 0.337), so their grid provably brackets the maximum.
+# Search space of the embedding-only baseline (overrides the shared grid, merged after DISTMULT_DROP).
 DISTMULT_PARAMS = {
 	'learning_rate': {'values': [1e-2, 3e-2, 1e-1, 3e-1]},
 	'mlp_out_layer': {'values': [64, 128, 200, 400]},
@@ -348,7 +334,7 @@ def train_model(config=None):
 	negative_rate = 1
 	alone = False
 
-	# sampling protocol (v1 = legacy x5 / 0.5; v2 = see module top)
+	# sampling protocol (v1 = x5 / 0.5; v2 = see module top)
 	oversample_rate = HPO_OVERSAMPLE
 	undersample_rate = HPO_UNDERSAMPLE
 	disjoint_supervision = HPO_DISJOINT
@@ -370,18 +356,16 @@ def train_model(config=None):
 	
 	try:
 		# Load dataset
-		# error missing oversample_rate, undersample_rate in get_dataset call
 		(in_channels_dict, num_nodes_per_type, num_entities, num_relations,
 		 train_triplets, train_index, flattened_features_per_type, val_triplets,
 		 train_val_triplets, test_triplets, train_val_test_triplets,
 		 edge_index, ent2id, relation2id) = get_dataset(
 			tsv_path, task, validation_size, test_size, True, seed,
-			# added new {2025-12-15}
 			oversample_rate=oversample_rate,
 			undersample_rate=undersample_rate
 		)
 
-			# preparazione parametri per neg sampling corretto
+		# inputs for filtered negative sampling
 		all_entities_arr = np.arange(num_entities)
 		all_true_arr = train_val_test_triplets.cpu().numpy()
 		
@@ -538,19 +522,13 @@ def train_model(config=None):
 			'test_hits@10': test_metrics["Hits@"][10],
 			'final_mixed_metric': 0.2 * test_metrics["Auroc"] + 0.4 * test_metrics["Auprc"] + 0.4 * test_metrics["MRR"]
 		})
-		"""
-		final_mixed_metric
-		AUROC (20%): misura separazione classi, robusta ma meno sensibile a imbalance.
-		AUPRC (40%): cruciale per link prediction (pochi edge positivi), enfatizza precision/recall su positivi.
-		MRR (40%): prioritizza top ranking (essenziale per raccomandazioni link).
-		Pesi enfatizzano metriche ranking-specifiche vs AUROC generica.
-		"""
+		# M = 0.2 AUROC + 0.4 AUPRC + 0.4 MRR (ranking-weighted, as in PathogenKG).
 		
 		cleanup_cuda()
 		
 	except torch.cuda.OutOfMemoryError as e:
-		print(f"🚨 CUDA OOM Error: {e}")
-		print("💡 Trying to recover by cleaning up memory...")
+		print(f"[HPO] CUDA OOM error: {e}")
+		print("[HPO] Recovering by freeing GPU memory...")
 		cleanup_cuda()
 		
 		# Log the error but don't fail the run
@@ -564,7 +542,7 @@ def train_model(config=None):
 		return
 		
 	except Exception as e:
-		print(f"❌ Error in training: {e}")
+		print(f"[HPO] Error in training: {e}")
 		wandb.log({
 			'error': 'training_error',
 			'error_details': str(e),
@@ -630,7 +608,7 @@ def run_hyperparameter_optimization():
 
 		print(f"Project: {model_project}")
 		print(f"Resume later:  PKT_HPO_RESUME=1 python tuning_hyperparameter.py")
-		print(f"   (or directly: wandb agent {ENTITY}/{model_project}/{sweep_id})")
+		print(f"   (or directly: wandb agent {ENTITY + '/' if ENTITY else ''}{model_project}/{sweep_id})")
 
 		# Run the sweep (configurable via PKT_HPO_RUNS)
 		number_of_runs = HPO_RUNS
@@ -638,7 +616,8 @@ def run_hyperparameter_optimization():
 			# on resume PKT_HPO_RUNS is the TOTAL per model: only run the trials still missing,
 			# so a model whose sweep already completed is not re-run
 			try:
-				sweep = wandb.Api().sweep(f"{ENTITY}/{model_project}/{sweep_id}")
+				_api = wandb.Api()
+				sweep = _api.sweep(f"{ENTITY or _api.default_entity}/{model_project}/{sweep_id}")
 				done = sum(1 for r in sweep.runs if r.state == "finished")
 				number_of_runs = max(0, HPO_RUNS - done)
 				print(f"[resume] {model_name}: {done} finished trials, {number_of_runs} to go (target {HPO_RUNS})")
@@ -659,9 +638,9 @@ def run_hyperparameter_optimization():
 
 if __name__ == "__main__":
 	
-	print("🔬 Starting hyperparameter optimization with WandB")
-	print(f"🖥️ Device: {device}")
-	print(f"📊 Total planned runs: {len(AVAILABLE_MODELS) * 100}")
+	print("[HPO] Starting hyperparameter optimization with WandB")
+	print(f"[HPO] Device: {device}")
+	print(f"[HPO] Total planned runs: {len(AVAILABLE_MODELS) * HPO_RUNS}")
 	print("-" * 50)
 	
 	run_hyperparameter_optimization()

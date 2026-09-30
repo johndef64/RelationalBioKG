@@ -33,7 +33,7 @@
 #   version cannot differ in anything but the variant: that is what makes their deltas readable.
 #
 # DETERMINISM: ABL_DETERMINISTIC=1 (default) passes --deterministic, under which two executions of
-# the same variant and seed are bit-identical (src/deterministic_ops.py). DTI_v1 predates it.
+# the same variant and seed are bit-identical (src/deterministic_ops.py).
 #
 # Usage:  PROTOCOL=v2 bash experiments/e3_ablation.sh                      # v2, Task A, both families
 #         PROTOCOL=v2 ABL_TASK=B bash experiments/e3_ablation.sh component # v2, Task B, component only
@@ -50,9 +50,7 @@ ABL_DRY="${ABL_DRY:-0}"
 ABL_ROOT="${ABL_ROOT:-experiments/ablation}"
 
 if [ "$PROTOCOL" = "v2" ]; then
-  # 1500 = the E1 budget. It used to default to $EPOCHS (800 under v2), which is below the best
-  # epoch of some E1 Task A seeds (up to 925): the ablation would have been cut short where E1 was not,
-  # and every delta against it would have mixed the ablated factor with a smaller training budget.
+  # 1500 = the E1 budget, so no ablation delta is confounded with a smaller training budget.
   ABL_RUNS="${ABL_RUNS:-5}"; ABL_EPOCHS="${ABL_EPOCHS:-1500}"
   MODEL="${ABL_MODEL:-rgcn}"
   ABL_TASK="${ABL_TASK:-A}"
@@ -201,10 +199,8 @@ context_ablation () {
   if [ ! -f "$abl/pkt_${pfx}_full.tsv.zip" ]; then
     echo "[E3b] building ablation subgraphs..."; python analysis/07_build_ablation_subgraphs.py
   fi
-  # NB ctx_full is trained on the ablation "full" file, which holds the same rows IN THE SAME ORDER as
-  # the task subgraph (same content hash, checked 2026-09-24): it is the same experiment as comp_full.
-  # An older comment here claimed a different row order, hence a different split: that was wrong.
-  # It is kept as a separate run so that each family has its own reference in the summary; under
+  # NB ctx_full is trained on the ablation "full" file, which holds the same rows in the same order as
+  # the task subgraph (same content hash): it is the same experiment as comp_full. It is kept as a separate run so that each family has its own reference in the summary; under
   # --deterministic the two are bit-identical, which doubles as a check that nothing drifted.
   for v in $variants; do
     if [ "$PROTOCOL" = "v2" ]; then

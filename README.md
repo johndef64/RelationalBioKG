@@ -79,7 +79,7 @@ Human biomedical KG in `dataset/PKT/` as `nodes.json` (~483 MB) + `edges.json` (
   (only one direction is kept — the framework re-adds reverse edges internally).
 
 Full analysis in [`analysis/out/`](analysis/out/) (`01_nodes_summary.md`, `02_edges_summary.md`,
-`04_relazioni_canoniche_e_scelta_target.md`).
+`02_target_candidates.md`).
 
 ---
 
@@ -126,7 +126,7 @@ sha256sum dataset/PKT/nodes.zip dataset/PKT/edges.zip    # must match the two li
 
 The same with the Hugging Face CLI: `huggingface-cli download johndef64/KG-TransomicNet --repo-type
 dataset --include "PKT/*.zip" --local-dir dataset`. These are the exact files every result in this
-repository was computed from (checksums verified against the local copy on 2026-09-28).
+repository was computed from.
 
 ### Step 1 — the pharmacological layer (`analysis/10_build_dti_drugbank.py`)
 
@@ -160,7 +160,7 @@ that *is* a drug target, stays on the target side.
 
 ```bash
 python analysis/06_build_subgraphs.py                 # both tasks + unified
-python analysis/06_build_subgraphs.py --no-pharma     # legacy build (biochemical relation as target)
+python analysis/06_build_subgraphs.py --no-pharma     # variant without the pharmacological layer
 python analysis/07_build_ablation_subgraphs.py --task A   # context-ablation variants
 python analysis/07_build_ablation_subgraphs.py --task B
 ```
@@ -229,7 +229,8 @@ conda activate gnn && wandb login     # W&B is needed for the HPO only
 depend on the CUDA version and are installed by the script.
 
 **Requirements:** Python 3.10, a CUDA GPU with adequate VRAM (the full-graph ranking needs a real
-GPU — see the TDR note in `experiments/README.md`). Full experiment runs are meant for the **server**.
+GPU — see the TDR note in `experiments/README.md`). The full experiments are meant for a GPU server;
+`experiments/slurm/` has Slurm job files to adapt.
 
 ---
 
@@ -246,13 +247,13 @@ python analysis/10_build_dti_drugbank.py
 python analysis/06_build_subgraphs.py
 bash experiments/smoke_test.sh            # optional: checks every step still runs
 
-# 2. Train (Task A / DTI, R-GCN, tuned config, consolidated protocol v2)
+# 2. Train (Task A / DTI, R-GCN, tuned config, protocol v2), as in the paper
 PYTHONHASHSEED=0 python train_and_eval.py --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip \
-  --task DTI --model rgcn --config PKT-DTI-best-v2 --runs 5 --epochs 800 \
+  --task DTI --model rgcn --config PKT-DTI-best-v2b --runs 12 --epochs 1500 \
   --early_stopping --patience 50 --negative_sampling filtered --eval_filtered \
   --oversample_rate 1 --undersample_rate 1.0 --split_seed 42 --select_metric mixed \
-  --train_negative_rate 5 --disjoint_supervision 0.3 --warm_eval
-#    same command with --model distmult --learning_rate 0.03 = embedding-only baseline (no GNN)
+  --train_negative_rate auto --disjoint_supervision 0.3 --warm_eval --dedup_eval
+#    --model distmult = embedding-only baseline (no GNN); add --deterministic for bit-identical reruns
 
 # 3. Compound-centric repurposing on a trained model (Task A ranks proteins);
 #    split, graph and config are rebuilt automatically from the model's *_params.json
@@ -270,15 +271,15 @@ Full, scripted pipeline (both tasks, HPO, ablations, repurposing) lives in
 | **E2** | Bayesian hyperparameter optimisation (W&B), baseline tuned too | `experiments/e2_hpo_tandem2.sh` |
 | **E3** | ablations (component machinery + relational context) | `experiments/e3_ablation.sh` |
 | **E4** | compound-centric repurposing + interpretability + expert review | `experiments/e4_repurposing.sh` |
-| **E5** | per-triple ranks of a trained run, then stratified analysis | `experiments/dump_test_ranks.py`, `experiments/stratified_analysis.py` |
+| **E5** | per-triple ranks of every seed, then stratified analysis | `experiments/dump_test_ranks.py`, `experiments/stratified_multiseed.py` |
 
 ```bash
-# E5 — who the model actually works for (no GPU beyond the forward pass, no retraining)
-PYTHONHASHSEED=0 python experiments/dump_test_ranks.py \
-  --model_folder models/<run> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI
-python experiments/stratified_analysis.py --ranks models/<run>/test_ranks_DTI.csv \
-  --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI \
-  --compare "DistMult=models/<other run>/test_ranks_DTI.csv"
+# E5 — who the model actually works for (no retraining; forward passes only)
+PYTHONHASHSEED=0 python experiments/dump_test_ranks.py --model_folder models/<run> \
+  --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --run all
+python experiments/stratified_multiseed.py --task DTI --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip \
+  --model R-GCN=models/<rgcn run> --model DistMult=models/<distmult run> --reference DistMult \
+  --out experiments/logs/v2/stratified_multiseed_DTI.md
 ```
 
 `PYTHONHASHSEED=0` is not optional when a checkpoint is reloaded: entity ids come from the iteration
@@ -296,7 +297,7 @@ relation; known positives masked). Focal loss (α=0.25, γ=3.0) + adversarial ne
 Two sampling/selection protocols are available as flags of `train_and_eval.py` (defaults = v1,
 reproduced bit-for-bit); the evidence behind v2 (protocol ladder E0) is reported in the paper:
 
-| | **v1** (PathogenKG, legacy) | **v2** (consolidated) |
+| | **v1** (PathogenKG) | **v2** (consolidated, used for all results) |
 |---|---|---|
 | model selection / early stopping | validation loss | validation **M** (same criterion as the HPO) |
 | data split | changes at every run | fixed (`--split_seed 42`), only init varies |
@@ -307,7 +308,11 @@ reproduced bit-for-bit); the evidence behind v2 (protocol ladder E0) is reported
 | reproducibility | Python hash seed random per process | `PYTHONHASHSEED=0` |
 
 **Key question answered by E1 under v2:** do the relational GNN encoders (R-GCN, CompGCN) improve
-over an equally tuned embedding-only DistMult on the same data, split and protocol?
+over an equally tuned embedding-only DistMult on the same data, split and protocol? In short: on
+Task A they recognise plausible pairs better (AUROC 0.844 vs 0.786) but do not rank the true target
+better (MRR 0.408 vs 0.407), except on drugs with context but no known target (about 15× the
+baseline's MRR); on Task B the baseline wins on every metric (MRR 0.692 vs 0.348). Tables in
+`experiments/logs/v2/`.
 
 ---
 
@@ -332,8 +337,6 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
   to score it with `aggregate`. On Task A, 22.2% of the top-20 predictions for nine drugs were rated
   plausible against 1.1% of the decoys ($p=4\cdot10^{-7}$), and the automatic KG triage agreed with
   the expert on only 8.3% of them — graph evidence explains a prediction, it does not validate it.
-- A **time-split** (train on an older PheKnowLator release, test on later-added edges) would be the
-  strongest automatic external validation — proposed, not yet built.
 
 ---
 

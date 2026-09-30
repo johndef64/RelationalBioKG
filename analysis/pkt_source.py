@@ -19,7 +19,7 @@ from pathlib import Path
 
 PKT_DIR = Path(__file__).resolve().parents[1] / "dataset" / "PKT"
 HF_BASE = "https://huggingface.co/datasets/johndef64/KG-TransomicNet/resolve/main/PKT/"
-FILES = {  # name -> (size in bytes, SHA-256), the release used for all results (checked 2026-09-28)
+FILES = {  # name -> (size in bytes, SHA-256), the release used for all results
     "nodes.zip": (64_673_549, "129f4f1110d56e7695fce0d8e160f1b9c54c5664be8fff5d07f8204a4ccfad7b"),
     "edges.zip": (224_508_605, "24642dec8b220eb9264113c29fc4784a0fea75e70d5bc5c594e1d5ce60fae2cc"),
 }

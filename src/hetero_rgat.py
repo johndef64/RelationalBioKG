@@ -107,7 +107,7 @@ class HRGATconv(Module):
         nn.init.xavier_uniform_(self.attention, gain=weight_gain)
     
     def forward(self, node_embeddings, triples, change_points, device):
-        """ Perform a single pass of message propagation - FIXED VERSION """
+        """ Perform a single pass of message propagation """
         
         # Apply weight decomposition
         weights = torch.einsum('rb, bio -> rio', self.att, self.basis)
@@ -154,7 +154,7 @@ class HRGATconv(Module):
             # Normalize attention coefficients
             normalized_attention = edge_e / attention_sum[rel_index[:, 1]]
             
-            # FIX 4: Correct aggregation
+            # aggregate with normalised attention
             h_prime_rel = torch_sparse.spmm(rel_index.T, normalized_attention * vals, 
                                         self.every_node, self.every_node, Wh_rel)
             

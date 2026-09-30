@@ -17,11 +17,11 @@ node types come from the "::" prefix; the task target is selected at runtime by
   * Keep ONE direction of every inverse pair (the framework re-adds reverse edges itself).
   * De-duplicate; symmetric same-type relations (PPI) are deduped as unordered pairs.
 
-TWO LAYERS OF EVIDENCE (see TICKET_01_DTI_drug_scope.md)
---------------------------------------------------------
+TWO LAYERS OF EVIDENCE
+----------------------
 PheKnowLator has no pharmacological source: its chemical->protein edges come from Reactome
 (reaction participation), UniProt catalysts and CTD toxicogenomics, so they describe
-substrates, cofactors and products. Measured on the first build: the ten hub compounds
+substrates, cofactors and products. Measured on the PheKnowLator-only build: the ten hub compounds
 (hydron, water, ATP, ADP, phosphate, magnesium) carried 31.4% of that relation, and only
 12.5% of its edges involved a compound with any therapeutic use. Predicting it means
 predicting known biochemistry, not medicine.
@@ -282,8 +282,7 @@ def main():
             fh.write("Task A target = `DTI`, drug--target edges injected from DrugBank through the "
                      "cross-references published by UniProt (`analysis/10_build_dti_drugbank.py`). "
                      "PheKnowLator's own chemical--protein edges are biochemical (Reactome, UniProt "
-                     "catalysts, CTD) and are kept as context under the name `CPI_BIOCHEM`; see "
-                     "`TICKET_01_DTI_drug_scope.md`.\n\n")
+                     "catalysts, CTD) and are kept as context under the name `CPI_BIOCHEM`.\n\n")
         fh.write("## De-duplicated edges per relation (one direction kept)\n\n")
         fh.write("| relation | edges | origin | in A | in B | in unified |\n|---|---:|---|:--:|:--:|:--:|\n")
         for rel in sorted(rel_counts):

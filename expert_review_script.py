@@ -18,16 +18,15 @@ Runs the compound-centric ranking (drug_eval.py) for a cohort of drugs with the 
 attaches the KG-evidence interpretability (interpret_predictions), joins human-readable node
 labels, and writes a REVIEW SHEET with empty columns for an expert to fill in the 3 tiers.
 
-Unlike drug_eval_script.py (which hard-codes ~9 case-study compounds), this works WITHOUT a
-curated list: leave CANDIDATES empty and it ranks ALL compounds (`--compound all`); set
-CANDIDATES to restrict the review to a hand-picked cohort. Either way the output is the same
+Leave CANDIDATES empty and it ranks ALL compounds (`--compound all`); set CANDIDATES to
+restrict the review to a pre-declared cohort. Either way the output is the same
 review sheet, ready for human evaluation.
 
 --- HOW THE OUTPUT IS CAPTURED FOR HUMAN EVALUATION ---
 The protocol follows PathogenKG (a pre-declared cohort, the model ranks every candidate of the
 target type, an expert rates the top-20 per compound on three tiers) with two additions that
-PathogenKG did not have and that this setting needs, because here the reviewer is also the author
-of the model.
+PathogenKG did not have and that this setting needs, because the reviewer is not independent of
+the model's development.
 
 BLINDING. Two files are written instead of one:
     ..._BLIND.csv   what the reviewer opens: item_id, the two labels, three empty columns.
@@ -57,8 +56,8 @@ Then:
 
 # ----------------------- CONFIG -----------------------
 TASK          = "A"                                              # "A" = DTI (targets), "B" = TREATS (diseases)
-# E1 R-GCN, Task A: best M (0.684) and MRR tied with DistMult (docs/report_E1.md). drug_eval loads the
-# seed with the best test MRR (run 3, MRR 0.439, above the 0.408 mean: to be stated when reporting).
+# E1 R-GCN, Task A; drug_eval loads the seed with the best test MRR.
+# Example folder name: edit it to point to your own trained model.
 MODEL_FOLDER  = os.path.join("models", "dti_pkt_taskA_dti.tsv_20260918_130755")
 TOPK          = 50          # how deep drug_eval ranks and stores
 REVIEW_TOPK   = 20          # how many per compound actually go to the reviewer (PathogenKG: 20)
@@ -68,10 +67,8 @@ REVIEW_TOPK   = 20          # how many per compound actually go to the reviewer 
 # they would be proteins never seen in pharmacology, recognisable as implausible at a glance.
 CANDIDATE_POOL = "relation"
 
-# Cohort 1 of docs/coorte_validazione_taskA.md: nine drugs with known and diverse mechanisms of
-# action, declared before looking at any model output, on the PathogenKG pattern. The rationale for
-# each, the DrugBank-injection sanity check, and the archived nutraceutical variant (Cohort 2) are
-# in that file. Leave the list empty to rank ALL compounds, which is not a review but a spreadsheet.
+# Pre-declared cohort: nine drugs with known, diverse mechanisms of action (as in PathogenKG).
+# Leave the list empty to rank ALL compounds.
 CANDIDATES = [
     "Compound::CHEBI_50681",  # methotrexate    antimetabolite, DHFR
     "Compound::CHEBI_64816",  # doxorubicin     topoisomerase II, intercalation
@@ -85,7 +82,7 @@ CANDIDATES = [
 ]
 
 # --- review protocol ---
-BLIND            = True     # False reproduces the old single-sheet behaviour (not recommended)
+BLIND            = True     # False = single unblinded sheet (not recommended)
 DECOY_RANDOM     = 5        # random candidates of the right type, per compound
 DECOY_MIDRANK    = 5        # candidates drawn from ranks MIDRANK_FROM..MIDRANK_TO, per compound
 MIDRANK_FROM     = 400
@@ -151,9 +148,8 @@ def _true_targets(df, cfg):
     """drug -> every target asserted in the task graph (train, validation AND test).
 
     A decoy must be a pair the graph does not assert. The rankings flag train/val positives
-    (is_known_positive) and test ones (is_test_target) separately, and only the first used to be
-    excluded: a held-out true target falling in the mid-rank window could be drawn as a 'decoy',
-    and a reviewer judging it plausible would count against the model.
+    (is_known_positive) and test ones (is_test_target) separately. Both are excluded, so a
+    held-out true target is never drawn as a decoy.
     """
     rel = df[df["interaction"] == cfg["task_rel"]]
     out = defaultdict(set)
@@ -283,7 +279,7 @@ def aggregate(filled_csv, key_csv=None):
     if key_csv is None:
         if "auto_tier" not in df.columns:
             raise SystemExit("Blind sheet given without its KEY file. Usage: aggregate <BLIND.csv> <KEY.csv>")
-        merged = df                                   # legacy unblinded sheet
+        merged = df                                   # unblinded sheet (BLIND = False)
     else:
         key = pd.read_csv(key_csv, dtype=str)
         merged = df.merge(key, on="item_id", how="left", validate="one_to_one")

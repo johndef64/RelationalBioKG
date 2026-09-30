@@ -2,23 +2,21 @@
 # =============================================================================
 # E1 on the -v2b data, end to end: both tasks, all models, then the summary.
 # =============================================================================
-# One command for the run that produces the thesis table. It wraps
+# One command for the run that produces the main E1 results. It wraps
 # e1_main_training.sh (one invocation per task x model, so nothing is duplicated here) and adds
 # the three things a multi-hour unattended job needs:
 #
-#   1. PREFLIGHT. The tuned configs, the datasets and the post-HPO code fixes are checked BEFORE
-#      anything trains. Finding out after six hours that PKT-TREATS-best-v2b was never written,
-#      or that the server was never pulled, is the failure this prevents.
+#   1. PREFLIGHT. The tuned configs, the datasets and the evaluation flags are checked BEFORE
+#      anything trains, so a missing config is found in seconds rather than after hours.
 #   2. CRASH-RESUME. A (task, model) whose log already records its final run is skipped, so the
 #      script can simply be relaunched after a crash, an OOM or a dropped connection.
 #   3. FAULT TOLERANCE. One model failing (CompGCN on Task B is the OOM-prone case) does not stop
 #      the others; the failure is recorded and reported at the end.
 #
 # COST: 12 seeds x 3 models x 2 tasks at 1500 epochs. Task A is roughly 3 h, Task B roughly 25 h in
-# the worst case, less with early stopping (patience PATIENCE_V2). RUN IT UNDER tmux OR nohup.
+# the worst case, less with early stopping (patience PATIENCE_V2). Run it under nohup or as a batch job.
 #
 # USAGE:
-#   tmux new -s e1
 #   bash experiments/e1_run_v2b.sh                  # everything
 #   bash experiments/e1_run_v2b.sh A                # Task A only (the cheap one)
 #   E1_MODELS="rgcn distmult" bash experiments/e1_run_v2b.sh B
@@ -74,13 +72,10 @@ done
 [ "$WHICH" != B ] && { [ -f "$TSV_A" ] && echo "  [ok] $TSV_A" || note "missing $TSV_A (run analysis/06_build_subgraphs.py)"; }
 [ "$WHICH" != A ] && { [ -f "$TSV_B" ] && echo "  [ok] $TSV_B" || note "missing $TSV_B (run analysis/06_build_subgraphs.py)"; }
 
-# -- the post-HPO code fixes must be present: catches a server that was never pulled --
-grep -q "resolve_train_negative_rate" train_and_eval.py \
-  && echo "  [ok] tuned train_negative_rate is honoured" \
-  || note "train_and_eval.py predates the train_negative_rate fix: E1 would train with a fixed 5 negatives instead of the value the HPO chose. git pull first."
+# -- the evaluation flags --
 case "$COMMON_FLAGS" in
   *--dedup_eval*) echo "  [ok] near-duplicate metrics enabled" ;;
-  *) note "config.sh has no --dedup_eval in FLAGS_V2: the ChEBI near-duplicate columns will be missing. git pull first." ;;
+  *) note "FLAGS_V2 in config.sh has no --dedup_eval: the ChEBI near-duplicate columns would be missing." ;;
 esac
 case "$COMMON_FLAGS" in
   *"--train_negative_rate auto"*) echo "  [ok] train_negative_rate = auto" ;;

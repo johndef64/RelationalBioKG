@@ -2,7 +2,7 @@
 
 INCLUDE_VARIANT = False · pharmacological layer = YES
 
-Task A target = `DTI`, drug--target edges injected from DrugBank through the cross-references published by UniProt (`analysis/10_build_dti_drugbank.py`). PheKnowLator's own chemical--protein edges are biochemical (Reactome, UniProt catalysts, CTD) and are kept as context under the name `CPI_BIOCHEM`; see `TICKET_01_DTI_drug_scope.md`.
+Task A target = `DTI`, drug--target edges injected from DrugBank through the cross-references published by UniProt (`analysis/10_build_dti_drugbank.py`). PheKnowLator's own chemical--protein edges are biochemical (Reactome, UniProt catalysts, CTD) and are kept as context under the name `CPI_BIOCHEM`.
 
 ## De-duplicated edges per relation (one direction kept)
 

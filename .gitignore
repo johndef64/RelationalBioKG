@@ -155,3 +155,26 @@ experiments/ablation/*_v*/*
 !experiments/ablation/*_v*/COMPLETE
 !experiments/ablation/DTI_v2/stratified_no_drugctx.md
 !experiments/ablation/DTI_v2/stratified_no_drugctx_per_seed.csv
+
+# development-only files, kept locally, not part of the release
+vscode.bat
+install_torch_sparce.bat
+experiments/slurm/hello.sbatch
+experiments/slurm/check_new_system.sbatch
+experiments/diag_compgcn_treats.sh
+experiments/e1_progress.sh
+experiments/e2_hpo_tandem.sh
+experiments/resume_hpo.sh
+experiments/models_index.py
+experiments/convergence_check.sh
+experiments/convergence_summary.py
+analysis/out/03_DECISION_target_and_subgraph.md
+analysis/out/04_relazioni_canoniche_e_scelta_target.md
+src/hetero_compgcn_info.md
+drug_eval_results.py
+src/bio_utils.py
+TICKET*
+PROGETTO*
+zip.sh
+# cluster-specific Slurm jobs (iknos): local only
+experiments/slurm/iknos/

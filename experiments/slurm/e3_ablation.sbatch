@@ -1,17 +1,15 @@
 #!/bin/bash
 # =============================================================================
-# E3 ablation as a Slurm job on the iknos cluster. Submit from the repository root:
+# E3 ablation as a Slurm job (queue, GPU type and environment are site-specific: adapt them).
+# Submit from the repository root:
 #
-#   Task A (10 seeds, confirmatory run DTI_v2)
-#     sbatch --job-name=e3A --export=ALL,ABL_TASK=A,ABL_VERSION=v2,ABL_RUNS=10 experiments/slurm/e3_ablation.sbatch
+#   Task A (10 seeds)
+#     sbatch --job-name=e3A --export=ALL,ABL_TASK=A,ABL_VERSION=v1,ABL_RUNS=10 experiments/slurm/e3_ablation.sbatch
 #
-#   Task B (5 seeds, TREATS_v1)
+#   Task B (5 seeds)
 #     sbatch --job-name=e3B --export=ALL,ABL_TASK=B,ABL_VERSION=v1 experiments/slurm/e3_ablation.sbatch
 #
-# GPU: any free one (--gres=gpu:1). The cluster types, to pin one add e.g. --gres=gpu:rtx3090:1:
-#     gpu:rtx3090:1      iknos-gpu1, RTX 3090, 24 GB
-#     gpu:rtx5000ada:1   iknos-gpu2, RTX 5000 Ada, 32 GB
-# A job in the low queue can be preempted and requeued, possibly on the other node: every launch
+# GPU: any free one (--gres=gpu:1). A preemptible job can be requeued on another node: every launch
 # writes its GPU into the version's MANIFEST.md, so a mixed-hardware version is visible there.
 #
 # Why ABL_VERSION is always given: when the job is requeued, or resubmitted after a stop, the script
@@ -26,8 +24,6 @@
 #SBATCH --error=experiments/slurm/%x-%j.out
 #SBATCH --qos=low
 #SBATCH --gres=gpu:1
-##SBATCH --gres=gpu:rtx3090:1      # iknos-gpu1, RTX 3090, 24 GB
-##SBATCH --gres=gpu:rtx5000ada:1   # iknos-gpu2, RTX 5000 Ada, 32 GB
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=72:00:00
@@ -36,8 +32,8 @@
 set -euo pipefail
 cd "${SLURM_SUBMIT_DIR:-$PWD}"
 
-source /home/apps/iknos-env.sh
-iknos_activate gnn
+# site-specific: activate the environment of your cluster, e.g.
+source "$(conda info --base)/etc/profile.d/conda.sh" && conda activate gnn
 export PKT_SKIP_CONDA=1          # keep experiments/config.sh from switching to another conda env
 
 : "${ABL_TASK:?set ABL_TASK=A or B with --export}"

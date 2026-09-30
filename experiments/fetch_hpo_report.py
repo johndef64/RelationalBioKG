@@ -19,7 +19,7 @@ import json
 import os
 from pathlib import Path
 
-DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY", "giovannimaria-defilippis-university-of-naples-federico-ii")
+DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY")   # None = the default entity of your W&B login
 OUT_DIR = Path(__file__).resolve().parent / "hpo_report"
 PARAM_KEYS = ["conv_layer_num", "dropout", "layer_0", "layer_1", "layer_2", "mlp_out_layer",
               "learning_rate", "opn", "grad_norm", "num_bases", "regularization",
@@ -111,6 +111,7 @@ def main():
     projects = args.projects or [f"RelationalPKT-{args.task}{args.suffix}-{m}" for m in args.models]
     import wandb
     api = wandb.Api()
+    args.entity = args.entity or api.default_entity   # WANDB_ENTITY, else your login's default
     print(f"[i] entity={args.entity} | projects={projects} | sort by {args.sort_metric}")
     for p in projects:
         dump_project(api, args.entity, p, args.sort_metric)

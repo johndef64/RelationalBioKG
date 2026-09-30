@@ -16,7 +16,7 @@ Usage:
       --model R-GCN=models/dti_pkt_taskA_dti.tsv_20260918_130755 \
       --model CompGCN=models/dti_pkt_taskA_dti.tsv_20260918_135629 \
       --model DistMult=models/dti_pkt_taskA_dti.tsv_20260918_153101 \
-      --reference DistMult --out docs/stratified_multiseed_DTI.md
+      --reference DistMult --out experiments/logs/v2/stratified_multiseed_DTI.md
 """
 import argparse
 import glob

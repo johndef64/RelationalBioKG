@@ -1,5 +1,5 @@
 """
-10_build_dti_drugbank.py — build a genuine drug--target relation for Task A (see TICKET_01).
+10_build_dti_drugbank.py — build a genuine drug--target relation for Task A.
 
 Why: the Task A target relation inherited from PheKnowLator (`molecularly interacts with`,
 chemical -> protein) is biochemical, not pharmacological: its hub compounds are hydron, water, ATP

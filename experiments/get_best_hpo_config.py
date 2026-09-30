@@ -28,7 +28,7 @@ PARAM_KEYS = ["conv_layer_num", "dropout", "layer_0", "layer_1", "layer_2", "mlp
 REPORT_METRICS = ["best_val_mixed_metric", "best_epoch", "val_mixed_metric", "final_mixed_metric", "val_auroc", "val_auprc", "val_mrr",
                   "test_auroc", "test_auprc", "test_mrr"]
 
-DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY", "giovannimaria-defilippis-university-of-naples-federico-ii")
+DEFAULT_ENTITY = os.environ.get("WANDB_ENTITY")   # None = the default entity of your W&B login
 OUT_DIR = Path(__file__).resolve().parent / "hpo_best"
 PARAMS_JSON = Path(__file__).resolve().parents[1] / "src" / "models_params.json"
 
@@ -82,6 +82,7 @@ def main():
 
     import wandb
     api = wandb.Api()
+    args.entity = args.entity or api.default_entity   # WANDB_ENTITY, else your login's default
     OUT_DIR.mkdir(exist_ok=True)
 
     task_config = {}

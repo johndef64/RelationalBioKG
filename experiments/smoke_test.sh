@@ -7,7 +7,7 @@
 # it prints are meaningless.
 #
 # Run it after rebuilding the task graphs (analysis/06_build_subgraphs.py) and before launching
-# anything long, locally or on the server.
+# anything long, locally or on a cluster.
 #
 # USAGE:
 #   bash experiments/smoke_test.sh              # everything except the W&B sweep
@@ -110,7 +110,6 @@ fi
 step "summary: protocol_compare_summary" python experiments/protocol_compare_summary.py \
   --logdir "$SMOKE_DIR" --out "$SMOKE_DIR"
 step "summary: e1_summary" python experiments/e1_summary.py --logdir "$SMOKE_DIR" --out "$SMOKE_DIR"
-step "summary: convergence_summary" python experiments/convergence_summary.py --logdir "$SMOKE_DIR"
 
 # ---- 7. HPO (optional: needs wandb) ----------------------------------------
 if [ "${SMOKE_HPO:-0}" = "1" ]; then

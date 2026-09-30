@@ -1,35 +1,19 @@
 """
-Given a pre-trained link prediction model (folder_path), create with @train_and_eval.py.
+Compound-centric evaluation of a trained link-prediction model (drug repurposing, E4).
 
-The purpose of this script is to create a ranking for a compound (drug) and all possible protein targets (ExtGene) in the reference dataset: dataset = 'PathogenKG_n34_core.tsv.zip'
+For each compound, every node of --target_type (Protein for Task A / DTI, Disease for Task B /
+TREATS) is scored, not only the nodes seen in training target edges. The ranking is filtered
+(train/val positives removed) and compared with the held-out test edges of that compound, which
+measures the model's ability to recover new targets or indications. The data split is rebuilt
+exactly as in training from the model folder's *_params.json.
 
+Example commands:
+  bash experiments/e4_repurposing.sh A models/<folder>
 
-The current eval scripts rank compounds using the trained model among the compounds and ExtGens present in the training edges ("interaction"== TARGET). In this script, however, we need to rank a compound among all possible protein targets (ExtGens) present in the reference dataset, regardless of whether or not they are present in the training edges.
+  python drug_eval.py --model_folder models/<folder> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --target_type Protein --compound all
 
-Finally, the targets with the highest scores will be evaluated and compared with the targets present in the test edges ("interaction"== TARGET) to assess the model's ability to predict new protein targets for a given compound.
-
-
-# All compounds
-python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723
-
-# Single compound
-python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723 --compound "Compound::Pubchem:19"
-
+  python drug_eval.py --model_folder models/<folder> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --target_type Protein --compound "Compound::CHEBI_44185"
 """
-
-################# DRUG EVAL ####################
-
-# Evaluate a single compound against ALL ExtGene targets in the full graph.
-# Unlike model_eval.py / train_and_eval.py which rank among known TARGET edges,
-# this script ranks a compound against every ExtGene in the reference dataset
-# and then evaluates recall against the held-out test TARGET edges.
-
-# Example commands:
-# python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723
-# python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723 --compound "Compound::Pubchem:19"
-# python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723 --compound all --topk 50
-
-########################################################
 
 #%%
 import warnings
@@ -57,8 +41,8 @@ from src.hetero_compgcn import HeterogeneousCompGCN as compgcn
 
 BASE_SEED = 42
 
-dataset = 'PathogenKG_n31_core.tsv.zip'
-DEFAULT_TRAIN_TSV = os.path.join('dataset', dataset)
+dataset = 'pkt_taskA_dti.tsv.zip'  # default: PKT Task A subgraph
+DEFAULT_TRAIN_TSV = os.path.join('dataset', 'PKT_subgraphs', dataset)
 models_params_path = './src/models_params.json'
 CONFIG_NAME = 'pathogen31-cmp-gene'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -77,7 +61,7 @@ def get_dataset_for_drug_eval(tsv_path, task, validation_size, test_size, quiet,
   """
   Load the full dataset and prepare the graph for inference.
   Returns everything needed to rebuild the model and score arbitrary triplets,
-  plus the train/val/test splits of TARGET edges for evaluation.
+  plus the train/val/test splits of the target-relation edges for evaluation.
   """
   edge_index, node_features_per_type = load_data(tsv_path, {}, quiet)
   edge_index = set_target_label(edge_index, [x for x in task.split(',')])
@@ -134,71 +118,6 @@ def get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entiti
   model, lr, regularization, grad_norm, _, _ = _train_get_model(
     model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config_name=config)
   return model, lr, regularization, grad_norm
-
-
-def _legacy_get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entities, num_relations, config=CONFIG_NAME):
-  """Previous local copy of get_model (kept for reference, not used)."""
-  with open(models_params_path, 'r') as f:
-    models_params = json.load(f)
-
-  if config not in models_params:
-    print(f"[get_model] Sweep '{config}' not found, using 'default' config")
-    config = "default"
-
-  if config not in models_params:
-    raise KeyError("[get_model] Neither requested config nor 'default' found in models_params.json")
-  if model_name not in models_params[config]:
-    raise KeyError(f"[get_model] Model '{model_name}' not found in config '{config}'")
-
-  model_params = models_params[config][model_name]
-  print(f"[get_model] Using parameters from config '{config}': {model_params}")
-
-  conv_hidden_channels = {f'layer_{x}': model_params[f'layer_{x}'] for x in range(model_params['conv_layer_num'])}
-
-  if model_name == 'rgcn':
-    model = rgcn(
-      in_channels_dict,
-      model_params['mlp_out_layer'],
-      model_params['mlp_out_layer'],
-      conv_hidden_channels,
-      num_nodes_per_type,
-      num_entities,
-      num_relations + 1,
-      model_params['conv_layer_num'],
-      model_params['num_bases'],
-      activation_function=F.relu,
-      device=device
-    )
-  elif model_name == 'rgat':
-    model = rgat(
-      in_channels_dict,
-      model_params['mlp_out_layer'],
-      model_params['mlp_out_layer'],
-      conv_hidden_channels,
-      num_nodes_per_type,
-      num_entities,
-      num_relations + 1,
-      conv_num_layers=model_params['conv_layer_num'],
-      num_bases=model_params['num_bases'],
-      activation_function=F.relu,
-      device=device
-    )
-  elif model_name == 'compgcn':
-    model = compgcn(
-      in_channels_dict,
-      mlp_out_emb_size=model_params['mlp_out_layer'],
-      conv_hidden_channels=conv_hidden_channels,
-      num_nodes_per_type=num_nodes_per_type,
-      num_entities=num_entities,
-      num_relations=num_relations,
-      dropout=model_params['dropout'],
-      conv_num_layers=model_params['conv_layer_num'],
-      opn=model_params['opn'],
-    )
-  else:
-    return None
-
-  return model, model_params['learning_rate'], model_params['regularization'], model_params['grad_norm']
 
 
 def resolve_model_folder(folder_path):
@@ -258,18 +177,18 @@ def rank_compound_against_all_extgenes(
     model, embeddings, compound_id, all_extgene_ids, rel_id, batch_size=4096
 ):
   """
-  Score a single compound against every ExtGene in the dataset.
+  Score a single compound against every candidate target node (--target_type).
 
   Args:
     model: Trained GNN model.
     embeddings: Node embeddings from model forward pass.
     compound_id: Integer ID of the compound node.
-    all_extgene_ids: Tensor of all ExtGene integer IDs.
-    rel_id: Integer ID of the TARGET relation.
+    all_extgene_ids: Tensor of all candidate target integer IDs.
+    rel_id: Integer ID of the target relation.
     batch_size: Batch size for scoring (to avoid OOM).
 
   Returns:
-    scores: Tensor of sigmoid scores, one per ExtGene.
+    scores: Tensor of sigmoid scores, one per candidate target.
   """
   num_targets = all_extgene_ids.size(0)
   all_scores = []
@@ -299,7 +218,7 @@ def evaluate_compound(
     known_positive_tails=None
 ):
   """
-  Rank a compound against all ExtGenes and compute filtered type-constrained
+  Rank a compound against all candidate targets and compute filtered type-constrained
   metrics against the test set.
 
   Filtered evaluation (standard in KGE literature): when computing the rank
@@ -311,13 +230,13 @@ def evaluate_compound(
     compound_id: Integer ID.
     model: Trained model.
     embeddings: Precomputed embeddings.
-    all_extgene_ids: Tensor of all ExtGene IDs.
-    all_extgene_names: List of all ExtGene string names (aligned with all_extgene_ids).
-    rel_id: TARGET relation ID.
-    test_target_tails: Set of ExtGene IDs that are true targets in the test set for this compound.
+    all_extgene_ids: Tensor of all candidate target IDs.
+    all_extgene_names: List of all candidate target names (aligned with all_extgene_ids).
+    rel_id: Target relation ID.
+    test_target_tails: Set of target IDs that are true targets in the test set for this compound.
     topk: Number of top predictions to report.
     id2ent: ID to entity name mapping.
-    known_positive_tails: Set of ExtGene IDs that are known positives (train+val)
+    known_positive_tails: Set of target IDs that are known positives (train+val)
         for this compound. Used for filtered ranking. If None, no filtering is applied.
 
   Returns:
@@ -409,17 +328,18 @@ def evaluate_compound_legacy(
     test_target_tails, topk, id2ent
 ):
   """
-  Rank a compound against all ExtGenes and evaluate against test set.
+  Unfiltered variant of evaluate_compound (not used by main): rank a compound against all
+  candidate targets and evaluate against the test set.
 
   Args:
     compound_name: String name of the compound.
     compound_id: Integer ID.
     model: Trained model.
     embeddings: Precomputed embeddings.
-    all_extgene_ids: Tensor of all ExtGene IDs.
-    all_extgene_names: List of all ExtGene string names (aligned with all_extgene_ids).
-    rel_id: TARGET relation ID.
-    test_target_tails: Set of ExtGene IDs that are true targets in the test set for this compound.
+    all_extgene_ids: Tensor of all candidate target IDs.
+    all_extgene_names: List of all candidate target names (aligned with all_extgene_ids).
+    rel_id: Target relation ID.
+    test_target_tails: Set of target IDs that are true targets in the test set for this compound.
     topk: Number of top predictions to report.
     id2ent: ID to entity name mapping.
 
@@ -485,7 +405,7 @@ def evaluate_compound_legacy(
 
 def main(model_folder, dataset_tsv, task, compound_query, topk,
          validation_size, test_size, quiet, undersample_rate, batch_size,
-         target_type='ExtGene', candidate_pool='all'):
+         target_type='Protein', candidate_pool='all'):
 
   set_seed(BASE_SEED)
 
@@ -497,7 +417,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
 
   # Rebuild EXACTLY the data the selected model was trained on (values saved in *_params.json):
   #  - split / undersampling seed: --split_seed if the run used a fixed split (protocol v2),
-  #    otherwise the seed of the selected run (legacy: BASE_SEED + run index);
+  #    otherwise the seed of the selected run (v1: BASE_SEED + run index);
   #  - undersample rate, validation/test sizes and hyperparameter config of training.
   # Explicit CLI values (not None) still override.
   selected_run = int(train_params.get('_selected_run', 0))
@@ -530,8 +450,8 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   # Build reverse mapping
   id2ent = {v: k for k, v in ent2id.items()}
 
-  # Collect ALL target entity IDs from the full graph (target_type is configurable:
-  # ExtGene for bacterial PathogenKG, Protein for PKT Task A, Disease for PKT Task B).
+  # Collect ALL target entity IDs from the full graph
+  # (target_type: Protein for Task A, Disease for Task B).
   all_extgene_names = sorted(all_nodes_per_type.get(target_type, []))
   all_extgene_ids = torch.tensor(
     [ent2id[name] for name in all_extgene_names if name in ent2id],
@@ -540,7 +460,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   # Align names with IDs (filter out any that weren't in ent2id)
   all_extgene_names = [name for name in all_extgene_names if name in ent2id]
 
-  # Candidate pool. 'all' = every node of target_type (PathogenKG case study). 'relation' = only the
+  # Candidate pool. 'all' = every node of target_type. 'relation' = only the
   # nodes that occur as tails of the target relation (train+val+test) — the same pool used by the
   # training/HPO filtered evaluation and by the negative sampler. Nodes outside that pool are never
   # negatives during training, so their scores are not calibrated against true targets.
@@ -559,7 +479,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   all_compound_names = sorted(all_nodes_per_type.get('Compound', []))
   print(f'[i] Total Compounds in graph: {len(all_compound_names)}')
 
-  # Determine the target relation ID: 'TARGET' (PathogenKG) or the task relation (PKT: DTI / TREATS)
+  # Determine the target relation ID: the task relation (DTI / TREATS), or 'TARGET' if present
   wanted = ['TARGET'] + [t.strip() for t in task.split(',') if t.strip()]
   relation_name = None
   for w in wanted:
@@ -572,9 +492,9 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
   if relation_name is None:
     raise KeyError(f"Target relation {wanted} not found in relation2id. Available: {list(relation2id.keys())}")
   rel_id = relation2id[relation_name]
-  print(f'[i] TARGET relation ID: {rel_id}')
+  print(f'[i] Target relation: {relation_name} (ID {rel_id})')
 
-  # Build ground truth per compound: {compound_id -> set of ExtGene_ids}
+  # Build ground truth per compound: {compound_id -> set of target ids}
   # We need ALL target triples (train+val+test) for the pool of true positives,
   # and test triples specifically for evaluation.
   all_targets_per_compound = {}
@@ -596,7 +516,7 @@ def main(model_folder, dataset_tsv, task, compound_query, topk,
       train_targets_per_compound.setdefault(int(h), set()).add(int(t))
 
   # --- Diagnostic: show split sizes ---
-  print(f'[i] TARGET triple split: train={len(train_triplets)}, val={len(val_triplets)}, test={len(test_triplets)}')
+  print(f'[i] Target triple split: train={len(train_triplets)}, val={len(val_triplets)}, test={len(test_triplets)}')
   print(f'[i] Compounds with test targets: {len(test_targets_per_compound)} / {len(all_compound_names)}')
   if test_targets_per_compound:
     total_test_tails = sum(len(v) for v in test_targets_per_compound.values())
@@ -795,35 +715,32 @@ if __name__ == '__main__':
   print(f'[i] Running on {device}')
 
   parser = argparse.ArgumentParser(
-    description='Evaluate a trained model by ranking a compound against ALL ExtGene targets.',
+    description='Evaluate a trained model by ranking each compound against every node of --target_type.',
     formatter_class=argparse.RawDescriptionHelpFormatter,
     epilog="""
 Examples:
-  # Evaluate all compounds in the dataset
-  python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723
+  # Task A (DTI): all compounds against all proteins
+  python drug_eval.py --model_folder models/<folder> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --target_type Protein --compound all
 
-  # Evaluate a specific compound
-  python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723 --compound "Compound::Pubchem:19"
+  # Task A, a single compound, top-50 predictions
+  python drug_eval.py --model_folder models/<folder> --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --target_type Protein --compound "Compound::CHEBI_44185" --topk 50
 
-  # Evaluate all compounds with top-50 predictions
-  python drug_eval.py --model_folder models/target_PathogenKG_n34_core.tsv_20260225_184723 --compound all --topk 50
-
-  # Use a different dataset
-  python drug_eval.py --model_folder models/myfolder --tsv dataset/PathogenKG_n34_core.tsv.zip --compound all
+  # Task B (TREATS): all compounds against all diseases
+  python drug_eval.py --model_folder models/<folder> --tsv dataset/PKT_subgraphs/pkt_taskB_treats.tsv.zip --task TREATS --target_type Disease --compound all
     """
   )
 
   parser.add_argument('--model_folder', type=str, required=True,
                       help='Path to the model folder (containing .pt and _params.json files)')
   parser.add_argument('--compound', type=str, default='all',
-                      help='Compound to evaluate. Use "all" for all compounds, or a specific compound ID (e.g., "Compound::Pubchem:19")')
+                      help='Compound to evaluate. Use "all" for all compounds, or a compound ID (e.g., "Compound::CHEBI_44185")')
   parser.add_argument('--tsv', type=str, default=DEFAULT_TRAIN_TSV,
                       help=f'Path to the dataset TSV (default: {DEFAULT_TRAIN_TSV})')
-  parser.add_argument('--task', type=str, default='TARGET',
-                      help='Task / interaction type (default: TARGET)')
-  parser.add_argument('--target_type', type=str, default='ExtGene',
-                      help='Node type to rank each compound against (default: ExtGene). '
-                           'For PKT subgraphs use Protein (Task A / DTI) or Disease (Task B / TREATS).')
+  parser.add_argument('--task', type=str, default='DTI',
+                      help='Target relation (default: DTI; TREATS for Task B)')
+  parser.add_argument('--target_type', type=str, default='Protein',
+                      help='Node type to rank each compound against (default: Protein for Task A / DTI; '
+                           'use Disease for Task B / TREATS).')
   parser.add_argument('--topk', type=int, default=20,
                       help='Number of top predictions to display per compound (default: 20)')
   parser.add_argument('--validation_size', type=float, default=None,
@@ -833,13 +750,13 @@ Examples:
   parser.add_argument('--undersample_rate', type=float, default=None,
                       help='Fraction of non-target triplets to keep (default: value used in training)')
   parser.add_argument('--candidate_pool', type=str, default='all', choices=['all', 'relation'],
-                      help="'all' = rank every node of --target_type (default, PathogenKG case study); "
+                      help="'all' = rank every node of --target_type (default); "
                            "'relation' = only nodes occurring in the target relation, i.e. the pool of the "
                            "training evaluation and of the negative sampler.")
   parser.add_argument('--batch_size', type=int, default=4096,
                       help='Batch size for scoring triplets (default: 4096)')
   parser.add_argument('--quiet', action='store_true',
-                      help='Suppress verbose output')
+                      help='Suppress dataset loading/splitting messages')
 
   args = parser.parse_args()
 

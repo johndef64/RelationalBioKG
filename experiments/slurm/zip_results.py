@@ -2,7 +2,7 @@
 
     python experiments/slurm/zip_results.py <out.zip> <file or folder> [<file or folder> ...]
 
-Model checkpoints (*.pt) are left out: they are large and stay on the server. Missing paths are
+Model checkpoints (*.pt) are left out: they are large and are excluded. Missing paths are
 reported and skipped, so a job that failed half-way still gets its zip. Paths inside the zip are
 relative to the repository root, so `unzip` / Expand-Archive from the root puts every file back in its
 place.

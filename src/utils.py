@@ -13,8 +13,6 @@ import torch_geometric.transforms as T
 from torch_geometric.data import HeteroData
 from sklearn.model_selection import train_test_split
 
-PARAMS_FILE = 'configurations/vitagraph.yml'
-
 def set_seed(seed=42):
 	np.random.seed(seed)
 	random.seed(seed)
@@ -25,7 +23,7 @@ def set_seed(seed=42):
 		torch.cuda.manual_seed(seed)
 		torch.cuda.manual_seed_all(seed)
 
-# Utility Functions to exrtact the LCC from the DRKG
+# Utility functions to extract the LCC from a KG
 class UnionFind:
 	def __init__(self):
 		self.parent = dict()
@@ -323,7 +321,7 @@ def load_data(edge_index_path, features_paths_per_type, quiet=True, debug=False,
 	# Auto-detect or use specified column names for head, interaction, tail
 	# Assume the first 3 columns are head, interaction, tail if not specified
 	columns = edge_ind.columns.tolist()
-	# dedux the datsaframe at the first three columns
+	# keep only the first three columns
 	edge_ind = edge_ind.iloc[:, :3]
 	
 	if head_col is None:
@@ -581,100 +579,11 @@ def negative_sampling(target_triplets, negative_rate=1):
 	samples = torch.cat([torch.tensor(target_triplets), neg_samples], dim=0)
 	return samples, labels
 
-def negative_sampling_filtered_orignal(
-	target_triplets,
-	negative_rate=1,
-	all_true_triplets=None,
-	num_entities=None,
-	seed=42,
-	max_attempts_per_negative=50,
-	debug=False
-):
-	"""
-	Alternative negative sampling for KG link prediction.
-
-	Compared to `negative_sampling`, this version:
-	- filters false negatives using `all_true_triplets` (if provided),
-	- supports deterministic sampling through `seed`,
-	- accepts float/int `negative_rate` safely.
-
-	Args:
-		target_triplets: Positive triplets (N, 3) [h, r, t].
-		negative_rate: Number of negatives per positive.
-		all_true_triplets: Optional iterable with all true KG triplets to filter against.
-		num_entities: Optional total number of entities; if None, infer from data.
-		seed: RNG seed for reproducibility.
-		max_attempts_per_negative: Max retries to avoid sampling a true triplet.
-
-	Returns:
-		samples: Tensor of shape (N + N*negative_rate, 3).
-		labels: Tensor of shape (N + N*negative_rate,), positives first.
-	"""
-	target_triplets = np.asarray(target_triplets, dtype=np.int64)
-	if target_triplets.ndim != 2 or target_triplets.shape[1] != 3:
-		raise ValueError("target_triplets must have shape (N, 3)")
-	if target_triplets.shape[0] == 0:
-		return torch.empty((0, 3), dtype=torch.long), torch.empty((0,), dtype=torch.float)
-
-	neg_rate = int(negative_rate)
-	if neg_rate <= 0:
-		pos_tensor = torch.tensor(target_triplets, dtype=torch.long)
-		labels = torch.ones(pos_tensor.shape[0], dtype=torch.float)
-		return pos_tensor, labels
-
-	rng = np.random.default_rng(seed)
-	pos_num = target_triplets.shape[0]
-	neg_num = pos_num * neg_rate
-
-	if num_entities is None:
-		src, _, dst = target_triplets.T
-		unique_entities = np.unique(np.concatenate([src, dst]))
-	else:
-		unique_entities = np.arange(int(num_entities), dtype=np.int64)
-
-	true_set = set(map(tuple, target_triplets.tolist()))
-	if all_true_triplets is not None:
-		all_true_arr = np.asarray(all_true_triplets, dtype=np.int64)
-		if all_true_arr.ndim == 2 and all_true_arr.shape[1] == 3:
-			true_set.update(map(tuple, all_true_arr.tolist()))
-
-	neg_samples = np.empty((neg_num, 3), dtype=np.int64)
-	filled = 0
-	for i in range(pos_num):
-		h, r, t = target_triplets[i]
-		for _ in range(neg_rate):
-			candidate = None
-			for _attempt in range(max_attempts_per_negative):
-				if rng.random() > 0.5:
-					candidate = (int(rng.choice(unique_entities)), int(r), int(t))
-				else:
-					candidate = (int(h), int(r), int(rng.choice(unique_entities)))
-				if candidate not in true_set:
-					break
-			if candidate is None:
-				candidate = (int(h), int(r), int(t))
-			neg_samples[filled] = candidate
-			filled += 1
-
-	samples = torch.cat(
-		[
-			torch.tensor(target_triplets, dtype=torch.long),
-			torch.tensor(neg_samples, dtype=torch.long),
-		],
-		dim=0
-	)
-	labels = torch.zeros(samples.shape[0], dtype=torch.float)
-	labels[:pos_num] = 1.0
-	if debug:
-		print(f"Generated {neg_num} negative samples for {pos_num} positives.")
-	return samples, labels
-
-
 _NEG_POOLS_CACHE = {}
 
 def _negative_sampling_pools(target_triplets, all_true_triplets):
     """
-    Build (true_set, heads_by_rel, tails_by_rel) exactly as negative_sampling_filtered always did:
+    Build (true_set, heads_by_rel, tails_by_rel) for negative_sampling_filtered:
     rows of all_true_triplets inserted first (in order), then rows of target_triplets.
 
     Memoised on the bytes of all_true_triplets. When every target triple is already contained in
@@ -728,20 +637,19 @@ def _negative_sampling_pools(target_triplets, all_true_triplets):
 
 def negative_sampling_filtered(
     target_triplets,
-    all_entities,           # tutti i nodi del grafo (array di id)
+    all_entities,           # all graph node ids
     negative_rate=1,
-    all_true_triplets=None, # tutti i 4.1M edge per filtrare falsi negativi
+    all_true_triplets=None, # all known true triples, used to filter false negatives
     seed=42,
     max_attempts_per_negative=50,
     debug=False
 ):
     """
-    Correct negative sampling for KG link prediction.
+    Filtered, type-constrained negative sampling for KG link prediction.
 
-    Key fixes vs previous versions:
-    - uses all_entities (full graph node set) instead of inferring from target_triplets
-    - filters false negatives using all_true_triplets
-    - type-constrained: only perturbs head with valid heads, tail with valid tails
+    - candidates come from all_entities (full graph node set)
+    - false negatives are filtered using all_true_triplets
+    - type-constrained: heads are replaced only with valid heads, tails with valid tails
     """
 	
 
@@ -756,13 +664,10 @@ def negative_sampling_filtered(
     pos_num = target_triplets.shape[0]
     neg_num = pos_num * neg_rate
 
-    # --- FIX 1: usa tutte le entità del grafo ---
     all_entities = np.asarray(all_entities, dtype=np.int64)
 
-    # --- FIX 2 + FIX 3: true-triple set and type-constrained candidate pools ---
-    # These only depend on (target_triplets, all_true_triplets) and were rebuilt with Python
-    # loops at EVERY call (every epoch). They are now memoised on the content of both arrays:
-    # the structures are built exactly as before, so np.choice draws are unchanged.
+    # True-triple set and type-constrained candidate pools. They depend only on
+    # (target_triplets, all_true_triplets), so they are memoised across calls (epochs).
     true_set, heads_by_rel, tails_by_rel = _negative_sampling_pools(target_triplets, all_true_triplets)
 
     neg_samples = np.empty((neg_num, 3), dtype=np.int64)
@@ -772,7 +677,7 @@ def negative_sampling_filtered(
         h, r, t = target_triplets[i]
         r_int = int(r)
 
-        # candidati type-constrained, fallback a all_entities
+        # type-constrained candidates, falling back to all_entities
         head_candidates = heads_by_rel.get(r_int, all_entities)
         tail_candidates = tails_by_rel.get(r_int, all_entities)
 
@@ -788,11 +693,10 @@ def negative_sampling_filtered(
 
                 if candidate not in true_set:
                     break
-                candidate = None  # era un falso negativo, riprova
+                candidate = None  # false negative, retry
 
             if candidate is None:
-                # fallback: usa il positivo stesso (non ideale ma evita crash)
-                # in pratica non dovrebbe mai accadere con pool grandi
+                # fallback: reuse the positive itself; practically never reached with large pools
                 candidate = (int(h), r_int, int(t))
                 if debug:
                     print(f"[WARN] Could not find valid negative for triplet {i} after {max_attempts_per_negative} attempts")
@@ -835,35 +739,30 @@ def triple_sampling_basic(target_triplet, val_size, test_size, quiet=True, seed=
 
 def triple_sampling(target_triplet, val_size, test_size, quiet=True, seed=42):
     """
-    Split stratificato per gene (coda della relazione TARGET).
-    Garantisce che ogni gene con >= 2 edge abbia almeno un edge nel train.
-    Geni con un solo edge vanno sempre nel train.
-
-	La prima è attesa e corretta: lo split stratificato ha messo nel test set 
-	solo geni con ≥2 TARGET edges, eliminando i casi "facili" dove il modello 
-	poteva sfruttare geni molto connessi. Il task è genuinamente più difficile.
+    Stratified split by tail: every tail with >=2 edges keeps one in train;
+    single-edge tails stay in train.
     """
     target_triplet = list(target_triplet)
-    
-    # raggruppa per gene (tail = colonna 2)
+
+    # group by tail (column 2)
     from collections import defaultdict
     tail_to_triplets = defaultdict(list)
     for triplet in target_triplet:
-        tail = triplet[2]  # ExtGene id
+        tail = triplet[2]
         tail_to_triplets[tail].append(triplet)
     
     train_data, val_data, test_data = [], [], []
 
     for tail, triplets in tail_to_triplets.items():
         if len(triplets) == 1:
-            # geni con un solo edge: sempre in train, non valutabili
+            # single-edge tails: always in train, not evaluable
             train_data.extend(triplets)
         elif len(triplets) == 2:
-            # uno in train, uno in test
+            # one in train, one in test
             train_data.append(triplets[0])
             test_data.append(triplets[1])
         else:
-            # split normale ma garantendo almeno 1 in train
+            # regular split, keeping at least one edge in train
             temp, test = train_test_split(triplets, test_size=test_size, random_state=seed)
             if len(temp) == 1:
                 train_data.extend(temp)
@@ -880,11 +779,11 @@ def triple_sampling(target_triplet, val_size, test_size, quiet=True, seed=42):
         print(f"\tValidation set shape: {len(val_data)}")
         print(f"\tTesting set shape: {len(test_data)}\n")
         
-        # mostra quanti geni sono solo in train
+        # tails that appear only in train
         train_tails = set(t[2] for t in train_data)
         test_tails = set(t[2] for t in test_data)
         only_train = train_tails - test_tails
-        print(f"\tGeni solo in train (non valutabili): {len(only_train)}")
+        print(f"\tTails only in train (not evaluable): {len(only_train)}")
 
     return train_data, val_data, test_data
 
@@ -1061,17 +960,12 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
     dependent on the sampling size. Results are not directly comparable to
     standard full-ranking KG benchmarks.
 
-    FIXES rispetto alla versione originale:
-      1. Traccia la posizione del positivo dopo il sort (prima assumeva ranks[:,-1])
-      2. Clamp num_generate per evitare errore se > nodi disponibili
-      3. Gestisce il caso hits passato come dict (re-init sicuro)
-
     Args:
-        standardized_negatives: se True, campiona i negativi da tutti gli entity ID
-            (torch.arange su embeddings) invece che dai soli nodi presenti in
-            all_target_triplets. Garantisce lo stesso set di negativi tra varianti
-            di ablation study (a parità di num_generate e entity set), rendendo
-            le metriche direttamente confrontabili.
+        standardized_negatives: if True, sample negatives from all entity ids
+            (torch.arange over embeddings) instead of only the nodes in
+            all_target_triplets. This yields the same negative set across ablation
+            variants (for equal num_generate and entity set), so their metrics are
+            directly comparable.
     """
     if standardized_negatives:
         unique_nodes = torch.arange(embeddings.size(0), device=device)
@@ -1079,15 +973,15 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
         src, _, dst = all_target_triplets.T
         unique_nodes = torch.unique(torch.cat((src, dst), dim=0))
 
-    # Clamp: non possiamo generare più candidati di quanti nodi abbiamo
+    # Cannot draw more candidates than available nodes
     if num_generate > unique_nodes.size(0):
         print(f"[WARN] num_generate ({num_generate}) > unique nodes ({unique_nodes.size(0)}), clamping.")
         num_generate = unique_nodes.size(0)
 
-    # Re-init hits come dict pulito (evita side-effect se passato come default mutable)
+    # Accept hits as list or dict; results go into a fresh dict
     hits_k = list(hits.keys()) if isinstance(hits, dict) else list(hits)
-    
-    # Indice del positivo: è sempre l'ultimo concatenato -> posizione num_generate
+
+    # The positive is appended last, so its index is num_generate
     positive_idx = num_generate
 
     with torch.no_grad():
@@ -1097,13 +991,13 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
             selected_nodes = unique_nodes[random_indices]
 
             if head:
-                # Tail prediction: fisso (h, r), vario t
+                # Tail prediction: fix (h, r), vary t
                 head_rel = test_triplet[:, :2]
                 head_rel = torch.repeat_interleave(head_rel, num_generate, dim=0)
                 target_tails = torch.tile(selected_nodes, (1, test_triplet.size(0))).view(-1, 1)
                 mrr_triplets = torch.cat((head_rel, target_tails), dim=-1)
             else:
-                # Head prediction: fisso (r, t), vario h
+                # Head prediction: fix (r, t), vary h
                 rel_tail = test_triplet[:, 1:]
                 rel_tail = torch.repeat_interleave(rel_tail, num_generate, dim=0)
                 target_heads = torch.tile(selected_nodes, (1, test_triplet.size(0))).view(-1, 1)
@@ -1111,20 +1005,16 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
 
             # Shape: (num_test, num_generate, 3)
             mrr_triplets = mrr_triplets.view(test_triplet.size(0), num_generate, 3)
-            # Concatena il positivo come ultimo candidato -> indice num_generate
+            # Append the positive as the last candidate (index num_generate)
             mrr_triplets = torch.cat((mrr_triplets, test_triplet.view(-1, 1, 3)), dim=1)
 
             # Score: (num_test, num_generate+1)
             scores = model.distmult(embeddings, mrr_triplets.view(-1, 3)).view(test_triplet.size(0), num_generate + 1)
 
-            # Sort decrescente: ranks[i,j] = indice originale del candidato in posizione j
+            # Descending sort: sorted_indices[i, j] = original index of the candidate at rank j
             _, sorted_indices = torch.sort(scores, descending=True)
 
-            # FIX: trova la posizione del positivo (indice positive_idx) nel ranking ordinato
-            # Per ogni riga, cerca dove sorted_indices == positive_idx
-            # (sorted_indices == positive_idx) è un bool tensor (num_test, num_generate+1)
-            # .nonzero() restituisce le coordinate [riga, colonna] dei True
-            # La colonna è la posizione nel ranking (0-indexed)
+            # Rank position (0-indexed column) of the positive in each row
             positive_positions = (sorted_indices == positive_idx).nonzero(as_tuple=False)[:, 1]
 
             if head:
@@ -1132,7 +1022,7 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
             else:
                 ranks_o = positive_positions
 
-        # +1 per passare a 1-indexed (rank 1 = migliore)
+        # 1-indexed ranks (rank 1 = best)
         ranks = torch.cat([ranks_s, ranks_o]).float() + 1
 
         mrr = torch.mean(1.0 / ranks)
@@ -1144,14 +1034,10 @@ def evaluation_metrics_sampled(model, embeddings, all_target_triplets, test_trip
 
     return mrr.item(), hits_result
 
-# ======== FULL RANKING EVALUATION: MRR e Hits@k su TUTTI i nodi del grafo (filtered, confrontabile con la letteratura) ========
+# ======== FULL RANKING EVALUATION: MRR and Hits@k over ALL graph nodes ========
 
 def evaluation_metrics_full(model, embeddings, all_graph_nodes, test_triplet, device, hits=[1,3,10]):
     """
-    MRR e Hits calcolati su tutti i nodi del grafo.
-    Da chiamare SEPARATAMENTE dopo evaluation_metrics originale.
-    Non sostituisce nulla — è additive.
-    """"""
     Full-entity MRR and Hits@k evaluation for KG link prediction.
 
     For each test triplet (h,r,t), ranks the true tail entity against all
@@ -1174,21 +1060,20 @@ def evaluation_metrics_full(model, embeddings, all_graph_nodes, test_triplet, de
             triplet = test_triplet[i]  # (h, r, t)
             h, r, t = triplet[0], triplet[1], triplet[2]
             
-            # genera tutti i candidati sostituendo la coda
+            # all candidates obtained by replacing the tail
             candidates = torch.stack([
                 h.expand(num_generate),
                 r.expand(num_generate),
                 unique_nodes
             ], dim=1)  # (num_nodes, 3)
             
-            # aggiungi il positivo vero se non è già tra i candidati
             scores = torch.sigmoid(model.distmult(embeddings, candidates))  # (num_nodes,)
             
-            # rank del positivo vero
+            # rank of the true positive
             true_score = scores[unique_nodes == t]
             if true_score.size(0) == 0:
                 continue
-            rank = (scores >= true_score).sum().item()  # quanti hanno score >= del positivo
+            rank = (scores >= true_score).sum().item()  # candidates scoring >= the positive
             ranks_list.append(rank)
     
     if len(ranks_list) == 0:
@@ -1268,20 +1153,15 @@ def evaluation_metrics_full_bidirectional(model, embeddings, all_graph_nodes, te
 
 
 """
-Evaluation metrics per Knowledge Graph Link Prediction — Filtered Setting.
+Evaluation metrics for Knowledge Graph Link Prediction — Filtered Setting.
 
-Queste metriche sono standard nella letteratura KGE e forniscono una valutazione più realistica
+Standard in the KGE literature. Ranking is over the full graph (not sampled), which
+can be expensive on very large graphs but is more reliable than sampled or unfiltered
+metrics, especially with many known positives (as in biomedical KGs).
 
-Queste metriche sono full graph, non campionate, e possono essere computazionalmente intensive su grafi molto grandi. Tuttavia, sono più affidabili rispetto a metriche campionate o non filtrate, specialmente in contesti con molti positivi noti (come i KGE biomedici).
-
-Versione corretta e migliorata rispetto alla proposta originale.
-Cambiamenti rispetto alla versione proposta:
-  1. Aggiunto check di sicurezza per evitare rank=0 e divisione per zero nel MRR
-  2. Aggiunto clamp del rank minimo a 1 (difesa contro edge case)
-  3. Separazione metriche tail/head per diagnostica
-  4. Logging opzionale per debug
-  5. Supporto per device mismatch
-  6. Gestione edge case: nodo positivo assente da unique_nodes
+- ranks are clamped to a minimum of 1 (no division by zero in MRR)
+- tail and head metrics are reported separately
+- test triples whose nodes are missing from unique_nodes are skipped
 """
 
 import torch
@@ -1290,11 +1170,11 @@ from collections import defaultdict
 
 def build_positive_maps(all_target_triplets):
     """
-    Costruisce le mappe dei positivi noti per il filtered setting.
-    
+    Build the maps of known positives for the filtered setting.
+
     Args:
-        all_target_triplets: tensor (N, 3) con TUTTE le triple positive 
-                             (train + val + test) della relazione target.
+        all_target_triplets: tensor (N, 3) with ALL positive triples
+                             (train + val + test) of the target relation.
     
     Returns:
         all_positives_tail: dict (h, r) -> set of t
@@ -1316,44 +1196,44 @@ def build_positive_maps(all_target_triplets):
 def evaluation_metrics_filtered(
     model, 
     embeddings, 
-    all_target_triplets,  # train + val + test della relazione target
-    test_triplets,        # solo le triple di test
-    all_graph_nodes,      # tutti i nodi unici del grafo
-    device, 
+    all_target_triplets,  # train + val + test of the target relation
+    test_triplets,        # test triples only
+    all_graph_nodes,      # all unique graph nodes
+    device,
     hits_k=[1, 3, 10],
     verbose=False
 ):
     """
-    Calcola MRR e Hits@K con filtered setting (standard nella letteratura KGE).
-    
-    Il filtered setting rimuove dal ranking tutti i veri positivi noti
-    (tranne quello che si sta valutando), evitando di penalizzare il modello
-    per aver assegnato score alti ad altre risposte corrette.
-    
+    Compute MRR and Hits@K in the filtered setting (standard in the KGE literature).
+
+    The filtered setting removes all known true positives from the ranking
+    (except the one being evaluated), so the model is not penalised for
+    scoring other correct answers highly.
+
     Args:
-        model: modello con metodo .distmult(embeddings, triplets) -> scores
-        embeddings: embedding dei nodi (output del GNN encoder)
-        all_target_triplets: tensor (N, 3) — TUTTE le triple positive (train+val+test)
-        test_triplets: tensor (M, 3) — solo le triple di test da valutare
-        all_graph_nodes: tensor (E,) — tutti i nodi unici del grafo
+        model: model exposing .distmult(embeddings, triplets) -> scores
+        embeddings: node embeddings (GNN encoder output)
+        all_target_triplets: tensor (N, 3) — ALL positive triples (train+val+test)
+        test_triplets: tensor (M, 3) — test triples to evaluate
+        all_graph_nodes: tensor (E,) — all unique graph nodes
         device: torch device
-        hits_k: lista di K per Hits@K (default [1, 3, 10])
-        verbose: se True, stampa info di debug ogni 100 triple
-    
+        hits_k: list of K for Hits@K (default [1, 3, 10])
+        verbose: if True, print debug info every 100 triples
+
     Returns:
-        dict con chiavi: 'mrr', 'mrr_tail', 'mrr_head', 
-                         'hits@K' per ogni K, 'hits@K_tail', 'hits@K_head'
+        dict with keys: 'mrr', 'mrr_tail', 'mrr_head',
+                        'hits@K' for each K, 'hits@K_tail', 'hits@K_head'
     """
     model.eval()
     unique_nodes = all_graph_nodes.to(device)
     num_entities = unique_nodes.size(0)
     
-    # Mappa nodo -> indice nel vettore unique_nodes
+    # Map node -> index in unique_nodes
     node_to_idx = {}
     for i in range(num_entities):
         node_to_idx[unique_nodes[i].item()] = i
-    
-    # Costruisci mappe dei positivi per il filtering
+
+    # Known-positive maps for filtering
     all_positives_tail, all_positives_head = build_positive_maps(all_target_triplets)
     
     tail_ranks = []
@@ -1365,15 +1245,15 @@ def evaluation_metrics_filtered(
             h, r, t = test_triplets[i]
             h_i, r_i, t_i = h.item(), r.item(), t.item()
             
-            # Verifica che entrambi i nodi siano nel grafo
+            # Both nodes must be in the graph
             if h_i not in node_to_idx or t_i not in node_to_idx:
                 skipped += 1
                 if verbose:
-                    print(f"  [SKIP] Tripla {i}: nodo mancante da unique_nodes")
+                    print(f"  [SKIP] Triple {i}: node missing from unique_nodes")
                 continue
-            
+
             # ============================================
-            # TAIL PREDICTION: dato (h, r, ?), ranking di t
+            # TAIL PREDICTION: given (h, r, ?), rank t
             # ============================================
             tail_candidates = torch.stack([
                 h.expand(num_entities).to(device),
@@ -1382,28 +1262,27 @@ def evaluation_metrics_filtered(
             ], dim=1)
             tail_scores = model.distmult(embeddings, tail_candidates)
             
-            # Score del vero positivo
+            # Score of the true positive
             true_tail_score = tail_scores[node_to_idx[t_i]]
-            
-            # Filtered: maschera i positivi noti tranne t_i
+
+            # Filtered: mask known positives except t_i
             filter_mask = torch.ones(num_entities, dtype=torch.bool, device=device)
             for known_t in all_positives_tail.get((h_i, r_i), set()):
                 if known_t != t_i and known_t in node_to_idx:
                     filter_mask[node_to_idx[known_t]] = False
             
-            # Il positivo t_i NON viene mascherato (la condizione known_t != t_i lo protegge)
-            # Quindi true_tail_score è incluso in filtered_scores
+            # t_i itself is never masked, so true_tail_score is in filtered_scores
             filtered_scores = tail_scores[filter_mask]
-            
-            # Rank = quanti score sono >= al positivo (incluso se stesso, quindi rank minimo = 1)
+
+            # Rank = number of scores >= the positive (including itself, so min rank = 1)
             tail_rank = (filtered_scores >= true_tail_score).sum().item()
-            
-            # Safety: rank deve essere almeno 1 (difesa contro edge case numerici)
+
+            # Guard against numerical edge cases
             tail_rank = max(tail_rank, 1)
             tail_ranks.append(tail_rank)
-            
+
             # ============================================
-            # HEAD PREDICTION: dato (?, r, t), ranking di h
+            # HEAD PREDICTION: given (?, r, t), rank h
             # ============================================
             head_candidates = torch.stack([
                 unique_nodes,
@@ -1425,14 +1304,14 @@ def evaluation_metrics_filtered(
             head_ranks.append(head_rank)
             
             if verbose and (i + 1) % 100 == 0:
-                print(f"  Valutate {i+1}/{test_triplets.size(0)} triple "
+                print(f"  Evaluated {i+1}/{test_triplets.size(0)} triples "
                       f"(tail_rank={tail_rank}, head_rank={head_rank})")
-    
+
     if skipped > 0:
-        print(f"  [WARN] {skipped} triple saltate per nodi mancanti")
-    
+        print(f"  [WARN] {skipped} triples skipped due to missing nodes")
+
     if len(tail_ranks) == 0:
-        print("  [ERROR] Nessuna tripla valutata!")
+        print("  [ERROR] No triples evaluated!")
         return {
             'mrr': 0.0, 'mrr_tail': 0.0, 'mrr_head': 0.0,
             **{f'hits@{k}': 0.0 for k in hits_k},
@@ -1441,12 +1320,12 @@ def evaluation_metrics_filtered(
             'num_evaluated': 0, 'num_skipped': skipped
         }
     
-    # Converti in tensori
+    # Convert to tensors
     tail_ranks_t = torch.tensor(tail_ranks, dtype=torch.float, device=device)
     head_ranks_t = torch.tensor(head_ranks, dtype=torch.float, device=device)
     all_ranks_t = torch.cat([tail_ranks_t, head_ranks_t])
     
-    # Calcola metriche
+    # Compute metrics
     results = {
         'mrr': (1.0 / all_ranks_t).mean().item(),
         'mrr_tail': (1.0 / tail_ranks_t).mean().item(),
@@ -1464,15 +1343,15 @@ def evaluation_metrics_filtered(
 
 
 # ============================================
-# Funzione helper per stampare i risultati
+# Helper to print the results
 # ============================================
 def print_metrics(results, title="Evaluation Results"):
-    """Stampa le metriche in formato leggibile."""
+    """Print the metrics in a readable format."""
     print(f"\n{'='*50}")
     print(f"  {title}")
     print(f"{'='*50}")
-    print(f"  Triple valutate: {results['num_evaluated']}"
-          f" (saltate: {results['num_skipped']})")
+    print(f"  Triples evaluated: {results['num_evaluated']}"
+          f" (skipped: {results['num_skipped']})")
     print(f"  MRR (overall):   {results['mrr']:.4f}")
     print(f"  MRR (tail):      {results['mrr_tail']:.4f}")
     print(f"  MRR (head):      {results['mrr_head']:.4f}")
@@ -1486,23 +1365,23 @@ def print_metrics(results, title="Evaluation Results"):
 
 
 # ============================================
-# Esempio di utilizzo
+# Usage example
 # ============================================
 """
-# 1. Raccogli TUTTE le triple della relazione target (train + val + test)
+# 1. Collect ALL triples of the target relation (train + val + test)
 all_target_triplets = torch.cat([
     train_target_triplets,
     val_target_triplets,
     test_target_triplets
 ], dim=0)
 
-# 2. Raccogli tutti i nodi unici del grafo
+# 2. Collect all unique graph nodes
 all_graph_nodes = torch.unique(torch.cat([
     graph.edge_index[0], 
     graph.edge_index[1]
 ]))
 
-# 3. Valuta
+# 3. Evaluate
 results = evaluation_metrics_filtered(
     model=model,
     embeddings=embeddings,

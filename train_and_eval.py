@@ -1,38 +1,20 @@
-﻿################# TRAIN AND EVAL ####################
-
-
-# # Specify a different TASK (edge type) to train on
-# python train_and_eval.py --task CMP_BIND
-
-# # Use a different model
-# python train_and_eval.py --model rgcn
-
-# # Change number of runs and epochs
-# python train_and_eval.py --runs 5 --epochs 200
-
-# # Training with pretraining
-# python train_and_eval.py --pretrain_epochs 50
-
-# # Training with focal loss parameters
-# python train_and_eval.py --alpha 0.25 --gamma 3.0 --alpha_adv 2.0
-
-########################################################
-
-# # Full configuration with multiple parameters
-# python train_and_eval.py --target 83332 --model compgcn --runs 3 --epochs 300 --patience 100 --validation_size 0.15 --test_size 0.2 --evaluate_every 10 --negative_rate 2 --oversample_rate 5 --undersample_rate 0.5
-
-# # With pretraining and frozen base layers
-# python train_and_eval.py --model rgat --pretrain_epochs 100 --freeze_base --epochs 200
-
-# # Training on target graph with custom sampling
-# python train_and_eval.py --oversample_rate 10 --undersample_rate 0.3 --negative_rate 3
-
-# # Quiet mode (minimal output)
-# python train_and_eval.py --quiet --runs 5
+################# TRAIN AND EVAL ####################
+#
+# Example commands (PKT, protocol v2):
+#
+# # Task A (DTI), R-GCN, 12 seeds on a fixed split
+# PYTHONHASHSEED=0 python train_and_eval.py --tsv dataset/PKT_subgraphs/pkt_taskA_dti.tsv.zip --task DTI --model rgcn --config PKT-DTI-best-v2b --runs 12 --epochs 1500 --early_stopping --patience 50 --negative_sampling filtered --eval_filtered --oversample_rate 1 --undersample_rate 1.0 --split_seed 42 --select_metric mixed --train_negative_rate auto --disjoint_supervision 0.3 --warm_eval --dedup_eval
+#
+# # Task B (TREATS), same protocol
+# PYTHONHASHSEED=0 python train_and_eval.py --tsv dataset/PKT_subgraphs/pkt_taskB_treats.tsv.zip --task TREATS --model rgcn --config PKT-TREATS-best-v2b --runs 12 --epochs 1500 --early_stopping --patience 50 --negative_sampling filtered --eval_filtered --oversample_rate 1 --undersample_rate 1.0 --split_seed 42 --select_metric mixed --train_negative_rate auto --disjoint_supervision 0.3 --warm_eval --dedup_eval
+#
+# # Embedding-only DistMult baseline: the same commands with --model distmult
+#
+####################################################
 
 """
-Train and evaluate heterogeneous GNN models (CompGCN, R-GCN, R-GAT) for link
-prediction on the TARGET relation in PathogenKG.
+Train and evaluate link prediction on a target relation of a KG (PKT Task A: DTI, Task B: TREATS).
+Method from PathogenKG.
 
 The dataset is loaded as (head, interaction, tail) triples from a TSV file.
 See README.md for usage examples.
@@ -67,13 +49,9 @@ from src.kge_distmult import DistMultKGE
 
 BASE_SEED = 42
 
-# Single, pre-merged dataset ready for training.
-dataset = 'PathogenKG_merged.tsv'
-dataset = 'PathogenKG_n19.tsv'
-
-
-dataset = 'PathogenKG_n31_core.tsv.zip'
-DEFAULT_TRAIN_TSV = os.path.join('dataset', dataset)
+# Default training TSV (PKT Task A subgraph).
+dataset = 'pkt_taskA_dti.tsv.zip'
+DEFAULT_TRAIN_TSV = os.path.join('dataset', 'PKT_subgraphs', dataset)
 models_params_path = './src/models_params.json'
 CONFIG_NAME = 'pathogen31-cmp-gene'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -86,7 +64,7 @@ USE_EVAL_TYPE_CONSTRAINED = True
 
 """
 If True, uses type-constrained filtered negative sampling:
-- Corrupts heads with valid Compound entities and tails with valid ExtGene entities
+- Corrupts heads/tails only with entities of the valid head/tail types of the target relation
 - Filters out all known true triples (train+val+test) to avoid false negatives
 - Deterministic seed for val/test (fixed per run), variable for train (seed+epoch)
 
@@ -97,7 +75,7 @@ def _resolve_dataset_path(tsv_path: str) -> str:
   resolved = os.path.normpath(tsv_path)
   if not os.path.exists(resolved):
     raise FileNotFoundError(
-      f"Training TSV not found: {resolved}. Expected the merged dataset at '{DEFAULT_TRAIN_TSV}'."
+      f"Training TSV not found: {resolved}. Default dataset: '{DEFAULT_TRAIN_TSV}'."
     )
   return resolved
 
@@ -396,10 +374,9 @@ def resolve_train_negative_rate(args):
   """--train_negative_rate as an int, or 'auto' = the value the HPO tuned for this model.
 
   The number of negatives per positive is a swept hyperparameter, so pinning it to a constant in
-  the experiment flags would evaluate a configuration the HPO never selected: on DTI -v2b the best
-  R-GCN and the best DistMult both chose 10, while the flags said 5. 'auto' reads it back from
-  --config; configs tuned before this parameter existed have no such key and fall back to
-  --train_negative_rate_default (5, what the legacy x5 oversampling effectively gave).
+  the experiment flags would evaluate a configuration the HPO never selected. 'auto' reads it back
+  from --config; configs without this key fall back to --train_negative_rate_default (5, what the
+  v1 x5 oversampling effectively gave).
   """
   v = args.train_negative_rate
   if v is None:
@@ -432,9 +409,7 @@ def get_model(model_name, task, in_channels_dict, num_nodes_per_type, num_entiti
   if model_name == 'distmult':
     # Baseline without message passing: it has no convolution, so its tuned block legitimately has
     # no conv_layer_num / layer_* / num_bases (the sweep drops them, see DISTMULT_DROP in
-    # tuning_hyperparameter.py). It must therefore NEVER reach the generic branch below, which
-    # reads those keys -- guarding this branch on "the config has no distmult block", as it used
-    # to, meant that a config where DistMult HAD been tuned crashed with KeyError: 'conv_layer_num'.
+    # tuning_hyperparameter.py), so it must never reach the generic branch below, which reads them.
     p = models_params[config_name].get('distmult')
     if p is None:
       # config predating the tuning of the baseline: fall back to the R-GCN optimisation settings
@@ -534,7 +509,7 @@ def train(model, optimizer, gradnorm, reg_param, x_dict, index , target_triplets
   # loss = loss_fl + reg_loss
 
   ############################################
-  # focal loss + hard-negative mining | NEW! #
+  # focal loss + hard-negative mining        #
   ############################################
   raw_logits = model.distmult(out, target_triplets)
   probs = torch.sigmoid(raw_logits)
@@ -591,7 +566,7 @@ def test(model, reg_param, x_dict, index , target_triplets, target_labels, train
     # loss = loss_fl + reg_loss
 
     ############################################
-    # focal loss + hard-negative mining | NEW! #
+    # focal loss + hard-negative mining        #
     ############################################
     raw_logits = model.distmult(out, target_triplets)
     probs = torch.sigmoid(raw_logits)
@@ -617,16 +592,16 @@ def test(model, reg_param, x_dict, index , target_triplets, target_labels, train
     scores = torch.sigmoid(scores)
   
 
-  # Subito prima della chiamata evaluation_metrics in test()
+  # Nodes appearing in the target triples (candidate pool of the sampled evaluation)
   src, _, dst = train_val_triplets.T
   unique_nodes = torch.unique(torch.cat((src, dst)))
   # print(f"[DEBUG] unique_nodes: {unique_nodes.size(0)}, train_val_triplets shape: {train_val_triplets.shape}, device: {train_val_triplets.device}")
   
   if use_filtered_eval and all_target_triplets is not None and num_entities is not None:
-    # --- NEW: Filtered evaluation (standard in KGE literature) ---
-    # Usa tutti i nodi del grafo come candidati, con filtered setting
+    # --- Filtered evaluation (standard in KGE literature) ---
+    # All graph nodes are candidates; known true triples are filtered out
     all_graph_nodes = torch.arange(num_entities, device=target_triplets.device)
-    # Estrai solo le triple positive dal batch (target_triplets contiene pos+neg)
+    # Keep only the positive triples of the batch (target_triplets holds pos+neg)
     pos_mask = target_labels.bool()
     test_positives = target_triplets[pos_mask]
     
@@ -645,23 +620,10 @@ def test(model, reg_param, x_dict, index , target_triplets, target_labels, train
     mrr = filtered_results['mrr']
     hits = {k: filtered_results[f'hits@{k}'] for k in [1, 3, 10]}
   else:
-    # --- OLD: evaluation_metrics originale (mantenuta per backward compatibility) ---
-    # è nomrale che copn sole 20 random avrò valori di mrr e hits molto variabili tra run!!!
-    NUM_GENERATE = 200  # [100-200]  # 20 legacy
+    # --- Sampled (unfiltered) evaluation, kept for comparison with PathogenKG v1 ---
+    # MRR/Hits are noisy across runs with few sampled candidates, hence 200
+    NUM_GENERATE = 200
     mrr, hits = evaluation_metrics_sampled(model, out, train_val_triplets, target_triplets[...], NUM_GENERATE, 0, hits=[1,3,10], standardized_negatives=standardized_negatives)
-
-  # # aggiungi MRR affidabile solo sul test set finale
-  # all_graph_nodes = torch.arange(num_entities)
-  # mrr_full, hits_full = evaluation_metrics_full(
-  #     model, 
-  #     model(flattened_features_per_type, train_index),  # ricalcola embeddings
-  #     all_graph_nodes,
-  #     testing_triplets[test_labels.bool()],  # solo i positivi
-  #     device,
-  #     hits=[1, 3, 10]
-  # )
-
-  # print(f"MRR (full graph): {mrr_full:.3f}, Hits@10 (full graph): {hits_full[10]:.3f}")
 
   metrics["Loss"]   = loss.item()
   metrics["MRR"]    = mrr
@@ -672,7 +634,6 @@ def test(model, reg_param, x_dict, index , target_triplets, target_labels, train
   return metrics
 
 
-# Import the helper function from utils_v2
 from src.utils import get_edge_type
 
 def eval(model, flattened_features_per_type, train_index, edge_index, ent2id, relation2id, change_points=None, task=None):
@@ -687,7 +648,7 @@ def eval(model, flattened_features_per_type, train_index, edge_index, ent2id, re
         ent2id: Entity to ID mapping.
         relation2id: Relation to ID mapping.
         change_points: Change points for RGAT (optional).
-        task: The task/edge type to evaluate (e.g., 'Compound-ExtGene'). 
+        task: The task/edge type to evaluate (e.g., 'DTI'). 
               If None, uses args.task.
               
     Note:
@@ -815,7 +776,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
   split_seed=None, select_metric='loss', train_negative_rate=None, disjoint_supervision=0.0,
   detect_anomaly=False, warm_eval=False, dedup_eval=False, learning_rate=None):
   """
-  Protocol knobs (defaults = legacy PathogenKG behaviour, "v1"):
+  Protocol knobs (defaults = PathogenKG protocol, "v1"):
     split_seed           None -> split/undersampling/val-test negatives follow the run seed (v1);
                          int  -> fixed data split across runs, only model init varies.
     select_metric        'loss' -> checkpoint/early stopping on validation loss (v1);
@@ -824,7 +785,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
                          TRAINING only (validation/test keep negative_rate, e.g. 1:1).
     disjoint_supervision 0 -> training target edges are also in the message-passing graph (v1);
                          r in (0,1) -> see SupervisionSampler.
-    detect_anomaly       autograd anomaly detection (debug only; was always on, very slow).
+    detect_anomaly       autograd anomaly detection (debug only; slow).
     warm_eval            also report test metrics excluding cold-start triples.
     dedup_eval           also report test metrics excluding triples whose fact is already
                          in training through a near-duplicate ChEBI node (reporting only).
@@ -886,7 +847,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
 
       change_points_pre = None
       if model_name == 'rgat':
-        # pt_full_index è un numpy array [src, rel, dst]
+        # pt_full_index is a numpy array [src, rel, dst]
         rel_ids = torch.from_numpy(pt_full_index[:,1]).to(device)
         change_points_pre = torch.cat([
             torch.tensor([0], device=device),
@@ -926,7 +887,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
     print('[i] Getting dataset...', end='', flush=True)
     start_time_dataset = time.time()
 
-    # data seed: split + undersampling mask + val/test negatives. Legacy = run seed (changes per run).
+    # data seed: split + undersampling mask + val/test negatives. v1 = run seed (changes per run).
     data_seed = random_seed if split_seed is None else int(split_seed)
     in_channels_dict, num_nodes_per_type, num_entities, num_relations, \
     train_triplets, train_index, flattened_features_per_type, val_triplets, \
@@ -936,7 +897,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       # fixed split: make model init depend only on the run seed, whatever get_dataset consumed
       set_seed(random_seed)
   
-    # --- preparazione parametri per neg sampling corretto ---
+    # --- inputs for filtered negative sampling ---
     all_entities_arr = np.arange(num_entities)
     all_true_arr = train_val_test_triplets.cpu().numpy()
       
@@ -980,8 +941,8 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
 
 
     # Training runs
-    # Anomaly detection is a debugging tool that slows autograd considerably; it used to be
-    # always on. It does not change the computed values.
+    # Anomaly detection is a debugging tool that slows autograd considerably; it does not
+    # change the computed values.
     torch.autograd.set_detect_anomaly(bool(detect_anomaly))
     val_metrics       = {"Auroc":0, "Auprc":0, "Loss":0, "MRR":0, "Hits@":0}
     last_improvement_epoch = 0
@@ -994,9 +955,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
       sup_sampler = SupervisionSampler(train_index, train_triplets, num_relations, disjoint_supervision,
                                        oversample_rate, random_seed)
     run_start = time.time()
-    # disable=None means "draw the bar only on a real terminal". Redirected to a log the bar was
-    # rewriting a line thousands of times per run, which bloated the log and, more to the point,
-    # was the bulk of the output volume that used to fill the terminal buffer and freeze the job.
+    # disable=None draws the progress bar only on a real terminal, keeping redirected logs small.
     with trange(1, (epochs + 1), desc=f'Run {i} | Epochs', position=0, disable=None) as epochs_tqdm:
       for epoch in epochs_tqdm:
         if sup_sampler is not None:
@@ -1049,18 +1008,15 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
             all_target_triplets=train_val_test_triplets if eval_filtered else None,
             num_entities=num_entities if eval_filtered else None
           )
-          # Model selection / early stopping: 'loss' (legacy) or validation M (as in the HPO)
+          # Model selection / early stopping: 'loss' (v1) or validation M (as in the HPO)
           if select_on_loss:
             val_loss = val_metrics["Loss"]
             improved = val_loss < (best_val_loss - min_delta)
           else:
             val_loss = mixed_metric(val_metrics)
             improved = val_loss > (best_val_loss + min_delta)
-          # Wall-clock stamp on every validation line. Until the run ends the log carries no time
-          # reference at all (train_time_sec is printed only per finished seed), so a job frozen for
-          # hours on a stalled volume or a throttled pod looks exactly like one that is merely slow.
-          # One seed of E1 TREATS took 145875 s against ~1500 s for its siblings and that was only
-          # visible after the fact; with the stamp the gap is readable in the log while it happens.
+          # Wall-clock stamp on every validation line, so a stalled job is distinguishable from a slow
+          # one while it runs (train_time_sec is printed only when a seed finishes).
           print(f"[val] {time.strftime('%Y-%m-%d %H:%M:%S')} run {i} epoch {epoch} | loss {val_metrics['Loss']:.4f} | AUROC {val_metrics['Auroc']:.4f} "
                 f"| AUPRC {val_metrics['Auprc']:.4f} | MRR {val_metrics['MRR']:.4f} | M {mixed_metric(val_metrics):.4f}")
           if improved:
@@ -1209,7 +1165,7 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
   avg_metrics = {key: float(np.mean([m[key] for m in all_run_metrics])) for key in metric_keys}
   std_metrics = {key: float(np.std([m[key] for m in all_run_metrics])) for key in metric_keys}
 
-  # Salvataggio su JSON
+  # Save metrics to JSON
   result_to_save = {
       "protocol": protocol,
       "individual_runs": all_run_metrics,
@@ -1227,64 +1183,63 @@ def main(model_name, dataset_tsv, task, runs, epochs, patience, validation_size,
 if __name__ == '__main__':
   print(f'[i] Running on {device}')
 
-  parser = argparse.ArgumentParser(description='Ablation study on Vitagraph generation process.')
-  # add 
+  parser = argparse.ArgumentParser(description='Train and evaluate link-prediction models on a KG target relation.')
 
   parser.add_argument('--tsv', type=str, default=DEFAULT_TRAIN_TSV,
                       help=f"Path to the training TSV (default: {DEFAULT_TRAIN_TSV})")
   parser.add_argument('-m', '--model', type=str, default='compgcn', choices=['rgcn', 'rgat', 'compgcn', 'distmult'], help='Model to use (distmult = embedding-only baseline, no message passing).')
-  parser.add_argument('-r', '--runs', type=int, default=1, help='Number of runs for the ablation study.')
-  parser.add_argument('-e', '--epochs', type=int, default=400, help='Number of epochs for the ablation study.')
+  parser.add_argument('-r', '--runs', type=int, default=1, help='Number of runs (seed BASE_SEED + run index).')
+  parser.add_argument('-e', '--epochs', type=int, default=400, help='Maximum number of training epochs.')
   parser.add_argument('-p', '--patience', type=int, default=20, help='Patience in epochs for early stopping (used only with --early_stopping).')
   parser.add_argument('--early_stopping', action='store_true', help='Enable early stopping based on validation performance.')
-  parser.add_argument('--min_delta', type=float, default=0.0, help='Minimum validation-loss decrease required to reset early-stopping patience.')
-  parser.add_argument('--validation_size', type=float, default=0.1, help='Validation size for the ablation study.')
-  parser.add_argument('--test_size', type=float, default=0.2, help='Test size for the ablation study.')
-  parser.add_argument('--quiet', action='store_true', help='If set, the ablation study will print debug output.')
+  parser.add_argument('--min_delta', type=float, default=0.0, help='Minimum improvement of the selection metric (see --select_metric) required to reset early-stopping patience.')
+  parser.add_argument('--validation_size', type=float, default=0.1, help='Fraction of target triples used for validation.')
+  parser.add_argument('--test_size', type=float, default=0.2, help='Fraction of target triples used for test.')
+  parser.add_argument('--quiet', action='store_true', help='Suppress dataset loading/splitting messages.')
   parser.add_argument('--evaluate_every', type=int, default=5, help='Evaluate every n epochs.')
-  parser.add_argument('--negative_sampling', type=str, default='filtered', help='')  
-  parser.add_argument('--negative_rate', type=float, default=1, help='Negative sampling rate for the ablation study.')
-  parser.add_argument('--oversample_rate', type=int, default=5, help='how many times to repeat the positive training triplets')
-  parser.add_argument('--undersample_rate', type=float, default=0.5, help='fraction [0,1] of non-target triplets to keep in the training graph')
-  parser.add_argument('--pretrain_epochs', type=int, default=0, help='Number of epochs for multi-relational pretraining')
-  parser.add_argument('--freeze_base', action='store_true', help='Freeze pre-trained conv layers during fine-tuning')
-  parser.add_argument('--alpha', type=float, default=0.25, help='Alpha value of the focal loss')
-  parser.add_argument('--gamma', type=float, default=3.0, help='Gamma value of the focal loss')
-  parser.add_argument('--alpha_adv', type=float, default=2.0, help='Alpha value for the hard-negative mining loss'), 
-  parser.add_argument('--dry_run', action='store_true', help='If set, the ablation study will not save models or rankings, and will skip final evaluation.')
+  parser.add_argument('--negative_sampling', type=str, default='filtered', help="Training negative sampler: 'filtered' (known true triples excluded) or any other value for the standard sampler.")  
+  parser.add_argument('--negative_rate', type=float, default=1, help='Negatives per positive (validation/test; also training unless --train_negative_rate is set).')
+  parser.add_argument('--oversample_rate', type=int, default=5, help='How many times to repeat the positive training triplets.')
+  parser.add_argument('--undersample_rate', type=float, default=0.5, help='Fraction [0,1] of non-target triplets to keep in the training graph.')
+  parser.add_argument('--pretrain_epochs', type=int, default=0, help='Number of epochs for multi-relational pretraining.')
+  parser.add_argument('--freeze_base', action='store_true', help='Freeze pre-trained conv layers during fine-tuning.')
+  parser.add_argument('--alpha', type=float, default=0.25, help='Alpha value of the focal loss.')
+  parser.add_argument('--gamma', type=float, default=3.0, help='Gamma value of the focal loss.')
+  parser.add_argument('--alpha_adv', type=float, default=2.0, help='Alpha value for the hard-negative mining loss.'), 
+  parser.add_argument('--dry_run', action='store_true', help='Do not write models, parameters, metrics or rankings to disk.')
   parser.add_argument('--rank_after_train', action='store_true',
                       help='After each run, rank ALL task head×tail triplets and save a *_ranking.json. '
                            'Off by default (heavy: materialises the full grid, e.g. ~13M for DTI). '
                            'Prefer drug_eval.py for batched, compound-centric ranking.')
-  # ---- protocol v2 knobs (defaults reproduce the legacy v1 behaviour; see main() docstring) ----
+  # ---- protocol v2 knobs (defaults reproduce the v1 protocol; see main() docstring) ----
   parser.add_argument('--split_seed', type=int, default=None,
                       help='Fixed seed for the data split / undersampling / val-test negatives. '
-                           'Default None = legacy: follows the run seed, so the split changes at every run.')
+                           'Default None = v1: follows the run seed, so the split changes at every run.')
   parser.add_argument('--select_metric', type=str, default='loss', choices=['loss', 'mixed'],
-                      help="Checkpoint selection and early stopping on validation 'loss' (legacy) or "
+                      help="Checkpoint selection and early stopping on validation 'loss' (v1) or "
                            "'mixed' = M = 0.2 AUROC + 0.4 AUPRC + 0.4 MRR (same criterion as the HPO).")
   parser.add_argument('--train_negative_rate', type=str, default=None,
                       help="Negatives per positive in TRAINING only (val/test keep --negative_rate). "
                            "An integer, or 'auto' to use the value the HPO stored in --config for this "
-                           "model (falling back to --train_negative_rate_default when the config predates "
-                           "the tuning of this parameter). Default None = same as --negative_rate.")
+                           "model (falling back to --train_negative_rate_default when the config has no "
+                           "tuned value). Default None = same as --negative_rate.")
   parser.add_argument('--train_negative_rate_default', type=int, default=5,
                       help="Fallback for --train_negative_rate auto when the config has no tuned value.")
   parser.add_argument('--disjoint_supervision', type=float, default=0.0,
                       help='Fraction of training target edges removed from the message-passing graph at '
-                           'each epoch and used only as loss positives (0 = legacy: all in the graph).')
+                           'each epoch and used only as loss positives (0 = v1: all in the graph).')
   parser.add_argument('--detect_anomaly', action='store_true',
-                      help='Enable torch autograd anomaly detection (debug only; slow). Legacy code had it always on.')
+                      help='Enable torch autograd anomaly detection (debug only; slow).')
   parser.add_argument('--deterministic', action='store_true',
                       help='Bit-reproducible training on GPU: R-GCN aggregation and decoder gradients are '
                            'summed in a fixed order instead of with atomic additions (src/deterministic_ops.py). '
-                           'Off by default, so E0/E1 keep their original code path.')
+                           'Off by default.')
   parser.add_argument('--models_dir', type=str, default='models',
                       help="Where the run folder is created (default 'models'). Ablations write inside "
                            "their own versioned folder under experiments/ablation/.")
   parser.add_argument('--run_name', type=str, default=None,
                       help='Exact name of the run folder inside --models_dir (default: '
-                           '<task>_<dataset>_<model>_<timestamp>). Used by the ablation, one folder per variant.')
+                           '<task>_<dataset>_<model>_<timestamp>).')
   parser.add_argument('--learning_rate', type=float, default=None,
                       help='Override the learning rate of the selected config (default: use the config value).')
   parser.add_argument('--dedup_eval', action='store_true',
@@ -1297,19 +1252,17 @@ if __name__ == '__main__':
   parser.add_argument('--eval_filtered', action='store_true', default=True,
                       help='Use filtered evaluation metrics (standard KGE setting). '
                            'Ranks against all graph nodes with known positives masked. '
-                           'If not set, uses legacy pool-based evaluation.')
+                           'Always on (the flag defaults to True).')
 
-  # add task as argument
   parser.add_argument('--task', type=str,
-                      #default='Compound-ExtGene',
                       default='TARGET',
-                      help='Task to perform. Could be a comma-separated list of edge types or interaction names (e.g., "CMP_BIND,ENZYME"). If not specified, defaults to "TARGET".')
+                      help='Target relation: an interaction name or edge type, or a comma-separated list '
+                           '(e.g. "DTI", "TREATS"). Default: "TARGET".')
 
-  # hyperparameter config selector (key in src/models_params.json). For the PKT
-  # subgraphs (DRKG-scale biomedical KG, ~66-94k nodes) use e.g. BIOKG-128 / BIOKG-200.
+  # hyperparameter config selector (key in src/models_params.json)
   parser.add_argument('--config', type=str, default=CONFIG_NAME,
                       help=f'Hyperparameter config name from src/models_params.json (default: {CONFIG_NAME}). '
-                           'For PKT subgraphs try BIOKG-64 / BIOKG-128 / BIOKG-200.')
+                           'Tuned PKT configs: PKT-DTI-best-v2b, PKT-TREATS-best-v2b.')
 
 
   args            = parser.parse_args()
@@ -1349,7 +1302,7 @@ if __name__ == '__main__':
   task            = args.task  # needed by main() in both dry_run and normal paths
 
   if args.dry_run:
-      print("[i] Dry run enabled: models and rankings will not be saved, and final evaluation will be skipped.")
+      print("[i] Dry run enabled: nothing will be written to disk.")
       model_save_path = None  # No saving
   else:
     time_stamp      = time.strftime('%Y%m%d_%H%M%S')
@@ -1367,36 +1320,6 @@ if __name__ == '__main__':
         json.dump(vars(args), f, indent=4)
 
   if not quiet: print(f'Running training of model: {model}, runs: {runs} | device: {device}')
-
-
-
-  """
-  Example commands:
-  python train_and_eval.py --model rgcn --epochs 1
-  python train_and_eval.py --model rgcn --runs 1 --epochs 100
-  python train_and_eval.py --model rgcn --runs 3 --epochs 100
-  python train_and_eval.py --model rgcn --runs 3 --epochs 100
-  python train_and_eval.py --model compgcn --epochs 100 --negative_sampling filtered
-  python train_and_eval.py --model compgcn --epochs 100 --negative_sampling filtered --eval_filtered
-  python train_and_eval.py --model compgcn --pretrain_epochs 100 --freeze_base --epochs 200
-
-  -----------------------------------------------------------
-  # optimized training commands: 
-  python train_and_eval.py --model compgcn --run 3 --epochs 400  --tsv dataset/PathogenKG_n31_core.tsv.zip --early_stopping --negative_sampling filtered
-
-  -----------------------------------------------------------
-  
-  -- on DRKG (simple triplets):
-  python train_and_eval.py --model compgcn --epochs 100 --task CMP_BIND --tsv dataset/drkg/drkg_reduced.zip 
-  
-  -- on DRKG dataset:
-  python train_and_eval.py --model compgcn --epochs 300 --task Compound-Gene --tsv dataset/drkg/drkg.tsv
-  
-  -- on DRKG_reduced dataset:
-  python train_and_eval.py --model compgcn --epochs 300 --task Compound-Gene --tsv dataset/drkg/drkg_reduced.tsv
-  python train_and_eval.py --model compgcn --epochs 3 --task Compound-Gene --tsv dataset/drkg/drkg_reduced.tsv
-
-  """
 
   main(model, dataset_tsv, task, runs, epochs, patience, validation_size, test_size, quiet, \
       evaluate_every, negative_rate, model_save_path, oversample_rate, undersample_rate, \

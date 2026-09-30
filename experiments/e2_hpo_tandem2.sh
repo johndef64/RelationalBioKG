@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# E2 (tandem 2) — both hyperparameter sweeps with an ASYMMETRIC budget, then the extraction.
+# E2 — both hyperparameter sweeps with a per-task budget, then the extraction of the best configs.
 #
-# Same idea as e2_hpo_tandem.sh (Task A then Task B, sequential: one GPU can't hold two sweeps),
-# but the two tasks no longer share one trial budget. They don't cost the same and they don't carry
-# the same prior knowledge:
+# Task A then Task B, sequentially (one GPU cannot hold two sweeps). The budgets differ because the
+# cost does:
 #
-#   Task A (DTI)     10.305 target edges / 1,16 M edges   -> an R-GCN trial is a couple of minutes.
-#                    The target relation was rebuilt from scratch (DrugBank via UniProt) and the
-#                    learning-rate grid now reaches 1e-1, a region no earlier trial ever visited,
-#                    so this sweep EXPLORES. 30 trials per model.
-#   Task B (TREATS)  168.157 target edges / 1,87 M edges  -> roughly ten times the cost per trial,
-#                    CompGCN on the full graph is the OOM-prone case. 15 trials per model, even
-#                    though its history is thinner (the old sweep stopped at 22 trials, R-GCN only).
+#   Task A (DTI)     10,305 target edges / 1.16 M edges   -> an R-GCN trial takes a few minutes.
+#                    30 trials per model.
+#   Task B (TREATS)  168,157 target edges / 1.87 M edges  -> roughly ten times the cost per trial;
+#                    CompGCN on the full graph is the most memory-hungry case. 15 trials per model.
 #
 # Budget per model, not per task: three models (rgcn, compgcn, distmult) are swept for each task.
 # Ceiling 500 epochs, patience 10 evaluations (v2 defaults of e2_hpo_sweep.sh).
@@ -50,28 +46,28 @@ case "$WHICH" in
   *) echo "usage: $0 [A|B|AB]"; exit 1 ;;
 esac
 
-echo "[E2-tandem2] protocol=$PKT_HPO_PROTOCOL suffix=$HPO_SUFFIX models=$N_MODELS epochs=$PKT_HPO_EPOCHS patience=$PKT_HPO_PATIENCE"
-[ "$WHICH" != "B" ] && echo "[E2-tandem2] Task A: $PKT_HPO_RUNS_A trials/model -> $((PKT_HPO_RUNS_A*N_MODELS)) runs"
-[ "$WHICH" != "A" ] && echo "[E2-tandem2] Task B: $PKT_HPO_RUNS_B trials/model -> $((PKT_HPO_RUNS_B*N_MODELS)) runs"
+echo "[E2] protocol=$PKT_HPO_PROTOCOL suffix=$HPO_SUFFIX models=$N_MODELS epochs=$PKT_HPO_EPOCHS patience=$PKT_HPO_PATIENCE"
+[ "$WHICH" != "B" ] && echo "[E2] Task A: $PKT_HPO_RUNS_A trials/model -> $((PKT_HPO_RUNS_A*N_MODELS)) runs"
+[ "$WHICH" != "A" ] && echo "[E2] Task B: $PKT_HPO_RUNS_B trials/model -> $((PKT_HPO_RUNS_B*N_MODELS)) runs"
 
 sweep () {   # $1 = A|B   $2 = runs per model
-  echo "[E2-tandem2] === Task $1 -> projects RelationalPKT-*${HPO_SUFFIX}-<model> ==="
+  echo "[E2] === Task $1 -> projects RelationalPKT-*${HPO_SUFFIX}-<model> ==="
   PKT_HPO_RUNS="$2" bash experiments/e2_hpo_sweep.sh "$1"
 }
 
 # NB: --suffix=-v2b (with '='): argparse would read a bare '-v2b' as an option, not as a value
 extract () {   # $1 = DTI|TREATS
   python experiments/get_best_hpo_config.py --task "$1" --suffix="$HPO_SUFFIX" --write \
-    || echo "[E2-tandem2] extraction failed for $1 — rerun: python experiments/get_best_hpo_config.py --task $1 --suffix=$HPO_SUFFIX --write"
+    || echo "[E2] extraction failed for $1 — rerun: python experiments/get_best_hpo_config.py --task $1 --suffix=$HPO_SUFFIX --write"
 }
 
 [ "$WHICH" != "B" ] && sweep A "$PKT_HPO_RUNS_A"
 [ "$WHICH" != "A" ] && sweep B "$PKT_HPO_RUNS_B"
 
-echo "[E2-tandem2] extracting best configs from W&B ..."
+echo "[E2] extracting best configs from W&B ..."
 [ "$WHICH" != "B" ] && extract DTI
 [ "$WHICH" != "A" ] && extract TREATS
 
-echo "[E2-tandem2] done. Check the configs landed:"
+echo "[E2] done. Check the configs landed:"
 echo "  python -c \"import json;d=json.load(open('src/models_params.json'));print({k:list(v) for k,v in d.items() if k.endswith('${HPO_SUFFIX}')})\""
-echo "[E2-tandem2] Then E1:  CFG_A=PKT-DTI-best${HPO_SUFFIX} CFG_B=PKT-TREATS-best${HPO_SUFFIX} PROTOCOL=v2 EPOCHS=1500 bash experiments/e1_main_training.sh"
+echo "[E2] Then E1:  CFG_A=PKT-DTI-best${HPO_SUFFIX} CFG_B=PKT-TREATS-best${HPO_SUFFIX} PROTOCOL=v2 EPOCHS=1500 bash experiments/e1_main_training.sh"

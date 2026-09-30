@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E1 summary — thesis table: relational GNN encoders (R-GCN, CompGCN) vs the embedding-only
+E1 summary — main results table: relational GNN encoders (R-GCN, CompGCN) vs the embedding-only
 DistMult baseline, per task, in the format of the PathogenKG model-comparison table.
 
 Reads experiments/logs/v2/e1_<TASK>_<model>_<YYYYmmdd>_<HHMMSS>.log (the latest most-complete log

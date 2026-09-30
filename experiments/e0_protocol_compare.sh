@@ -2,8 +2,8 @@
 # =============================================================================
 # E0 — PROTOCOL COMPARISON: legacy system (v1) vs consolidated system (v2)
 # =============================================================================
-# Run this BEFORE redoing HPO / ablation / E1. It answers one question: does the consolidated
-# protocol (docs/piano_consolidamento_v2.md) change the results, and which change does what?
+# It answers one question: does the consolidated protocol change the results, and which change
+# does what?
 #
 # Same code, same tuned configs (PKT-<TASK>-best, tuned under v1 -> the comparison is
 # conservative for v2), same epochs budget. Only train_and_eval.py protocol flags change.

@@ -1,13 +1,12 @@
 #!/bin/bash
 # =============================================================================
-# Stratified analysis of Task B over all 12 E1 seeds of each model. Submit from the repository root:
+# Stratified analysis of Task B over all 12 E1 seeds of each model, as a Slurm job (queue, GPU and
+# environment are site-specific: adapt them). Submit from the repository root:
 #
 #     sbatch experiments/slurm/stratified_taskB.sbatch
 #
 # Needs the E1 Task B checkpoints in their folders (<model>_run0.pt ... _run11.pt):
-#     models/treats_pkt_taskB_treats.tsv_20260918_151621            R-GCN
-#     models/treats_pkt_taskB_treats.tsv_compgcn_20260920_123201    CompGCN
-#     models/treats_pkt_taskB_treats.tsv_distmult_20260920_212827   DistMult
+#     the three E1 Task B model folders (R-GCN, CompGCN, DistMult), set below
 # The models are ranked one after the other (about 9 GB of RAM each). Output:
 #     <model folder>/ranks/test_ranks_TREATS_run<i>.csv   (per-seed rank dumps; each checks its E1 MRR)
 #     experiments/logs/v2/dump_ranks_TREATS_allseeds_<model>.log
@@ -20,19 +19,17 @@
 #SBATCH --error=experiments/slurm/%x-%j.out
 #SBATCH --qos=low
 #SBATCH --gres=gpu:1
-##SBATCH --gres=gpu:rtx3090:1      # iknos-gpu1, RTX 3090, 24 GB
-##SBATCH --gres=gpu:rtx5000ada:1   # iknos-gpu2, RTX 5000 Ada, 32 GB
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
 
 set -uo pipefail
 cd "${SLURM_SUBMIT_DIR:-$PWD}"
-source /home/apps/iknos-env.sh
-iknos_activate gnn
+# site-specific: activate the environment of your cluster, e.g.
+source "$(conda info --base)/etc/profile.d/conda.sh" && conda activate gnn
 export PKT_SKIP_CONDA=1 PYTHONHASHSEED=0
 # scored (triple, candidate) pairs per GPU call. The default 250k is sized for small GPUs; 1M uses about
-# 5-6 GB for DistMult/R-GCN at dim 400 and fits both cluster GPUs (24 and 32 GB). The results do not
+# 5-6 GB for DistMult/R-GCN at dim 400 and fits a 24 GB GPU. The results do not
 # depend on it: each triple is scored on its own.
 export PKT_EVAL_BATCH_ROWS=1000000
 

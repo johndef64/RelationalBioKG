@@ -1,6 +1,6 @@
 """
 09_extract_chebi_roles.py — extract ChEBI `has_role` assertions from the PKT source graph and use
-them to tell drugs from metabolites in the Task A target relation (see TICKET_01_DTI_drug_scope.md).
+them to tell drugs from metabolites in the Task A target relation.
 
 The Task A relation (chemical -> protein) comes from the OWL property `molecularly interacts with`,
 which in PheKnowLator covers substrates, cofactors and products as well as drug binding: its ten

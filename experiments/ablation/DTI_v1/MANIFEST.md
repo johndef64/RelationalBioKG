@@ -4,7 +4,7 @@
 |---|---|
 | status | **complete**: 13/13 variants, 5/5 seeds each |
 | executed | 2026-09-23 10:24 → 2026-09-24 01:25, one uninterrupted session, variants back to back |
-| machine | a GPU machine **other than the server** used for HPO and E1; the GPU model was not logged (runs before 2026-09-24 did not print it) |
+| machine | a GPU machine other than the one used for HPO and E1; the GPU model was not logged |
 | code | repository after commit `f94d416` (2026-09-22), before the deterministic mode existed |
 | deterministic | **no** — see "Known issue" below |
 | model / config | R-GCN, `PKT-DTI-best-v2b`, protocol v2 (`FLAGS_V2`), 1500-epoch budget, patience 50, 10 training negatives |
@@ -40,7 +40,7 @@
 
 The target relation is untouched in every variant: 10,305 `DTI` edges.
 
-## Audit (2026-09-24)
+## Checks
 
 - every variant differs from its reference in exactly one flag or one dataset, verified from the
   `[i] Protocol` line of each log and from each folder's `rgcn_params.json`;
@@ -51,15 +51,14 @@ The target relation is untouched in every variant: 10,305 `DTI` edges.
 ## Known issue: non-deterministic GPU sums
 
 `comp_full` and `ctx_full` are the same experiment: `pkt_ablA_full` holds the same rows **in the same
-order** as the task graph (same content hash), so the split and the recipe coincide. (The comment in
-`e3_ablation.sh` claiming a different row order, hence a different split, was wrong.) Their validation
+order** as the task graph (same content hash), so the split and the recipe coincide. Their validation
 curves agree to the fourth decimal and then drift apart, because R-GCN sums messages and decoder
 gradients with atomic GPU additions, whose order is not fixed. On seeds 0–3 the test MRR still agrees
 within 0.001; on seed 4 the drift moves the selected checkpoint (epoch 375 against 590) and the MRR
-goes from 0.356 to 0.386. The same drift appears against E1, run on the server.
+goes from 0.356 to 0.386. The same drift appears against E1, run on another machine.
 
 The effect is noise of the same order as several of the ablation effects, and it weakens the paired
-tests. From v2 onwards the ablation runs with `--deterministic` (see `src/deterministic_ops.py`), under
+tests. From `DTI_v2` onwards the ablation runs with `--deterministic` (see `src/deterministic_ops.py`), under
 which two executions are bit-identical.
 
 ## Headline results
