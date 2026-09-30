@@ -24,7 +24,7 @@ plots/*
 # ML Tracking & Logs
 # ==========================================
 wandb/
-logs/
+**/logs/*
 writes/
 docs/*
 
@@ -87,7 +87,7 @@ src/dataset-stats.py
 
 # Experiments
 experiments/hpo*
-experiments/ablation*
+experiments/ablation/*
 
 # Bacterial / DRKG tuning & evaluation utilities
 # (RelationalPKT uses experiments/ + tuning_hyperparameter.py instead)
@@ -137,3 +137,21 @@ analysis/out/uri_to_type.pkl
 
 # release notes: tracked although docs/ is ignored
 !docs/release_1.0.0.md
+
+# result summaries behind the paper's tables (small; raw logs, ranks and checkpoints stay out)
+!experiments/logs/v2/
+experiments/logs/v2/*
+!experiments/logs/v2/e1_summary.md
+!experiments/logs/v2/e1_summary.csv
+!experiments/logs/v2/stratified_multiseed_*.md
+!experiments/logs/v2/stratified_multiseed_*_per_seed.csv
+!experiments/logs/v2/popularity_*.log
+!experiments/ablation/README.md
+!experiments/ablation/*_v*/
+experiments/ablation/*_v*/*
+!experiments/ablation/*_v*/summary/
+!experiments/ablation/*_v*/MANIFEST.md
+!experiments/ablation/*_v*/PREREGISTRATION.json
+!experiments/ablation/*_v*/COMPLETE
+!experiments/ablation/DTI_v2/stratified_no_drugctx.md
+!experiments/ablation/DTI_v2/stratified_no_drugctx_per_seed.csv

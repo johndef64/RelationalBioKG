@@ -14,7 +14,7 @@ Both graphs carry three layers of compound--protein evidence: `DTI` (pharmacodyn
 injected from DrugBank through UniProt cross-references — the Task A target), `DRUG_ADME`
 (metabolising enzymes, transporters, plasma carriers) and `CPI_BIOCHEM` (PheKnowLator's own
 biochemistry: substrates, cofactors, catalysis). The last two are always context. Why the target had
-to be injected: [`TICKET_01_DTI_drug_scope.md`](../TICKET_01_DTI_drug_scope.md).
+to be injected: see the paper.
 
 ## Mapping PathogenKG README → these experiments
 | PathogenKG (paper/README) | repo script | here |
@@ -39,8 +39,7 @@ to be injected: [`TICKET_01_DTI_drug_scope.md`](../TICKET_01_DTI_drug_scope.md).
 
 ## Protocol v1 vs v2 (read first)
 The pipeline has two training protocols, selected by flags of `train_and_eval.py` whose defaults
-reproduce the legacy one (verified bit-for-bit). Full rationale and evidence:
-[`docs/piano_consolidamento_v2.md`](../docs/piano_consolidamento_v2.md).
+reproduce the legacy one (verified bit-for-bit). Full rationale and evidence: see the paper (E0).
 
 | | v1 (legacy PathogenKG) | v2 (consolidated) |
 |---|---|---|
@@ -58,7 +57,7 @@ reproduce the legacy one (verified bit-for-bit). Full rationale and evidence:
 E0 measured what the consolidation is worth, one correction at a time on Task A: M from 0.476 to
 0.648, of which 78% comes from selecting the checkpoint on validation M instead of the loss. The
 three architectures span 0.027 on the same task, so the protocol matters roughly sixfold more than
-the choice of encoder ([`docs/report_E1.md`](../docs/report_E1.md) for the comparison it enabled).
+the choice of encoder (`logs/v2/e1_summary.md` for the comparison it enabled).
 
 ## Run order
 ```bash
@@ -233,10 +232,8 @@ Each chain is flagged by whether the drug already treats the disease it lands on
 existing indication, the others are repurposing candidates with a stated route. The chains come from
 the graph the model trained on, so they belong to interpretability, not validation.
 
-Instructions written for the reviewer are in
-[`docs/drug_eval/istruzioni_revisione_taskA.md`](../docs/drug_eval/istruzioni_revisione_taskA.md), the
-cohort and its rationale in [`docs/coorte_validazione_taskA.md`](../docs/coorte_validazione_taskA.md),
-and the result of the first round in [`docs/report_E4.md`](../docs/report_E4.md): 22.2% of the top-20
+The cohort, the reviewer instructions and the result of the first round are reported in the paper:
+22.2% of the top-20
 predictions plausible against 1.1% of the decoys, all eight recovered held-out targets confirmed, and
 an auto-vs-expert agreement of 8.3% — the graph-based triage explains predictions but does not rank
 them by truth.
@@ -281,8 +278,7 @@ different hash seed maps the saved embeddings onto the wrong entities: the run c
 an MRR near zero. `dump_test_ranks.py` refuses to start without it; `config.sh` exports it for the
 `.sh` scripts, but these two are run directly with `python`.
 
-Results for Task A are in [`docs/report_stratificata.md`](../docs/report_stratificata.md), confirmed
-over all 12 seeds in its §0bis (tables: `experiments/logs/v2/stratified_multiseed_DTI.md`).
+Results over all 12 seeds are in `experiments/logs/v2/stratified_multiseed_{DTI,TREATS}.md`.
 
 ## Smoke test (already run locally)
 `train_and_eval.py` on `pkt_taskA_dti.tsv.zip --task DTI` loads (1,155,994 triples), selects

@@ -1,0 +1,24 @@
+{
+  "task": "DTI (Task A)",
+  "written": "2026-09-24, before DTI_v2 was run",
+  "design": "DTI_v1 (5 seeds, non-deterministic) is the pilot. DTI_v2 (10 seeds, --deterministic) is the confirmatory run; the hypotheses below are derived from the pilot and fixed before DTI_v2 is looked at.",
+
+  "primary": {
+    "comp": ["comp_neg1", "comp_no_focal", "comp_no_adv"],
+    "ctx": ["ctx_core_ppi", "ctx_no_drugctx"]
+  },
+  "alternative": {"comp": "less", "ctx": "less"},
+  "equivalence": {
+    "margin": {"MRR": 0.02, "AUROC": 0.01},
+    "tags": {"ctx": ["ctx_no_ppi", "ctx_no_go", "ctx_no_pathway", "ctx_no_biochem"]}
+  },
+
+  "rationale": {
+    "comp_primary": "The three pieces of the loss and of negative sampling that the pipeline inherits from PathogenKG or that shape the decision boundary: number of training negatives, focal loss, adversarial weighting. Each was lower in the pilot (-0.163, -0.033, -0.028 MRR).",
+    "comp_secondary": "comp_no_disjoint and comp_undersample05 are protocol choices already measured, cumulatively, by the E0 ladder (+0.026 and +0.014 of M): here they are replications, reported descriptively.",
+    "ctx_primary": "ctx_core_ppi tests redundancy (removing almost all context at once hurts); ctx_no_drugctx is the only single block the pilot suggests matters (-0.028).",
+    "ctx_equivalence": "The claim that the interactome, GO annotation, pathway membership and the inherited biochemistry are individually not needed is an equivalence claim, tested as such (TOST). Margin 0.02 MRR = about one seed-to-seed standard deviation of R-GCN in E1 (0.016).",
+    "direction": "one-sided 'less': removing a piece of machinery or of context is expected to lower performance on Task A, where E1 found the context helps discrimination.",
+    "multiplicity": "Holm within each family over its primaries only (3 and 2 tests)."
+  }
+}

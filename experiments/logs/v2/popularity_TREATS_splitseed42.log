@@ -1,0 +1,12 @@
+﻿[set_target_label] Looking for: ['TREATS']
+[set_target_label] Available edge types: ['Compound-GO', 'Compound-Pathway', 'Compound-Protein', 'Disease-Phenotype', 'Gene-Disease', 'Disease-Gene', 'Gene-Pathway', 'Gene-Protein', 'Protein-Protein', 'Protein-GO', 'Protein-Pathway', 'Compound-Disease']
+[set_target_label] Available interactions: ['COMPOUND_GO', 'COMPOUND_PATHWAY', 'CPI_BIOCHEM', 'DISEASE_PHENOTYPE', 'DRUG_ADME', 'DTI', 'GDA', 'GDA_DYSFUNCTION', 'GENE_PATHWAY', 'GENE_PRODUCT', 'PPI', 'PROTEIN_GO_COMPONENT', 'PROTEIN_GO_FUNCTION', 'PROTEIN_GO_PROCESS', 'PROTEIN_PATHWAY', 'TREATS']
+[set_target_label] Found 168157 target edges out of 1873237 total
+[popularity] task=TREATS split_seed=42 | train 118921 | test 35117 | entities 95111
+Run 0 | Test Auroc: 0.807, Test Auprc: 0.801, Test MRR: 0.047, TEST HITS: {1: 0.02263860808155594, 3: 0.04345473702195518, 10: 0.08420423156875588}
+Run 0 | RANDOM-TIES MRR: 0.047, HITS: {1: 0.02263860808155594, 3: 0.043483213258535755, 10: 0.08427542216020731}
+Run 0 | cold-start test triples: 377/35117 (1.07%)
+Run 0 | WARM Test Auroc: 0.811, Test Auprc: 0.803, Test MRR: 0.047, TEST HITS: {1: 0.022697179044329302, 3: 0.04322107081174439, 10: 0.08409614277489925}
+Run 0 | WARM RANDOM-TIES MRR: 0.047
+Run 0 | best_epoch: None | train_time_sec: 0.0
+[i] Completed run 0/1

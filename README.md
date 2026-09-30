@@ -47,8 +47,8 @@ PheKnowLator has **no pharmacological source**: its chemical→protein edges com
 products. Measured on the first build, the ten hub "compounds" were hydron, water, ATP, ADP,
 phosphate and magnesium, carrying 31.4% of that relation, and only 12.5% of its edges involved a
 compound with any therapeutic use. Training on it means predicting known biochemistry, not medicine;
-filtering it by ChEBI role does not help (it retains 3.9% of the edges, still metabolites — see
-[`TICKET_01_DTI_drug_scope.md`](TICKET_01_DTI_drug_scope.md)).
+filtering it by ChEBI role does not help (it retains 3.9% of the edges, still metabolites; details in
+the paper).
 
 The graphs therefore separate **three layers of evidence**, all kept in both tasks:
 
@@ -191,7 +191,6 @@ RelationalBioKG/
 ├── drug_eval_results.py         # summarise drug-eval outputs
 ├── tuning_hyperparameter.py     # Bayesian W&B HPO (PKT_HPO_PROTOCOL=v1|v2)
 ├── expert_review_script.py      # human 3-tier expert review driver (cohort → review sheet)
-├── TICKET_01_DTI_drug_scope.md  # why Task A needed an injected drug--target layer, and how it was built
 ├── src/                         # encoders (hetero_rgcn/compgcn/rgat), kge_distmult baseline, utils, metrics, params
 │
 ├── dataset/
@@ -208,7 +207,7 @@ RelationalBioKG/
 │   ├── mechanistic_chains.py    #   drug → predicted target → gene/pathway → disease routes
 │   ├── dump_test_ranks.py       #   per-triple test ranks from a saved run (needs PYTHONHASHSEED=0)
 │   └── stratified_analysis.py   #   who the model works for: degree, competitors, redundancy, regimes
-└── docs/                        # project reports, consolidation plan v2, expert-validation requests
+└── docs/                        # release notes (docs/release_1.0.0.md)
 ```
 
 ---
@@ -295,8 +294,7 @@ relation; known positives masked). Focal loss (α=0.25, γ=3.0) + adversarial ne
 (α_adv=2.0), edge-level split stratified by target node.
 
 Two sampling/selection protocols are available as flags of `train_and_eval.py` (defaults = v1,
-reproduced bit-for-bit); the full audit behind v2 is in
-[`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md):
+reproduced bit-for-bit); the evidence behind v2 (protocol ladder E0) is reported in the paper:
 
 | | **v1** (PathogenKG, legacy) | **v2** (consolidated) |
 |---|---|---|
@@ -334,7 +332,6 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
   to score it with `aggregate`. On Task A, 22.2% of the top-20 predictions for nine drugs were rated
   plausible against 1.1% of the decoys ($p=4\cdot10^{-7}$), and the automatic KG triage agreed with
   the expert on only 8.3% of them — graph evidence explains a prediction, it does not validate it.
-  See [`docs/report_E4.md`](docs/report_E4.md); clinician request docs are in [`docs/`](docs/).
 - A **time-split** (train on an older PheKnowLator release, test on later-added edges) would be the
   strongest automatic external validation — proposed, not yet built.
 
@@ -342,18 +339,13 @@ A deliberate, honest distinction (see `experiments/README.md` for the full discu
 
 ## Documentation
 
-- [`TICKET_01_DTI_drug_scope.md`](TICKET_01_DTI_drug_scope.md) — the Task A target relation: why the
-  PheKnowLator one is biochemical, what was tried, and how the pharmacological layer was injected.
-- [`docs/piano_consolidamento_v2.md`](docs/piano_consolidamento_v2.md) — audit of the training/evaluation protocol, v2 changes and their verification.
-- [`PROGETTO.md`](PROGETTO.md) — the project in plain language: where it comes from, what has been learnt so far (Italian).
-- [`docs/report_E1.md`](docs/report_E1.md) — main comparison, 3 models × 2 tasks × 12 seeds, with the robustness checks.
-- [`docs/report_E4.md`](docs/report_E4.md) — blinded expert review of the Task A predictions.
-- [`docs/report_stratificata.md`](docs/report_stratificata.md) — who the model works for: supervision regimes, what beats the true target, annotation bias, redundancy.
-- [`docs/report_progetto_RelationalPKT.md`](docs/report_progetto_RelationalPKT.md) — full project report.
-- [`docs/report_HPO_risultati_finali.md`](docs/report_HPO_risultati_finali.md) — first HPO (protocol v1; superseded by the v2 HPO).
-- [`docs/richiesta_candidati_validazione_medico.md`](docs/richiesta_candidati_validazione_medico.md) — candidate request for a clinician/biologist.
-- [`docs/richiesta_candidati_validazione_oncologo.md`](docs/richiesta_candidati_validazione_oncologo.md) — oncology-tailored version (with TCGA / multi-omics cross-check).
 - [`experiments/README.md`](experiments/README.md) — experiment plan and run instructions.
+- `experiments/logs/v2/` — result summaries behind the paper's tables: `e1_summary.{md,csv}` (E1),
+  `stratified_multiseed_*.md` and `_per_seed.csv` (stratified analysis), `popularity_*.log`.
+- `experiments/ablation/<TASK>_v<N>/` — for each ablation: `summary/`, `MANIFEST.md`,
+  `PREREGISTRATION.json` (the frozen hypotheses) and, for DTI_v2, the circularity check.
+- `experiments/prereg/` — the pre-registrations as committed before the confirmatory runs.
+- [`docs/release_1.0.0.md`](docs/release_1.0.0.md) and [`CITATION.cff`](CITATION.cff) — release notes and how to cite.
 
 ---
 

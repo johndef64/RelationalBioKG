@@ -1,0 +1,12 @@
+﻿[set_target_label] Looking for: ['DTI']
+[set_target_label] Available edge types: ['Compound-GO', 'Compound-Pathway', 'Compound-Protein', 'Gene-Protein', 'Protein-Protein', 'Protein-GO', 'Protein-Pathway']
+[set_target_label] Available interactions: ['COMPOUND_GO', 'COMPOUND_PATHWAY', 'CPI_BIOCHEM', 'DRUG_ADME', 'DTI', 'GENE_PRODUCT', 'PPI', 'PROTEIN_GO_COMPONENT', 'PROTEIN_GO_FUNCTION', 'PROTEIN_GO_PROCESS', 'PROTEIN_PATHWAY']
+[set_target_label] Found 10305 target edges out of 1155994 total
+[popularity] task=DTI split_seed=42 | train 6867 | test 2380 | entities 69233
+Run 0 | Test Auroc: 0.665, Test Auprc: 0.683, Test MRR: 0.041, TEST HITS: {1: 0.013865546218487394, 3: 0.034453781512605045, 10: 0.08802521008403362}
+Run 0 | RANDOM-TIES MRR: 0.041, HITS: {1: 0.013865546218487394, 3: 0.034453781512605045, 10: 0.08844537815126051}
+Run 0 | cold-start test triples: 226/2380 (9.50%)
+Run 0 | WARM Test Auroc: 0.685, Test Auprc: 0.691, Test MRR: 0.044, TEST HITS: {1: 0.01532033426183844, 3: 0.037372330547818015, 10: 0.09493964716805943}
+Run 0 | WARM RANDOM-TIES MRR: 0.044
+Run 0 | best_epoch: None | train_time_sec: 0.0
+[i] Completed run 0/1
