@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "RelationalBioKG: relational link prediction on an ontology-grounded human knowledge graph for drug repurposing"
+version: 1.0.0
+date-released: 2026-09-30
+license: MIT
+repository-code: "https://github.com/johndef64/RelationalBioKG"
+authors:
+  - family-names: De Filippis
+    given-names: Giovanni Maria
+    email: giovannimaria.defilippis@unina.it
+    orcid: "https://orcid.org/0009-0002-8395-0724"
+    affiliation: "Department of Electrical Engineering and Information Technology, University of Naples Federico II"
+  - family-names: Rinaldi
+    given-names: Antonio Maria
+    orcid: "https://orcid.org/0000-0001-7003-4781"
+    affiliation: "Department of Electrical Engineering and Information Technology, University of Naples Federico II"
+  - family-names: Tommasino
+    given-names: Cristian
+    orcid: "https://orcid.org/0000-0001-9763-8745"
+    affiliation: "Department of Electrical Engineering and Information Technology, University of Naples Federico II"
+keywords:
+  - knowledge graph
+  - link prediction
+  - graph neural networks
+  - drug repurposing
+  - drug-target interaction
+  - PheKnowLator

@@ -208,7 +208,6 @@ RelationalBioKG/
 │   ├── mechanistic_chains.py    #   drug → predicted target → gene/pathway → disease routes
 │   ├── dump_test_ranks.py       #   per-triple test ranks from a saved run (needs PYTHONHASHSEED=0)
 │   └── stratified_analysis.py   #   who the model works for: degree, competitors, redundancy, regimes
-├── plots/                       # one script per paper/thesis figure + make_all.py
 └── docs/                        # project reports, consolidation plan v2, expert-validation requests
 ```
 
