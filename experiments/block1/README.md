@@ -39,6 +39,15 @@ sbatch --export=ALL,X0A_MODE=check experiments/block1/slurm/x0a_distance_curve.s
 sbatch experiments/block1/slurm/x0a_distance_curve.sbatch                               # run (v1)
 ```
 
+The E1 rank dumps live in `models/` (git-ignored). Where they are missing but the E1 checkpoints are
+there, a GPU job rebuilds them with `experiments/dump_test_ranks.py` (v1.0.0, unchanged), and X0a
+can be chained on it:
+
+```bash
+J=$(sbatch --parsable experiments/block1/slurm/x0a_dump_ranks.sbatch)
+sbatch --dependency=afterok:$J experiments/block1/slurm/x0a_distance_curve.sbatch
+```
+
 The check verifies the packages, the six E1 folders (params + 12 rank dumps each), that the 36 dumps
 are aligned and reproduce the E1 MRR, that the split rebuilt by `drug_eval.get_dataset_for_drug_eval`
 gives exactly the dumped test pairs and training degrees, and (Task B) that `edges.zip` is the
