@@ -184,3 +184,4 @@ experiments/slurm/iknos/
 experiments/block1/slurm/*.out
 experiments/block1/slurm/site_env.sh
 experiments/block1/cache/
+experiments/block1/results/*/ranks/

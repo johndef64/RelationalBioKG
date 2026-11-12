@@ -30,7 +30,13 @@ cp experiments/block1/slurm/site_env.example.sh experiments/block1/slurm/site_en
 
 | ID | What | Code | Job | Needs | Status |
 |---|---|---|---|---|---|
-| X0a | MRR by distance from the supervision: PPI hops (Task A), Mondo steps (Task B, step 0 of X7) | `x0a_distance_curve.py` | `slurm/x0a_distance_curve.sbatch` | E1 rank dumps + params, task graphs, `dataset/PKT/edges.zip` | code ready |
+| X0a | MRR by distance from the supervision: PPI hops (Task A), Mondo steps (Task B, step 0 of X7) | `x0a_distance_curve.py` | `slurm/x0a_distance_curve.sbatch` | E1 rank dumps + params, task graphs, `dataset/PKT/edges.zip` | v1 complete |
+| X0b | Smoothing of relatives in the embeddings: relative contrast in the decoder space, Dirichlet energy, effective rank | `x0b_embedding_smoothing.py` | `slurm/x0b_embedding_smoothing.sbatch` | E1 checkpoints + params + rank dumps, task graphs; Mondo cache of X0a (optional) | v2 complete (v1 superseded) |
+| X0c | Classical link-prediction heuristics (popularity, CN, AA, RA, Katz-3, PPR, typed relatives, collaborative filtering) under the E1 protocol | `x0c_heuristics.py` | `slurm/x0c_heuristics.sbatch` | E1 rank dumps + params, task graphs | v2 complete (v1 superseded) |
+
+Phase A (diagnostics, no training) = X0a, X0b, X0c: independent of each other, run in parallel.
+The synthesis of phase A (`results/PHASE_A.md`) and the results are kept locally until they are
+reviewed. Per-triple ranks written by X0c (`results/*/ranks/`) are always git-ignored, as for the E1 ranks.
 
 ### X0a
 
