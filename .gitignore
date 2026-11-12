@@ -178,3 +178,9 @@ PROGETTO*
 zip.sh
 # cluster-specific Slurm jobs (iknos): local only
 experiments/slurm/iknos/
+
+# block 1 (experiments after v1.0.0, see experiments/block1/README.md): code and result summaries are
+# tracked; job output, job zips (*.zip above), the site environment and caches stay local
+experiments/block1/slurm/*.out
+experiments/block1/slurm/site_env.sh
+experiments/block1/cache/
