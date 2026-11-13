@@ -34,9 +34,35 @@ cp experiments/block1/slurm/site_env.example.sh experiments/block1/slurm/site_en
 | X0b | Smoothing of relatives in the embeddings: relative contrast in the decoder space, Dirichlet energy, effective rank | `x0b_embedding_smoothing.py` | `slurm/x0b_embedding_smoothing.sbatch` | E1 checkpoints + params + rank dumps, task graphs; Mondo cache of X0a (optional) | v2 complete (v1 superseded) |
 | X0c | Classical link-prediction heuristics (popularity, CN, AA, RA, Katz-3, PPR, typed relatives, collaborative filtering) under the E1 protocol | `x0c_heuristics.py` | `slurm/x0c_heuristics.sbatch` | E1 rank dumps + params, task graphs | v2 complete (v1 superseded) |
 
+| B0 | Prerequisite of phase B: `train_b1.py` trains bit for bit what `train_and_eval.py` trains (E1 R-GCN, seed 42, E1 flags, `--deterministic`; arms v1 / b1 / b1reg) | `test_equivalence.py` | `slurm/b0_equivalence.sbatch` | E1 R-GCN params + metrics, task graphs, GPU | code ready |
+
 Phase A (diagnostics, no training) = X0a, X0b, X0c: independent of each other, run in parallel.
 The synthesis of phase A (`results/PHASE_A.md`) and the results are kept locally until they are
 reviewed. Per-triple ranks written by X0c (`results/*/ranks/`) are always git-ignored, as for the E1 ranks.
+
+## Training in block 1: `train_b1.py`
+
+Every training of phase B goes through `train_b1.py`. It imports `train_and_eval.py` and calls its
+`main()`, so the loop, the loss, the negatives, the evaluation and the selection are the v1.0.0 code,
+not a copy. It adds two things from outside, without editing any v1 file:
+
+- `--override KEY=VALUE` changes a hyperparameter of the `--config` block. The block is copied into
+  the run folder (`b1_models_params.json`) and the copy is what the v1 code reads;
+- `--model <name>` can name a model registered in `b1_models.py`, which starts from the block of a
+  v1 model (`base`) plus its own defaults.
+
+It requires `PYTHONHASHSEED=0` and writes only under `results/` (checkpoints git-ignored). The v1
+tools that rebuild a model from `src/models_params.json` (`drug_eval.py`, `dump_test_ranks.py`) do
+not know the overrides or the new models.
+
+B0 checks the claim before any phase-B run. E1 itself cannot be the bit-level reference: it was
+trained before `--deterministic` existed. The reference is therefore `train_and_eval.py` run now
+with `--deterministic`, and the distance from E1 seed 42 is reported for information only.
+
+```bash
+sbatch --export=ALL,B0_MODE=check experiments/block1/slurm/b0_equivalence.sbatch   # requirements
+sbatch experiments/block1/slurm/b0_equivalence.sbatch                               # run (v1)
+```
 
 ### X0a
 
